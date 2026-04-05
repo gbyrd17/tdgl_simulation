@@ -1,81 +1,64 @@
 #version 430 core
-layout(local_size_x = 16, local_size_y = 16) in; // 16x16 workgroup
+layout(local_size_x=16,local_size_y=16) in;
 
-layout(rgba32f, binding = 0) uniform image2D img_in;
-layout(rgba32f, binding = 1) uniform image2D img_out;
+layout(rgba32f,binding=0) uniform image2D img_in;
+layout(rgba32f,binding=1) uniform image2D img_out;
+layout(r32f   ,binding=2) uniform image2D img_mask;
 
-uniform float uAlpha, uBeta, uGamma, uMC, uQ, uH, uDt, uBField, uL;
+uniform float uDt, uH, uL, uBField, uQ, uXi, uLambda, uGamma;
+uniform bool uUseNoise;
+uniform float uTime;
 
-void main() {
-    ivec2 curr = ivec2(gl_GlobalInvocationID.xy);
-    ivec2 dim  = imageSize(img_in);
-    
-    // load current state (Real = r, Imag = g)
-    vec2 p = imageLoad(img_in, curr).rg;
+void main(){
+  ivec2 curr = ivec2(gl_GlobalInvocationID.xy);
+  float mask = imageLoad(img_mask, curr).rg;
 
-    // compute neighbors w/ gauge wrapping
-    float xPhys     = (float(curr.x) + 0.5f) * uH - 0.5f *uL;
-    float Ay        = uBField * xPhys;
+  // check for vacuum
+  if (mask < 0.5) {
+    imageStore(img_out, curr, vec4(0,0));
+    return;
+  }
 
-    float yPhase    = uQ * Ay * uH;
-    float linkY_re  = cos(yPhase);
-    float linkY_im  = sin(yPhase);
-    
-    // vertical neighbors 
-    ivec2 up_pos    = ivec2(curr.x, (curr.y + 1) % dim.y);
-    ivec2 down_pos  = ivec2(curr.x, (curr.y - 1 + dim.y) % dim.y);
-    vec2 up         = imageLoad(img_in, up_pos).rg;
-    vec2 down       = imageLoad(img_in, down_pos).rg;
-    
-    // magnetic links to y
-    //   north neighbor gets forward link  U_y  = e^{+iqA_y h}
-    //   south neighbor gets backward link U_y† = e^{-iqA_y h}  (conjugate)
-    vec2 noP = vec2(up.x   * linkY_re - up.y   * linkY_im,
-                    up.x   * linkY_im + up.y   * linkY_re);
-    vec2 soP = vec2(down.x * linkY_re + down.y * linkY_im,
-                   -down.x * linkY_im + down.y * linkY_re);
+  auto getOrderParam = [&](ivec2 pos) {
+    return (imageLoad(img_mask, pos).r > 0.5) ? imageLoad(img_in, pos).rg : p;
+  };
 
-    // horizontal neighbors w/ gauge tf at boundary
-    //   gauge tf <shift> needs to apply add-inv.'ly from lhs to rhs
-    //   ==> rhs : + => lhs : -, vice versa
-    vec2 rhsP, lhsP;
-    if (curr.x == dim.x - 1) {
-        float yPhys   = (float(curr.y) + 0.5f) * uH - 0.5f * uL;
-        float shift   = uQ * uBField * uL * yPhys;
-        vec2 p0       = imageLoad(img_in, ivec2(0, curr.y)).rg;
+  vec2  p   = imageLoad(img_in, curr).rg;
+  ivec2 dim = imageSize(img_in);
 
-        rhsP = vec2(p0.x * cos(shift) - p0.y * sin(shift),
-                    p0.x * sin(shift) + p0.y * cos(shift));
-    } else {
-        rhsP = imageLoad(img_in, curr + ivec2(1, 0)).rg;
-    }
+  float xPhys  = (float(curr.x) - 0.5 * float(dim.x - 1)) * uH;
+  float Ay     = uBField * xPhys;
+  float yPhase = uQ * Ay * uH;
+  vec2  linkY  = vec2(cos(yPhase), sin(yPhase));
 
-    if (curr.x == 0) {
-        float yPhys   = (float(curr.y) + 0.5f) * uH - 0.5f * uL;
-        float shift   = uQ * uBField * uL * yPhys;
-        vec2 pN       = imageLoad(img_in, ivec2(dim.x - 1, curr.y)).rg;
+  ivec2 up    = getOrderParam(ivec2(curr.x, (curr.y + 1) % dim.y);
+  ivec2 down  = ivec2(curr.x, (curr.y - 1 + dim.y) % dim.y);
 
-        lhsP = vec2(pN.x  * cos(shift) + pN.y * sin(shift),
-                    -pN.x * sin(shift) + pN.y * cos(shift));
-    } else {
-        lhsP = imageLoad(img_in, curr - ivec2(1, 0)).rg;
-    }
+  // bounce off vacua
 
-    // TDGL equation
-    vec2 lap    = (rhsP + lhsP + noP + soP - 4.0 * p) / (uH * uH);
-    float mag2  = dot(p, p);
-    vec2 rhs    = -uAlpha * p - 2.0 * uBeta * mag2 * p + (1.0 / (2.0 * uMC)) * lap;
 
-    // add noise
-    float noiseAmp = 0.0001;
-    float n1 = fract(sin(dot(vec2(curr), vec2(12.9898,78.233))) * 43758.5453);
-    float n2 = fract(sin(dot(vec2(curr)+1.23, vec2(4.898,7.23))) * 23421.631);
+  vec2 noP    = imageLoad(img_in, up).rg;
+  vec2 soP    = imageLoad(img_in, down).rg;
 
-    vec2 noise = noiseAmp * vec2(n1 - 0.5, n2 - 0.5);
+  noP         = vec2(noP.x * linkY.x - noP.y * linkY.y,
+                     noP.x * linkY.y + noP.y * linkY.x);
+  soP         = vec2(soP.x * linkY.x + soP.y * linkY.y,
+                    -soP.x * linkY.y + soP.y * linkY.x);
 
-    vec2 p_next = p + uGamma * uDt * rhs;
-    if (uUseNoise) {
-      p_next += sqrt(uDt) * noise;
-    }
-    imageStore(img_out, curr, vec4(p_next, 0.0, 0.0));
+  vec2 rhs = (noP + soP - 2.0 * p)/(uH * uH) - (p * (p.x * p.x + p.y * p.y));
+
+  // noise (scaled properly)
+  if (uUseNoise) {
+    float noiseAmp = 0.1; // fraction of equilibrium |ψ|
+    vec2 seed1 = vec2(curr)+uTime*1.7321;
+    vec2 seed2 = vec2(curr)+uTime*2.6457+1.23;
+    float n1 = fract(sin(dot(seed1,vec2(12.9898,78.233)))*43758.5453);
+    float n2 = fract(sin(dot(seed2,vec2(4.898,7.230)))*23421.631);
+    vec2 noise = noiseAmp*vec2(n1-0.5,n2-0.5);
+  }
+
+  vec2 p_next = p + uDt*rhs;
+  if(uUseNoise) {p_next += sqrt(uDt)*noise};
+
+  imageStore(img_out,curr,vec4(p_next,0.0,0.0));
 }

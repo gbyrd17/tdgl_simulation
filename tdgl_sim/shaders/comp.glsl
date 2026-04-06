@@ -19,12 +19,12 @@ void main(){
     return;
   }
 
+  vec2  p   = imageLoad(img_in, curr).rg;
+  ivec2 dim = imageSize(img_in);
+
   auto getOrderParam = [&](ivec2 pos) {
     return (imageLoad(img_mask, pos).r > 0.5) ? imageLoad(img_in, pos).rg : p;
   };
-
-  vec2  p   = imageLoad(img_in, curr).rg;
-  ivec2 dim = imageSize(img_in);
 
   float xPhys  = (float(curr.x) - 0.5 * float(dim.x - 1)) * uH;
   float Ay     = uBField * xPhys;
@@ -33,9 +33,6 @@ void main(){
 
   ivec2 up    = getOrderParam(ivec2(curr.x, (curr.y + 1) % dim.y);
   ivec2 down  = ivec2(curr.x, (curr.y - 1 + dim.y) % dim.y);
-
-  // bounce off vacua
-
 
   vec2 noP    = imageLoad(img_in, up).rg;
   vec2 soP    = imageLoad(img_in, down).rg;
@@ -47,6 +44,8 @@ void main(){
 
   vec2 rhs = (noP + soP - 2.0 * p)/(uH * uH) - (p * (p.x * p.x + p.y * p.y));
 
+  vec2 p_next = p + uDt*rhs;
+
   // noise (scaled properly)
   if (uUseNoise) {
     float noiseAmp = 0.1; // fraction of equilibrium |ψ|
@@ -55,10 +54,8 @@ void main(){
     float n1 = fract(sin(dot(seed1,vec2(12.9898,78.233)))*43758.5453);
     float n2 = fract(sin(dot(seed2,vec2(4.898,7.230)))*23421.631);
     vec2 noise = noiseAmp*vec2(n1-0.5,n2-0.5);
+    p_next += sqrt(uDt)*noise;
   }
-
-  vec2 p_next = p + uDt*rhs;
-  if(uUseNoise) {p_next += sqrt(uDt)*noise};
 
   imageStore(img_out,curr,vec4(p_next,0.0,0.0));
 }

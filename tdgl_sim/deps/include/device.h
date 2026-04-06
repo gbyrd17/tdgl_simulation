@@ -21,13 +21,15 @@ struct layer {
   double thickness;       // thickness of layer
   double sigma_n;         // normal state conductivity
   double gamma;           // tdgl relaxation rate
-  float z;                // vertical position in stack
+  float  z;               // vertical position in stack
 
   std::vector<polygon> polygons;
 
   // gpu texture resources
   unsigned int phiTex   = 0;    // order param field
   unsigned int jTex     = 0;    // supercurrent field
+                                //
+  
 };
 
 struct device {
@@ -36,10 +38,5 @@ struct device {
   float temp          = 0.1f;
 
   glm::vec2 worldSize;
-  void step(float dt) {
-    for (auto& layer : layers) {
-      // TODO compute shaders for this layer
-    }
-  }
 };
 

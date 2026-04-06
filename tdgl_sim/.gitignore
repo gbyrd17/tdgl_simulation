@@ -30,4 +30,5 @@ Makefile
 
 # deps
 /deps/imgui/
+/ignore/
 

@@ -97,7 +97,7 @@ void main() {
   }
 
 
-  int debugState = 6; float debug = 0.0f;
+  int debugState = 0; float debug = 0.0f;
   if        (debugState == 1) {
     debug = phi2;  // Current |ψ|^2
   } else if (debugState == 2) {

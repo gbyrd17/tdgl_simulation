@@ -18,7 +18,7 @@ int main()  {
   layer nbLayer;  // init niobium layer
   nbLayer.xi      = 1.0f;
   nbLayer.lambda  = 2.0f;
-  nbLayer.gamma   = 0.1f;  // Further reduced for very slow, observable dynamics
+  nbLayer.gamma   = 0.1f;
   nbLayer.epsilon = 1.0f; // stronger superconducting condensate
 
   polygon rect = geometry::genRectangle({50, 50}, {75, 75});

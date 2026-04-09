@@ -94,6 +94,11 @@ void infoPane::drawSimVars() {
     ImGui::Text("%.1f FPS  (%.2f ms)", ImGui::GetIO().Framerate,
                 1000.f / ImGui::GetIO().Framerate);
     ImGui::Text("m_simulator time  %.4e", m_simulator.simTime);
+    ImGui::Separator();
+    ImGui::TextColored(ImVec4(0.8f,0.8f,1.f,1.f), "PHI MAGNITUDE");
+    ImGui::Text("avg |psi|   %.4e", m_simulator.phiAvg);
+    ImGui::Text("min |psi|   %.4e", m_simulator.phiMin);
+    ImGui::Text("max |psi|   %.4e", m_simulator.phiMax);
 
     ImGui::End(); 
 }

@@ -1,7 +1,6 @@
 #pragma once
 #include <device.h>
 #include <glad/glad.h>
-#include <memory>
 
 class simulator {
   public:
@@ -12,12 +11,17 @@ class simulator {
     const float mc = 2.0f;   // Cooper pair mass
     const float q  = 2.0f;   // Cooper pair charge
 
-    double h;
-    double dt;              // timestep determined as 0.05 * cfl criterio
+    float h;
+    float dt;              // timestep determined as 0.05 * cfl criterio
 
-    bool useNoise = false;
+    bool useNoise = true;
     int m_res, stepsPerFrame;
     float simTime;
+
+    float phiAvg = 0.0f;
+    float phiMin = 0.0f;
+    float phiMax = 0.0f;
+    int phiStatCounter = 0;
 
     void step();
     void render();
@@ -29,11 +33,9 @@ class simulator {
     void render(int renderMode);
 
   private:
-
-
     device& m_device;
+    void updatePhiStats();
     layer&  m_layer;
-
 
     GLuint m_compPID;
     GLuint m_rendPID;
@@ -43,7 +45,7 @@ class simulator {
     GLuint m_phiTextures[2];
     GLuint m_maskTexture;
     int m_readIdx   = 0;
-    int m_writeIdx  = 0;
+    int m_writeIdx  = 1;
 
     void swapBuffers(layer& layer);
     void initRenderProg();

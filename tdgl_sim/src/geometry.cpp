@@ -1,5 +1,4 @@
 #include <geometry.h>
-#include <cmath>
 #include <vector>
 
 // ray casting 
@@ -13,7 +12,7 @@ bool geometry::isInside(glm::vec2 p, const polygon& poly) {
     const auto& vj = poly.vertices[j];
 
     bool intersect = ((vi.y > p.y) != (vj.y > p.y)) &&
-                     (p.x < (vj.x - vi.x) * (p.y - vi.y) / (vj.y - vi.y) + vi.x);
+        (p.x < (vj.x - vi.x) * (p.y - vi.y) / (vj.y - vi.y) + vi.x);
 
     if (intersect) inside = !inside;
   };
@@ -46,9 +45,9 @@ polygon geometry::genRectangle(glm::vec2 center, glm::vec2 size) {
   p.isMesh    = true;
   p.vertices  = {
     {center.x - size.x/2, center.y - size.y/2},
-    {center.x - size.x/2, center.y + size.y/2},
     {center.x + size.x/2, center.y - size.y/2},
-    {center.x + size.x/2, center.y + size.y/2}
+    {center.x + size.x/2, center.y + size.y/2},
+    {center.x - size.x/2, center.y + size.y/2}
   };
   return p;
 }

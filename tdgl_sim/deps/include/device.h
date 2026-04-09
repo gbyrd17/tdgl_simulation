@@ -21,15 +21,11 @@ struct layer {
   double thickness;       // thickness of layer
   double sigma_n;         // normal state conductivity
   double gamma;           // tdgl relaxation rate
+  float  u = 5.79f;       // ratio of relaxation times for the amplitude and phase of phi
   float  z;               // vertical position in stack
+  float  epsilon = 0.5f;  // GL free energy parameter: (Tc - T) / Tc; controls equilibrium |psi| magnitude
 
   std::vector<polygon> polygons;
-
-  // gpu texture resources
-  unsigned int phiTex   = 0;    // order param field
-  unsigned int jTex     = 0;    // supercurrent field
-                                //
-  
 };
 
 struct device {

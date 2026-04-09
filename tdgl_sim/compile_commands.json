@@ -1,0 +1,74 @@
+[
+{
+  "directory": "D:/cpp/tdgl_project/tdgl_sim",
+  "command": "C:\\msys64\\ucrt64\\bin\\c++.exe -DGLFW_DLL -ID:/cpp/tdgl_project/tdgl_sim/./deps/include -ID:/cpp/tdgl_project/tdgl_sim/deps/imgui -ID:/cpp/tdgl_project/tdgl_sim/deps/imgui/backends -std=gnu++17 -o CMakeFiles\\tdgl_sim.dir\\main.cpp.obj -c D:\\cpp\\tdgl_project\\tdgl_sim\\main.cpp",
+  "file": "D:/cpp/tdgl_project/tdgl_sim/main.cpp",
+  "output": "D:/cpp/tdgl_project/tdgl_sim/CMakeFiles/tdgl_sim.dir/main.cpp.obj"
+},
+{
+  "directory": "D:/cpp/tdgl_project/tdgl_sim",
+  "command": "C:\\msys64\\ucrt64\\bin\\cc.exe -DGLFW_DLL -ID:/cpp/tdgl_project/tdgl_sim/./deps/include -ID:/cpp/tdgl_project/tdgl_sim/deps/imgui -ID:/cpp/tdgl_project/tdgl_sim/deps/imgui/backends -o CMakeFiles\\tdgl_sim.dir\\glad.c.obj -c D:\\cpp\\tdgl_project\\tdgl_sim\\glad.c",
+  "file": "D:/cpp/tdgl_project/tdgl_sim/glad.c",
+  "output": "D:/cpp/tdgl_project/tdgl_sim/CMakeFiles/tdgl_sim.dir/glad.c.obj"
+},
+{
+  "directory": "D:/cpp/tdgl_project/tdgl_sim",
+  "command": "C:\\msys64\\ucrt64\\bin\\c++.exe -DGLFW_DLL -ID:/cpp/tdgl_project/tdgl_sim/./deps/include -ID:/cpp/tdgl_project/tdgl_sim/deps/imgui -ID:/cpp/tdgl_project/tdgl_sim/deps/imgui/backends -std=gnu++17 -o CMakeFiles\\tdgl_sim.dir\\src\\geometry.cpp.obj -c D:\\cpp\\tdgl_project\\tdgl_sim\\src\\geometry.cpp",
+  "file": "D:/cpp/tdgl_project/tdgl_sim/src/geometry.cpp",
+  "output": "D:/cpp/tdgl_project/tdgl_sim/CMakeFiles/tdgl_sim.dir/src/geometry.cpp.obj"
+},
+{
+  "directory": "D:/cpp/tdgl_project/tdgl_sim",
+  "command": "C:\\msys64\\ucrt64\\bin\\c++.exe -DGLFW_DLL -ID:/cpp/tdgl_project/tdgl_sim/./deps/include -ID:/cpp/tdgl_project/tdgl_sim/deps/imgui -ID:/cpp/tdgl_project/tdgl_sim/deps/imgui/backends -std=gnu++17 -o CMakeFiles\\tdgl_sim.dir\\src\\simulator.cpp.obj -c D:\\cpp\\tdgl_project\\tdgl_sim\\src\\simulator.cpp",
+  "file": "D:/cpp/tdgl_project/tdgl_sim/src/simulator.cpp",
+  "output": "D:/cpp/tdgl_project/tdgl_sim/CMakeFiles/tdgl_sim.dir/src/simulator.cpp.obj"
+},
+{
+  "directory": "D:/cpp/tdgl_project/tdgl_sim",
+  "command": "C:\\msys64\\ucrt64\\bin\\c++.exe -DGLFW_DLL -ID:/cpp/tdgl_project/tdgl_sim/./deps/include -ID:/cpp/tdgl_project/tdgl_sim/deps/imgui -ID:/cpp/tdgl_project/tdgl_sim/deps/imgui/backends -std=gnu++17 -o CMakeFiles\\tdgl_sim.dir\\src\\infoPane.cpp.obj -c D:\\cpp\\tdgl_project\\tdgl_sim\\src\\infoPane.cpp",
+  "file": "D:/cpp/tdgl_project/tdgl_sim/src/infoPane.cpp",
+  "output": "D:/cpp/tdgl_project/tdgl_sim/CMakeFiles/tdgl_sim.dir/src/infoPane.cpp.obj"
+},
+{
+  "directory": "D:/cpp/tdgl_project/tdgl_sim",
+  "command": "C:\\msys64\\ucrt64\\bin\\c++.exe -DGLFW_DLL -ID:/cpp/tdgl_project/tdgl_sim/./deps/include -ID:/cpp/tdgl_project/tdgl_sim/deps/imgui -ID:/cpp/tdgl_project/tdgl_sim/deps/imgui/backends -std=gnu++17 -o CMakeFiles\\tdgl_sim.dir\\deps\\imgui\\imgui.cpp.obj -c D:\\cpp\\tdgl_project\\tdgl_sim\\deps\\imgui\\imgui.cpp",
+  "file": "D:/cpp/tdgl_project/tdgl_sim/deps/imgui/imgui.cpp",
+  "output": "D:/cpp/tdgl_project/tdgl_sim/CMakeFiles/tdgl_sim.dir/deps/imgui/imgui.cpp.obj"
+},
+{
+  "directory": "D:/cpp/tdgl_project/tdgl_sim",
+  "command": "C:\\msys64\\ucrt64\\bin\\c++.exe -DGLFW_DLL -ID:/cpp/tdgl_project/tdgl_sim/./deps/include -ID:/cpp/tdgl_project/tdgl_sim/deps/imgui -ID:/cpp/tdgl_project/tdgl_sim/deps/imgui/backends -std=gnu++17 -o CMakeFiles\\tdgl_sim.dir\\deps\\imgui\\imgui_draw.cpp.obj -c D:\\cpp\\tdgl_project\\tdgl_sim\\deps\\imgui\\imgui_draw.cpp",
+  "file": "D:/cpp/tdgl_project/tdgl_sim/deps/imgui/imgui_draw.cpp",
+  "output": "D:/cpp/tdgl_project/tdgl_sim/CMakeFiles/tdgl_sim.dir/deps/imgui/imgui_draw.cpp.obj"
+},
+{
+  "directory": "D:/cpp/tdgl_project/tdgl_sim",
+  "command": "C:\\msys64\\ucrt64\\bin\\c++.exe -DGLFW_DLL -ID:/cpp/tdgl_project/tdgl_sim/./deps/include -ID:/cpp/tdgl_project/tdgl_sim/deps/imgui -ID:/cpp/tdgl_project/tdgl_sim/deps/imgui/backends -std=gnu++17 -o CMakeFiles\\tdgl_sim.dir\\deps\\imgui\\imgui_widgets.cpp.obj -c D:\\cpp\\tdgl_project\\tdgl_sim\\deps\\imgui\\imgui_widgets.cpp",
+  "file": "D:/cpp/tdgl_project/tdgl_sim/deps/imgui/imgui_widgets.cpp",
+  "output": "D:/cpp/tdgl_project/tdgl_sim/CMakeFiles/tdgl_sim.dir/deps/imgui/imgui_widgets.cpp.obj"
+},
+{
+  "directory": "D:/cpp/tdgl_project/tdgl_sim",
+  "command": "C:\\msys64\\ucrt64\\bin\\c++.exe -DGLFW_DLL -ID:/cpp/tdgl_project/tdgl_sim/./deps/include -ID:/cpp/tdgl_project/tdgl_sim/deps/imgui -ID:/cpp/tdgl_project/tdgl_sim/deps/imgui/backends -std=gnu++17 -o CMakeFiles\\tdgl_sim.dir\\deps\\imgui\\imgui_tables.cpp.obj -c D:\\cpp\\tdgl_project\\tdgl_sim\\deps\\imgui\\imgui_tables.cpp",
+  "file": "D:/cpp/tdgl_project/tdgl_sim/deps/imgui/imgui_tables.cpp",
+  "output": "D:/cpp/tdgl_project/tdgl_sim/CMakeFiles/tdgl_sim.dir/deps/imgui/imgui_tables.cpp.obj"
+},
+{
+  "directory": "D:/cpp/tdgl_project/tdgl_sim",
+  "command": "C:\\msys64\\ucrt64\\bin\\c++.exe -DGLFW_DLL -ID:/cpp/tdgl_project/tdgl_sim/./deps/include -ID:/cpp/tdgl_project/tdgl_sim/deps/imgui -ID:/cpp/tdgl_project/tdgl_sim/deps/imgui/backends -std=gnu++17 -o CMakeFiles\\tdgl_sim.dir\\deps\\imgui\\imgui_demo.cpp.obj -c D:\\cpp\\tdgl_project\\tdgl_sim\\deps\\imgui\\imgui_demo.cpp",
+  "file": "D:/cpp/tdgl_project/tdgl_sim/deps/imgui/imgui_demo.cpp",
+  "output": "D:/cpp/tdgl_project/tdgl_sim/CMakeFiles/tdgl_sim.dir/deps/imgui/imgui_demo.cpp.obj"
+},
+{
+  "directory": "D:/cpp/tdgl_project/tdgl_sim",
+  "command": "C:\\msys64\\ucrt64\\bin\\c++.exe -DGLFW_DLL -ID:/cpp/tdgl_project/tdgl_sim/./deps/include -ID:/cpp/tdgl_project/tdgl_sim/deps/imgui -ID:/cpp/tdgl_project/tdgl_sim/deps/imgui/backends -std=gnu++17 -o CMakeFiles\\tdgl_sim.dir\\deps\\imgui\\backends\\imgui_impl_glfw.cpp.obj -c D:\\cpp\\tdgl_project\\tdgl_sim\\deps\\imgui\\backends\\imgui_impl_glfw.cpp",
+  "file": "D:/cpp/tdgl_project/tdgl_sim/deps/imgui/backends/imgui_impl_glfw.cpp",
+  "output": "D:/cpp/tdgl_project/tdgl_sim/CMakeFiles/tdgl_sim.dir/deps/imgui/backends/imgui_impl_glfw.cpp.obj"
+},
+{
+  "directory": "D:/cpp/tdgl_project/tdgl_sim",
+  "command": "C:\\msys64\\ucrt64\\bin\\c++.exe -DGLFW_DLL -ID:/cpp/tdgl_project/tdgl_sim/./deps/include -ID:/cpp/tdgl_project/tdgl_sim/deps/imgui -ID:/cpp/tdgl_project/tdgl_sim/deps/imgui/backends -std=gnu++17 -o CMakeFiles\\tdgl_sim.dir\\deps\\imgui\\backends\\imgui_impl_opengl3.cpp.obj -c D:\\cpp\\tdgl_project\\tdgl_sim\\deps\\imgui\\backends\\imgui_impl_opengl3.cpp",
+  "file": "D:/cpp/tdgl_project/tdgl_sim/deps/imgui/backends/imgui_impl_opengl3.cpp",
+  "output": "D:/cpp/tdgl_project/tdgl_sim/CMakeFiles/tdgl_sim.dir/deps/imgui/backends/imgui_impl_opengl3.cpp.obj"
+}
+]

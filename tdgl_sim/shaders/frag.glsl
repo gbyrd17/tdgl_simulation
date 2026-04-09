@@ -1,78 +1,93 @@
 #version 330 core
-in vec2 fragCoord;
-out vec4 FragColor;
 
-uniform sampler2D uField, uMask;
-uniform float uH, uL, uAlpha, uBeta, uQ, uBField;
-uniform int uRenderMode;
+in vec2 fragCoord; 
+out vec4 fragColor;
+
+uniform sampler2D uField; 
+uniform sampler2D uMask;  
+uniform int uRenderMode;  
+
+uniform float uH, uL, uAlpha, uBeta, uQ, uBField, uEpsilon;
 
 #define PI 3.14159265359
 
 vec3 hsv2rgb(vec3 c) {
-    vec4 K    = vec4(1.0, 2.0 / 3.0, 1.0 / 3.0, 3.0);
-    vec3 p    = abs(fract(c.xxx + K.xyz)*6.0 - K.www);
-    return c.z * mix(K.xxx, clamp(p-K.xxx, 0.0, 1.0), c.y);
+  vec4 K = vec4(1.0, 2.0 / 3.0, 1.0 / 3.0, 3.0);
+  vec3 p = abs(fract(c.xxx + K.xyz) * 6.0 - K.www);
+  return c.z * mix(K.xxx, clamp(p - K.xxx, 0.0, 1.0), c.y);
+}
+
+vec3 viridis(float t) {
+  const vec3 c0 = vec3(0.2777, 0.0054, 0.3341);
+  const vec3 c1 = vec3(0.1051, 1.4046, 1.3846);
+  const vec3 c2 = vec3(-0.3309, 0.2177, 0.9524);
+  const vec3 c3 = vec3(-4.6372, -1.9639, -3.4541);
+  const vec3 c4 = vec3(10.3079, 3.1208, 2.7513);
+  const vec3 c5 = vec3(-5.7159, -1.3519, -0.9678);
+  return c0 + t * (c1 + t * (c2 + t * (c3 + t * (c4 + t * c5))));
 }
 
 void main() {
-  vec2 uv     = fragCoord * 0.5 + 0.5; // normalized
-  float mask  = texture(uMask, uv).r;
-  float texel = 1.0 / float(textureSize(uField,0).x);
+  vec2 uv = fragCoord * 0.5 + 0.5;
+  float mask = texture(uMask, uv).r;
 
-  if (mask < 0.5) { fragColor = vec4(0.05, 0.05, 0.07, 1.0); return; }
+  if (mask < 0.5) {
+    fragColor = vec4(0.02, 0.02, 0.05, 1.0);
+    return;
+  }
 
   vec2 data = texture(uField, uv).rg;
-  float mag = sqrt(data.x*data.x + data.y*data.y;);
+  float mag = length(data);
+  float phase = atan(data.y, data.x);
+  float texel = 1.0 / float(textureSize(uField, 0).x);
 
+  if (uRenderMode == 0) {
+    // MODE 0: VIRIDIS MAGNITUDE
+    float phiEq = sqrt(uEpsilon);
+    float displaymag = clamp(mag / phiEq, 0.0, 1.5);
+    vec3 col = viridis(displaymag);
+    col *= mix(0.65, 1.0, smoothstep(0.0, 0.8 * phiEq, mag));
+    fragColor = vec4(col, 1.0);
 
-  if(uRenderMode==0){
-    float phiEq2    = - uAlpha / (2 * uBeta);
-    float norm_mag  = (phiEq2>0.0) ? clamp(mag/sqrt(phiEq2),0.0,1.0) : 0.0;
-    float phase     = atan(data.y,data.x);
-    float hue       = (phase+PI)/(2.0*PI);
+  } else if (uRenderMode == 1) {
+    // MODE 1: PHASE + COLOR BAR
+    float phase_norm = fract((phase / (2.0 * 3.14159265359)) + 1.0);
+    float value = clamp(mag * 5.0, 0.15, 1.0);
+    vec3 phaseCol = hsv2rgb(vec3(phase_norm, 1.0, value));
+    
+    // Draw a vertical color legend at the right edge of the viewport
+    vec3 legend = vec3(0.0);
+    if (uv.x > 0.90) {
+      float t = smoothstep(0.90, 1.0, uv.x);
+      float y = uv.y;
+      float hue = fract(1.0 - y);
+      legend = hsv2rgb(vec3(hue, 1.0, 0.9));
+    }
 
-    float logMag  = log(mag+1e-6);
-    float rings   = sin(2.0*PI*logMag*1.5);
-    float gridM   = smoothstep(0.7,1.0,rings);
-
-    float spokes  = sin(phase*8.0);
-    float gridP   = smoothstep(0.8,1.0,spokes);
-
-    vec3 baseColor  = hsv2rgb(vec3(hue,0.8,0.9));
-    float grid      = clamp(gridM + gridP,0.0,1.0);
-    vec3 finalColor = baseColor*(1.0-0.3*grid)*norm_mag;
-
-    float contour = sin(norm_mag*25.0);
-    float line    = smoothstep(0.9,1.0,contour);
-    finalColor    = mix(finalColor,vec3(1.0),line*0.2);
-
-    fragColor = vec4(finalColor,1.0);
+    fragColor = vec4(mix(phaseCol, legend, step(0.90, uv.x)), 1.0);
 
   } else {
-    // --- Supercurrent map ---
-    vec2 dX = texture(uField, uv + vec2(texel,0.0)).rg;
-    vec2 dY = texture(uField, uv + vec2(0.0,texel)).rg;
+    // MODE 2: SUPERCURRENTS
+    vec2 dX = texture(uField, uv + vec2(texel, 0.0)).rg;
+    vec2 dY = texture(uField, uv + vec2(0.0, texel)).rg;
 
-    float xPhys = (uv.x - 0.5)*uL;
-    float yPhys = (uv.y - 0.5)*uL;
-    float Ay    = uBField * xPhys;
+    // Use uL, uBField, uQ, uH to prevent link errors
+    float yPhys = (uv.y - 0.5) * uL;
+    float Ax = -uBField * yPhys; 
+    vec2 linkX = vec2(cos(uQ * Ax * uH), sin(uQ * Ax * uH));
 
-    vec2 linkY      = vec2(cos(uQ*Ay*uH), sin(uQ*Ay*uH));
-    vec2 shifted_dY = vec2(dY.x*linkY.x + dY.y*linkY.y, -dY.x*linkY.y + dY.y*linkY.x);
+    vec2 shifted_dX = vec2(dX.x * linkX.x - dX.y * linkX.y, 
+                           dX.x * linkX.y + dX.y * linkX.x);
 
-    float Jx    = (data.x*dX.y - data.y*dX.x)/uH;
-    float Jy    = (data.x*shifted_dY.y - data.y*shifted_dY.x)/uH;
-    float J_mag = length(vec2(Jx,Jy))*10.0;
+    float Jx = (data.x * shifted_dX.y - data.y * shifted_dX.x) / uH;
+    float Jy = (data.x * dY.y - data.y * dY.x) / uH;
+    float J_mag = length(vec2(Jx, Jy));
 
-    float hR      = length(dX);
-    float hU      = length(dY);
-    vec3 normal   = normalize(vec3(mag - hR, mag - hU,0.02));
-    vec3 lightDir = normalize(vec3(0.5,0.5,1.0));
-    float diff    = max(dot(normal,lightDir),0.0);
+    float hue = (phase + PI) / (2.0 * PI);
+    vec3 phaseCol = hsv2rgb(vec3(hue, 0.8, 0.1));
+    float currentIntensity = smoothstep(0.0, 0.1, J_mag); 
+    vec3 currentGlow = vec3(0.0, 1.0, 1.0) * currentIntensity;
 
-    vec3 baseColor   = vec3(0.02,0.02,0.05) + diff*vec3(0.35);
-    vec3 currentGlow = vec3(0.0,1.0,1.0)*J_mag;
-
-    fragColor = vec4(baseColor + currentGlow,1.0);
+    fragColor = vec4(phaseCol + currentGlow, 1.0);
   }
 }

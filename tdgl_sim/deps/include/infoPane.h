@@ -19,9 +19,8 @@ class infoPane {
   device&     m_device;
   simulator&  m_simulator;
   layer&      m_layer;
-
-  ImDrawList* dl = ImGui::GetWindowDrawList();
-  ImVec2 wPos    = ImGui::GetCursorScreenPos();
   float gridUnit;
+  float gridUnitX;
+  float gridUnitY;
 
 };

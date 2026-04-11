@@ -12,7 +12,7 @@
 
 int main()  {
   device dev;     // init device 
-  dev.worldSize = glm::vec2(100.0f, 100.0f);
+  dev.worldSize = glm::vec2(96.0f, 96.0f);  // multiple of Abrikosov spacing for clean lattice
   dev.externalB = glm::vec3(0, 0, 0.05f);  // moderate field for visible vortex nucleation in a 100ξ domain
 
   layer nbLayer;  // init niobium layer
@@ -21,7 +21,7 @@ int main()  {
   nbLayer.gamma   = 0.1f;
   nbLayer.epsilon = 1.0f; // stronger superconducting condensate
 
-  polygon rect = geometry::genRectangle({50, 50}, {75, 75});
+  polygon rect = geometry::genRectangle({48, 48}, {80, 80});
   rect.isMesh = true;
   nbLayer.polygons.push_back(rect);
 
@@ -59,7 +59,7 @@ int main()  {
   std::cout << "OpenGL Context: " << glGetString(GL_VERSION) << std::endl;
 
   // glfw window must be instantiated before any shader math is performed
-  simulator sim(dev, nbLayer, 1024, 300);
+  simulator sim(dev, nbLayer, 1024, 1024, 300);
 
   // init imgui
   IMGUI_CHECKVERSION();

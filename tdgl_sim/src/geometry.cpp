@@ -19,7 +19,7 @@ bool geometry::isInside(glm::vec2 p, const polygon& poly) {
   return inside;
 }
 
-// rasterization
+// rasterization onto mesh cells
 std::vector<float> geometry::genMask(const layer& layer, int res, glm::vec2 worldSize) {
   std::vector<float> mask(res * res, 0.0f);
   float dx = worldSize.x / res;
@@ -27,8 +27,7 @@ std::vector<float> geometry::genMask(const layer& layer, int res, glm::vec2 worl
 
   for (int y = 0; y < res; y++) {
     for (int x = 0; x < res; x++) {
-      glm::vec2 p(x * dx, y * dy);
-
+      glm::vec2 p((x + 0.5f) * dx, (y + 0.5f) * dy);
       for (const auto& poly : layer.polygons) {
         if (isInside(p, poly)) {
           mask[y * res + x] = poly.isMesh ? 1.0f : 0.0f;

@@ -56,13 +56,13 @@ void main() {
     vec3 phaseCol = hsv2rgb(vec3(phase_norm, 1.0, value));
     
     // Draw a vertical color legend at the right edge of the viewport
-    // vec3 legend = vec3(0.0);
-    // if (uv.x > 0.90) {
-    //   float t = smoothstep(0.90, 1.0, uv.x);
-    //   float y = uv.y;
-    //   float hue = fract(1.0 - y);
-    //   legend = hsv2rgb(vec3(hue, 1.0, 0.9));
-    // }
+    vec3 legend = vec3(0.0);
+    if (uv.x > 0.90) {
+      float t = smoothstep(0.90, 1.0, uv.x);
+      float y = uv.y;
+      float hue = fract(1.0 - y);
+      legend = hsv2rgb(vec3(hue, 1.0, 0.9));
+    }
 
     fragColor = vec4(mix(phaseCol, legend, step(0.90, uv.x)), 1.0);
 

@@ -1,6 +1,7 @@
 #pragma once
 #include <device.h>
-#include <glm/fwd.hpp>
+#include <glm/glm.hpp>
+#include <vector>
 
 class geometry {
   public:

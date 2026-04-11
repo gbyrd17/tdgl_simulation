@@ -1,0 +1,296 @@
+\documentclass[11pt,twoside]{report}
+\input{../preamble.tex}
+\usepackage{dsfont}
+\usepackage{import}
+\setcounter{secnumdepth}{1} 
+\setcounter{tocdepth}{1}
+
+\usepackage[compat=1.0.0]{tikz-feynman}
+
+\DeclareMathOperator{\sgn}{sgn}
+\DeclareMathOperator{\res}{Res}
+
+\fancyfoot[RE,LO]{\textbf{TDGL Simulation Writeup}}
+
+\title{Time-Dependent Ginzburg-Landau Simulation Writeup}
+
+\begin{document}\maketitle
+\pagenumbering{roman}
+\tableofcontents
+\newpage
+\pagenumbering{arabic}
+
+\chapter{Introduction}
+
+The Ginzburg-Landau result introduced the world of physics to the idea of spontaneous symmetry breaking.  When a ferromagnetic material in thermal equilbrium at temperature $T$ is placed in a magnetization $\bm{M}(x)$ (this is a measure of how many electrons are magnetically aligned), we know that at low temperatures, rotational invariance is spontaneously broken, and the material exhibits a sudden bulk magnetization in some direction.  The bulk magnetization suddenly disapears above some critical temperature $T_{c}$.  We have even been able to show that increasing the temperature causes the magnetic moments to point in increasingly random directions, causing the bulk magnetization to drop lower and lower.  Experimentally, we found that below $T_{c}$, $|\bm{M}|$ vanishes as $\sim (T_{c}-T)^{\chi}$, with the critical exponent $\chi\simeq 0.37$.
+
+We call this sudden change a \textbf{second order phase transition}, which is an example of the greater umbrella term \textbf{critical phenomena}.  From a theoretic perspective, we want to compute the partition function $Z = \tr\, e^{-\mathcal{H}/T}$, (consider $\mathcal{H}$ the Hamiltonian) which is clearly smooth in $T$, unlike the experimental result.  In true theorist fashion, the first instinct was to blame the experimental result, saying that the nonanylitic behavior of $(T_{c}-T)^{\chi}$ rules it out as a proper model of the phenomenon, arguing that within the error bounds of the measurement of $|\bm{M}|$, a hidden, smooth progression to zero in $T$ is present. Lars Onsager's exact solution of the 2D Ising model in 1944\footnote{\href{https://doi.org/10.1103/PhysRev.65.117}{doi.org/10.1103/PhysRev.65.117}} settled this argument by realizing the trace in the partition function sums over an infinite number of terms, and a sum of infinite terms that are analytic in some variable need not be itself analytic.
+
+Landau and Ginzburg had the elegant idea that the form of the free energy $G$ could be derived from general principles.\footnote{\href{https://doi.org/10.1016/B978-0-08-010586-4.50078-X}{doi.org/10.1016/B978-0-08-010586-4.50078-X}, pdf: \href{https://tinyurl.com/landauGinzburg}{On the Theory of Superconductivity}}  They proposed that by demanding rotational invariance, the free energy $G$ could be expressed as a function of $\bm{M}$ for a system with volume $V$.  If $\bm{M}$ is constant in $x$, 
+\begin{align}
+  G = V \left[ \alpha(T)\bm{M}^{2}+\beta(T)\left( \bm{M}^{2} \right)^{2} + \cdots \right],
+\end{align}
+where $\alpha, \beta, \dots$ are unknown but presumably smooth functions of $T$.  Landau and Ginzburg further supposed that $\alpha$ vanishes at some temperature $T_{c}$, and it logically follows that $\alpha$ would look something like the experimental result, $\alpha = \alpha_{1}(T-T_{c})+\cdots$.  Its clear that for $T>T_{c}$, $G$ minimizes for $\bm{M}=0$, but once $T<T_{c}$, new minima develop at $|\bm{M}| = \sqrt{(-\alpha/2\beta)}\sim (T_{c}-T)^{1/2}$.  Hence rotational symmetry spontaneously breaks, and we see that dreaded nonanalytic behavior appear.
+
+The natural progression is to include the variability of $\bm{M}$ in space, Landau and Ginzburg argued that the free energy would have the form
+\begin{align}
+  G = \int d^{3}x \left\{ \partial_{i}\bm{M}\partial_{i}\bm{M} + \alpha \bm{M}^{2} + \beta \left( \bm{M}^{2} \right)^{2} + \cdots \right\},
+\end{align}
+where one can argue that we can rescale $\bm{M}$ to set the coefficient of the derivative term to $1$.  Derivations ensue...
+
+\subsection{Goldstone Modes}
+
+In our introduction, we mentioned spontaneous symmetry breaking.  There exists a theorem: 
+\begin{theorem}[Goldstone's Theorem]
+  For every spontaneously broken continuous symmetry generator, there exists a massless scalar mode in the field spectra, identified by the direction tangent to the degenerate vacuum manifold.
+\end{theorem}
+
+\begin{proof}[Anderson-Higgs Mechanism in Superconductors]
+  Consider a complex scalar field $\varphi$ exhibiting a $\mathrm{U}(1)$ symmetric potential,
+  \begin{align}
+    V(\varphi) &= \alpha|\varphi|^{2}+\beta|\varphi|^{4}, \nonumber
+    \intertext{we can split into two real fields, $\varphi=\frac{1}{\sqrt{2}}(\phi_{1}+i\phi_{2})$, so that $|\varphi|^{2} = (\phi_{1}^{2}+\phi_{2}^{2})/2$, then the potential:}
+    V(\phi_{1},\phi_{2}) &= \frac{\alpha}{2}\left( \phi_{1}^{2}+\phi_{2}^{2} \right) + \frac{\beta}{4}\left( \phi_{1}^{2}+\phi_{2}^{2} \right)^{2}.
+  \end{align}
+  From complex analysis it is intuitive to argue $\phi_{1}$ is the radial mode, and $\phi_{2}$ is the angular mode.  Now we build the mass matrix.  The mass of a mode is determined by the curvature of the potential at the minimum.  A steep potential means we have a heavy particle, while a flat potential is light.  Formally:
+  \begin{align}
+    M^{2}_{ij} = \frac{\partial^{2}V}{\partial\phi_{i}\partial\phi_{j}}\bigg|_{x|\mathrm{min}(V)}, \nonumber\\
+  \end{align}
+  for $T>T_{c}$, where $\varphi_{0}=0$ for $\mathrm{min}(V)=0$,
+  \begin{align}
+    M^{2} = \begin{pmatrix}
+      \alpha & 0 \\
+      0 & \alpha
+    \end{pmatrix}
+  \end{align}
+  and for $T<T_{c}$, where $|\varphi_{0}|^{2}=-\alpha/2\beta$ for $\mathrm{min}(V)$, we expand about the radial axis: $\phi_{1} = \varphi_{0}+\eta$, and $\phi_{2} = \pi$, where $\eta$ is the Higgs mode, and $\pi$ is the Goldstone mode.  We get:
+  \begin{align}
+    M^{2} = \begin{pmatrix}
+      -2\alpha & 0 \\
+      0 & 0
+    \end{pmatrix}
+  \end{align}
+  We see that after symmetry breaking, the Higgs eats the Goldstone bosons and the new gauge-boson couples to the field in a way that causes the electrons in our system to exhibit an effective attraction, the birth of Cooper pairs.  The Higgs mode is below zero, telling us that it costs energy to move away from the vacuum manifold formed by the new gauge-boson.  The angular mode tells us that it costs nothing to modify the phase of the order parameter, and thus the ground state has angular degeneracy.
+  
+\end{proof}
+
+This is the theorem that tells us precisely the spectrum of vacua that are formed in the $T<T_{c}$ regime: if we minimize our free energy w.r.t to the field (in the previous section, our field was $\bm{M}$):
+\begin{align}
+  \frac{\delta \mathcal{F}}{\delta|\varphi|} = 0 &= \frac{\delta}{\delta|\varphi|} \left( \alpha|\varphi|^{2} + \beta\left( |\varphi|^{2} \right)^{2} \right), \nonumber\\
+  0 &= 2\alpha|\varphi| + 4\beta|\varphi|^{2}|\varphi|, \nonumber\\
+  |\varphi|^{2} &= -\frac{\alpha}{2\beta}.
+\end{align}
+As we mentioned in the introduction.  This is exactly the type of behavior characteristic of a second order phase transition, a smooth transition to and from some critical parameter $T_{c}$ on either side of which different physics are observed
+
+
+
+\chapter{Ginzburg-Landau Theory}
+
+Now is time for a modern derivation of the Ginzburg-Landau equations.  The full GL free energy is:
+
+\begin{align}
+  \mathcal{F}[\varphi, A] = \int d^{3}x \left[ \alpha|\varphi|^{2}+\beta|\varphi|^{4} + \frac{1}{2m_{c}}\big|\left( -i \hbar \partial_{i} - e_{c}A_{i} \right)\varphi\big|^{2} + \frac{|\epsilon_{ijk}\partial_{j}A_{k}|^{2}}{2} \right],
+\end{align}
+including the kinetic energy of the condensate, $|D_{i}\varphi|^{2} \equiv \big|\left( -i \hbar \partial_{i} - e_{c}A_{i} \right)\varphi\big|^{2}$, and the coupling to the magnetic field $B \equiv \epsilon_{ijk}\partial_{j}A_{k}$.  We note that $m_{c}=2m_{e}$ and $e_{c}=2e$ are the mass and charge of the Cooper pair pseudo-bosons that make up this condensate.
+
+First we minimize w.r.t. $\varphi$:
+\begin{align}
+  \frac{\delta F}{\delta|\varphi|} = 0 &= \frac{\partial F}{\partial |\varphi|} - \partial_{i}\frac{\partial F}{\partial (\partial_{i}\varphi)}, \nonumber\\
+  0 &= \alpha\varphi + 2 \beta|\varphi|^{2}\varphi + \frac{1}{2m_{c}}D_{i}^{2}\varphi, \label{eq:energyBoundary}
+\end{align}
+then we look to the vector potential:
+\begin{align}
+  \frac{d \mathcal{F}}{dA_{i}} = 0 \Rightarrow \partial_{j}\frac{\partial \mathcal{F}}{\partial \left( \partial_{j}A_{i} \right)} &= \frac{\partial \mathcal{F}}{\partial A_{i}}, \nonumber\\
+  \frac{1}{2}\partial_{j}(\varepsilon_{ijk}\varepsilon_{ilm}\delta_{ik}\partial_{l}A_{m}) &= \frac{1}{2m_{c}}(ie_{c}\varphi^{*}\partial_{i}\varphi-ie_{c}\varphi \partial_{i}\varphi^{*}+2e_{c}^{2}A_{i}|\varphi|^{2}), \nonumber\\
+  \varepsilon_{ijk}\varepsilon_{klm}\partial_{j}\partial_{l}A_{m} &= \frac{e_{c}}{m_{c}}\left[ i(\varphi^{*}\bm{\nabla } \varphi - \varphi \bm{\nabla } \varphi^{*}) + 2e^{2}_{c}|\varphi|^{2}\bm{A} \right], \nonumber\\
+ \bm{\nabla } \times \left( \bm{\nabla } \times \bm{A} \right) &= \frac{e_{c}}{m_{c}}\left[ i(\varphi^{*}\bm{\nabla } \varphi - \varphi \bm{\nabla } \varphi^{*}) + 2e_{c}|\varphi|^{2}\bm{A} \right], \nonumber \\
+ \bm{j} &= \frac{e_{c}}{4\pi m_{c}}\left[ i(\varphi^{*}\bm{\nabla } \varphi - \varphi \bm{\nabla } \varphi^{*}) + 2e_{c}|\varphi|^{2}\bm{A} \right]. \label{eq:currentBoundary}
+\end{align}
+
+Here we've found the two Ginzburg-Landau (GL) equations that define the boundary conditions of our superconductor.  The first result, \cref{eq:energyBoundary} is a energy boundary condition term, telling us that, when minimized, the kinetic and potential energies will equalize as a function of the order parameter.  Phenomenologically, this tells us that for the system to approach equilibrium, the material will form more or less cooper pairs as the parameters $\alpha, \beta,$ and $\bm{A}$ are tuned. \\
+
+The second GL equation, \cref{eq:currentBoundary}, defines what it means for the condensate to have a "current".  It tells us that the current is dependent on the divergence of the density of cooper pairs in the material, as well as the external vector potential experienced by the bosons in the material. \\
+
+We can uncover two important characteristic scales for the effect we are investigating: first is the distance over which a perturbation in the order parameter propagates:  by setting $\bm{A}=0$ in our energy condition, we investigate the length scale over which we expect our order parameter to vary:
+\begin{align}
+  0 &= \alpha\varphi + 2\beta|\varphi|^{2}\varphi - \frac{1}{2m_{c}}\partial_{i}^{2}\varphi, \nonumber
+  \intertext{the equilibrium solution during criticality is $|\varphi_{0}|^{2} = -\alpha/2\beta$, so if we perturb the density around the equilibrium, we get $\varphi = (\varphi_{0} + \delta\varphi)e^{i\theta}$.  Plugging this in,}
+  0 &= \alpha\left( \varphi_{0}+\delta\varphi \right) + 2\beta\left( \varphi_{0}+\delta\varphi \right)^{3} - \frac{1}{2m_{c}}\partial_{i}\partial_{i}\delta\varphi, \nonumber
+  \intertext{to first order in the perturbation,}
+  0 &= \alpha\varphi_{0}+\alpha\delta\varphi+2\beta\varphi_{0}^{3}+6\beta\varphi_{0}^{2}\delta\varphi - \frac{1}{2m_{c}}\partial_{i}\partial_{i}\delta\varphi, \nonumber
+  \intertext{the zeroth order terms are just the criticality conditions, so together they vanish, and if we substitute the minima in, we get the result:}
+  \partial_{i}\partial_{i}\delta\varphi &= -4m_{c}\alpha\delta\varphi = 4m_{c}|\alpha|\delta\varphi, \nonumber
+  \intertext{this is very familiar, and we notice our solution immediately,}
+  \delta\varphi &= C e^{-x/\xi},
+\end{align}
+where $\xi^{2}=1/4m_{c}|\alpha|$.  This parameter $\xi$ is the \textbf{coherence length}, the length scale over which we expect perturbations of the density field to return to equilibrium.
+
+The other length scale is the depth within our material that we expect to see no perturbations to the density field.  This corresponds to the scenario where $\varphi=\varphi_{0}$ is uniform, then we can look at the current boundary condition \cref{eq:currentBoundary} to see:
+\begin{align}
+  \bm{j} &= \frac{e_{c}^{2}\varphi_{0}^{2}}{2\pi m_{c}}\bm{A}, \nonumber
+  \intertext{this is the London equation, describing the expulsion of a magnetic field by a current propagating through our material, if we look for a direct solution in terms of $\bm{B}$,}
+  \bm{\nabla } \times \bm{j} &= \frac{e_{c}^{2}\varphi_{0}^{2}}{2\pi m_{c}}\bm{B}, \nonumber
+  \intertext{if we realize that $\bm{\nabla} \times \bm{j} = \bm{\nabla} \times (\bm{\nabla} \times \bm{B})$, and use the identity $\bm{\nabla} \times (\bm{\nabla} \times \bm{B}) = \bm{\nabla}(\bm{\nabla}\cdot \bm{B}) - \nabla^{2}\bm{B}$, along with Maxwell's equation $\bm{\nabla}\cdot \bm{B}=0,$ we obtain the form}
+  \nabla^{2}\bm{B} &= -(4\pi)\frac{e^{2}_{c}\alpha}{4\pi m_{c}\beta}\bm{B} = -\frac{e^{2}_{c}\alpha}{m_{c}\beta}\bm{B}, \nonumber
+  \intertext{again, we identify the solution immediately,}
+  \bm{B} &= B_{0}e^{-x/\lambda}\bm{\hat{e}_{i}},
+\end{align}
+where $\lambda^{2} = m_{c}\beta/e_{c}^{2}\alpha$.  The parameter $\lambda$ is the \textbf{penetration depth}.  This is called the \textit{Meissner effect}.  \\
+
+\subsection{The Ginzburg-Landau Parameter}
+
+We define the material constant $\kappa = \lambda/\xi$ as the ratio of the penetration to coherence scales.  The divergence of the coherence and penetration parameters is avoided by defining $\kappa$ this way as they cancel at the pole $\alpha\to 0$.  This allows a continuous material parameter that characterizes the behavior of a superconductor in a lab.
+
+The use of $\kappa$ gave natural motivation to make distinct two types of superconductors, inventively dubbed Type I and Type II.  Type I superconductors have  a single thermodynamic critical field $H_{c}$ below which the material is fully superconducting, and above which it is fully normal.  It is characterized by a one-to-one correspondance between the condensation energy and the Meissner effect. 
+
+The condensation energy is the difference between the free energy during the normal state, $F_{0}$ and the free energy during the superconducting state, $F = F_{0} + \alpha|\varphi_{0}|^{2} + \beta|\psi_{0}|^{4}$.  In the superconducting state, $|\psi_{0}|^{2}=-\alpha/2\beta$, so $F_{cond} = \alpha^{2}/4\beta$.  The Meissner effect tells us that the energy used to expel the magnetic field comes from the energy gained from forming condensation.  At criticality, the Meissner effect is precisely equal to the condensation energy,
+\begin{align}
+  \frac{H_{c}^{2}}{8\pi} &= \frac{\alpha^{2}}{4\beta}, \nonumber\\
+  H_{c} &= \sqrt{\frac{2\pi\alpha^{2}}{\beta}},
+\end{align}
+is the threshold for the field at which it becomes energetically favorable to allow penetration by the external field, and destruction of the condensate.
+
+At the interface of the superconductor there are two possibilities:
+\begin{itemize}
+
+  \item $|\varphi|$ recovers from $0$ to $|\varphi_{0}|$ over the coherence length $\xi$ -- this costs condensation energy over a layer of thickness $\xi$.
+  \item $B$ because from $H_{c}$ to $0$ over the penetration depth $\lambda$ -- this releases magnetic energy over a layer of thickness $\lambda$.
+
+\end{itemize}
+
+So we have two competing contributions to the surface energy:  far from the interface, $\varphi=0$, and $B = H_{c}$ in the normal state, while $\varphi = \varphi_{0}$, and $B=0$ in the superconducting state.  These contributions compete due to the mismatch in length scale: over a length $\xi$, $\varphi = 0 \to \varphi_{0}$, but this region the system isn't fully superconducting yet since it isn't greater than the coherence length, thus there is a energy cost per unit area over the coherence length: $\sigma_{cond} \simeq \alpha^{2}\xi/2\beta$.  Then you have a similar resut from the magnetic field, the penetration depth tells us of a magnetic energy cost over a region $\lambda$ as the field decays $H_{c} \to 0$, so $\sigma_{mag} \simeq -\lambda H_{c}^{2}/8\pi = -\lambda\alpha^{2}/4\beta$.  Summing the total surfece energy cost, we see
+\begin{align}
+  \sigma_{ns} \simeq \frac{H_{c}^{2}}{8\pi}(\xi-\lambda).
+\end{align}
+(Another derivation is available for this using an effective length measure $\delta \propto \int_{- \infty}^{ \infty}dx\,f(\varphi,H_{c})$ where $f$ is a function of the normalized field profiles.  One should find that $\sigma_{ns}= \left( H_{c}^{2}/8\pi \right) \cdot \delta$.)
+
+When $\kappa<1/\sqrt{2}$ ($\xi>\lambda$), $\sigma_{ns}$ is positive -- interfaces cost energy, thus the system avoids creating them, so the field is either fully expelled or fully admitted.  This is Type I. \\
+
+When $\kappa>1/\sqrt{2}$ ($\xi<\lambda$), $\sigma_{ns}$ is negative -- interfaces are energetically favorable, so the system will create as many as possible.  This results in \textit{quantized flux tubes}, each carrying one flux quantum (see following section) surrounded by a normal core of radius $\xi$ and a current vortex of radius $\lambda$.  This is Type II.
+
+The \textit{Bogomolny point} is the exact value of $\kappa$ for which crossover occurs.  At this value, the surface energy vanishes and the GL equations become self dual.  The threshold is 
+\begin{align}
+  \kappa = 1/\sqrt{2},
+\end{align}
+below this value, the material is Type I, above it, the material is Type II.
+
+\subsection{Type-I Superconductors}
+
+The simpler picture, when $\kappa < 1/\sqrt{2}$, we see two distinct states, normal and superconducting, and the transition between these two states is immediate, the material moves from a state of total expulsion of any magnetic flux ($B=0$) to a normal state with induced flux from the external field.  There is no intermediate state since the coherence length is greater than the penetration depth, so it would cost more energy to form mixed regions of superconductiveity and normal conductivity.
+
+\subsection{Type-II Superconductors}
+
+In the case of a type-II material, the penetration depth is greater than the coherence length, and so it becomes energetically favorable to have an intermediate state where there are some regions with superconductivity and some regions with normal conductivity.  The regions exhibiting superconductive behavior are called vortexes and carry quantized magnetic flux through the superconductor.  In general, over some enclosed area $\mathcal{S}$,
+\begin{align}
+  \Phi &= \oint_{\partial \mathcal{S}}d\ell_{i}\,A_{i}, \nonumber
+  \intertext{recall London's equation,
+  $$
+    A_{i} = \frac{2\pi m_{c}}{e_{c}^{2}\varphi^{*}\varphi}j_{i} - \frac{i}{2e_{c}\varphi^{*}\varphi}(\varphi^{*}\partial_{i}\varphi - \varphi \partial_{i} \varphi^{*})
+  $$ and we consider a curve large enough s.t. $j_{i}=0$ on $\partial \mathcal{S}$, we see the form}
+     \Phi &= \frac{1}{2e_{c}|\varphi|^{2}}\left( i\oint_{\partial \mathcal{S}} d\ell_{i}\,\varphi^{*} \partial_{i}\varphi - i\oint_{\partial \mathcal{S}} d\ell_{i}\,\varphi \partial_{i}\varphi^{*} \right), \nonumber
+  \intertext{notice that if we name the integral $z$, we have $z+z^{*}$, which is just $2\Re{z}$, and $\varphi = |\varphi|e^{i\theta}$, thus the line integral:}
+  &= \frac{1}{2e_{c}|\varphi|^{2}}(2|\varphi|^{2}\pi), \nonumber \\
+  \Phi &= \frac{\pi}{e_{c}},
+\end{align}
+This is the \textit{flux quanta} of a vortex, the basic unit of energy that may flow through one of these distortions.  
+
+The core of the vortex is of radius $\xi$ and is very small, so we initially neglect its contribution to the energy.
+
+The line energy (energy per unit length) is given by the sum of the energy associated with the magnetic field, and the kinetic energy of the supercurrent:
+\begin{align}
+  J  &= \int_{r \gg \xi} d^{2}x\, \left( \frac{B^{2}}{8\pi} + \frac{1}{2}\frac{m_{c}}{e_{c}^{2}|\varphi_{0}|^{2}}j^{2} \right), \nonumber\\
+     &= \frac{1}{8\pi}\int_{r \gg \xi} d^{2}x\, \left( B^{2} + \lambda^{2}(\nabla \times B)^{2} \right), \nonumber
+\end{align}
+it is important to notice:
+\begin{align}
+  B_{i}B_{i} + \lambda^{2}\epsilon_{ijk}\epsilon_{ilm}\partial_{j}\partial_{l}B_{k}B_{m} &= B_{i}B_{i} + \lambda^{2}\epsilon_{ijk}\epsilon_{ilm}\partial_{j}\partial_{l}B_{k}B_{m}, \nonumber\\
+  &= B_{i}B_{i} + \lambda^{2}(\partial_{j}\partial_{j}B_{k} - \partial_{j}\partial_{k}B_{j})B_{k}, \nonumber\\
+  &= \bm{B} + \lambda^{2}(\nabla^{2}B - \nabla (\nabla \cdot B)), \nonumber\\
+  &= \bm{B} + \lambda^{2}\nabla \times (\nabla \times \bm{B}), \nonumber
+\end{align}
+Now, if we consider the interior of the core, we need a source term including the flux through the vortex:
+\begin{align}
+  \frac{\Phi_{0}}{8\pi}\delta^{2}(r)B(r) &= \bm{B} + \lambda^{2}\nabla \times (\nabla \times \bm{B}), \nonumber\\
+  \frac{\Phi_{0}}{8\pi}\int d^{2} x \delta^{2}(r)B(r) = J &= \frac{1}{8\pi}\int_{\mathcal{S}}\bm{B}\cdot d\bm{\sigma} + \frac{\lambda^{2}}{8\pi}\int\nabla \times (\nabla \times \bm{B})\cdot d\bm{\sigma}, \nonumber
+  \intertext{the left integral vanishes by the divergence theorem and Maxwell's equations, the right integral becomes a closed curve integral }
+              \frac{\Phi}{8\pi}B(0) &= \frac{1}{8\pi}\lambda^{2}\oint_{\partial \mathcal{S}} \left( \nabla \times \bm{B} \right)\cdot d \bm{\ell}, \nonumber
+              \intertext{this integral moves through $(\xi < r \ll \lambda)$ about the boundary of the vortex, so we carve out $B(0)$, leaving the much simpler continuity condition:}
+             \Phi &= \lambda^{2}2\pi r |\nabla \times \bm{B}|, \nonumber\\
+             |\nabla \times \bm{B}| &= \frac{\Phi}{2\lambda^{2}\pi}\frac{1}{r}, \nonumber
+             \intertext{since $\bm{B}\propto \bm{\hat{z}}$, its curl is $-\partial B / \partial r$,}
+             B &= \frac{\Phi}{2\pi\lambda^{2}}\ln{\left( \frac{\lambda}{r} \right)}\bigg|_{\lambda}^{\xi}, \nonumber\\
+             B &= \frac{\Phi}{2\pi\lambda^{2}}\ln{(\kappa)}.
+\end{align}
+Now, the change in free energy must be zero for this to be favorable, so if we call $\varepsilon_{0} = \Phi B(0)/8 \pi$ the energy of the core, we can argue that the coupling between the Meissner and external fields needs to satisfy
+\begin{align}
+  \varepsilon_{0} &= \frac{1}{4\pi}\int d^{2}r\, \bm{B}\cdot \bm{H}_{c,1}, \nonumber\\
+  \intertext{by Green's theorem, we find that $\Phi = \iint_{\mathcal{S}} d^{2}x \, \bm{B}$, and thus (since we know B(r) now,)}
+  \frac{\Phi^{2}}{16\pi^{2}\lambda^{2}}\ln(\kappa) &= \frac{\Phi H_{c,1}}{4\pi}, \nonumber\\
+  H_{c,1} &= \frac{\Phi}{4\pi\lambda^{2}}\ln{\kappa}
+\end{align}
+
+
+We denote this the first critical magnetic field, $H_{c,1}$, it is the threshold below which the Superconductive Meissner state is stable.  Above this point, it is energetically favorable to form vortices, but the cores aren't small enough to not feel the effect of the coherence length, so we won't see total admittance of the magnetic field.
+
+We are then interested in the other regime, where $|\varphi|^{2}$ is close to zero, so the first GL equation says:
+\begin{align}
+  0 &= \alpha\varphi + \frac{1}{2m_{c}}D_{i}^{2}\varphi, \nonumber
+  \intertext{the vector potential needs to correspond to the unifrom magnetic field $H_{c,2}\bm{\hat{z}}$, thus $A = H_{c,2}x\bm{\hat{x}}$, so the covariant derivative becomes:
+  $$
+    D_{i}^{2} = \frac{\partial^{2}}{\partial x^{2}} + \left( \frac{\partial}{\partial y} - e_{c}H_{c,2}x \right)^{2} + \frac{\partial^{2}}{\partial z^{2}}, 
+  $$ we try a solution of the form $\varphi(x,y) = f(x)e^{iky}$, and we see}
+  -\alpha f(x)e^{iky} &= \frac{1}{2m_{c}}\left( k - e_{c}H_{c,2}x \right)^{2}f(x)e^{iky} - \frac{1}{2m_{c}}f^{\prime\prime}(x) e^{iky}, \nonumber
+  \intertext{we define $x_{0}$ the center of the orbit, and argue $x_{0}e_{c}H_{c,2}=k$,}
+\alpha f(x) &= -\frac{e_{c}^{2}H_{c,2}^{2}}{2m_{c}}\left( x - x_{0} \right)^{2}f(x) + \frac{1}{2m_{c}}f^{\prime\prime}(x), \nonumber
+\end{align}
+if we suppose $-\alpha$ is the energy, this is just the quantum harmonic oscillator, so we can say that $\omega_{c} = e_{c}H_{c,2}/m_{c}$ and 
+$$
+  \omega \left( n+\frac{1}{2} \right) = -\alpha
+$$
+for $n=0,1,2,...$, then we can say $|\alpha| = 1/4m_{c}\xi^{2}$ and we want at minimum one energy level so $n=0$,  so 
+\begin{align}
+  -\alpha &= \frac{e_{c}H_{c,2}}{2m_{c}}, \nonumber
+  \intertext{Below $T_{c}$, $\alpha$ is negative, so $\alpha = -|\alpha|$,}
+  \frac{1}{4m_{c}\xi^{2}} &= \frac{e_{c}H_{c,2}}{2m_{c}}, \nonumber\\
+  H_{c,2} &= \frac{1}{2e_{c}\xi^{2}} = \frac{\Phi}{2\pi\xi^{2}}, 
+\end{align}
+Notice that the upper critical field is set entirely by the coherence length, as it gets longer, the superconductor will form more vorticies easier, since the material doesnt have enough room to totally dissipate the energy by normal means.
+
+A couple things are worth pointing out here: First, look at the ratio:
+\begin{align}
+  \frac{H_{c,2}}{H_{c,1}} &= \frac{\Phi}{2\pi\xi^{2}}\left( \frac{4\pi\lambda^{2}}{\Phi\ln{\kappa}} \right), \nonumber \\
+  \frac{H_{c,2}}{H_{c,1}} &= \frac{2\kappa^{2}}{\ln{\kappa}}.
+\end{align}
+So for $\kappa$ large, this ratio explodes, making the superconducting state less and less stable, requiring lower temperatures to obtain a fully superconducting state.  We also see an interesting relationship to the type-I criticality field threshold:
+\begin{align}
+  H_{c,1}H_{c,2} &= \frac{\Phi^{2}}{8\pi^{2}\xi^{2}\lambda^{2}}\ln(\kappa), \nonumber\\
+  &= \frac{e_{c}^{2}\alpha^{2}\Phi^{2}}{2\pi^{2}\beta}\ln(\kappa), \nonumber
+  \intertext{notice that $e_{c}\Phi=\pi$, thus}
+  &= \frac{\alpha^{2}}{2\beta}\ln(\kappa), \nonumber\\
+  H_{c,1}H_{c,2} &= \frac{1}{4\pi}H_{c}^{2}\ln(\kappa).
+\end{align}
+Telling us that in general $H_{c,2} \gg H_{c,1}$.
+
+
+\chapter{Time-Dependent Ginzburg-Landau Theory}
+
+The Time-Dependent Ginzburg-Landau (TDGL) equation is the simplest equation that maintains the symmetries of the original GL equations and drive $\varphi$ toward the minimum of the free energy:
+\begin{align}
+  \frac{1}{\gamma}\frac{\partial\varphi}{\partial t} &= - \frac{\delta \mathcal{F}}{\delta\varphi}, \nonumber\\
+  \frac{1}{\gamma}\frac{\partial\varphi}{\partial t} &= -\alpha\varphi - 2\beta|\varphi|^{2}\varphi + \frac{1}{2m_{c}}D_{i}^{2}\varphi,
+\end{align}
+where $\gamma$ is the relaxation rate -- a material-dependent constant setting the speed at which the condensate responds to perturbations.  This not analytically solvable, so this is where our simulation will build off from.  We propose the 5-point Laplacian Discretization scheme to calculate the laplacian in our covariant derivative:
+\begin{align}
+  \nabla^{2}\varphi\big|_{i,j} = \frac{\varphi_{i+1,j} + \varphi_{i-1,j} + \varphi_{i,j+1} + \varphi_{i,j-1} - 4\varphi_{i,j}}{h^{2}},
+\end{align}
+after this averaging, we need to step forward in time according to the CFL stability condition\footnote{doi: \href{https://doi.org/10.1147/rd.112.0215}{https://doi.org/10.1147/rd.112.0215}, pdf: \href{https://web.stanford.edu/class/cme324/classics/courant-friedrichs-lewy.pdf}{On the Partial Difference Equations of Mathematical Physics}} from our initial point $\varphi^{n}$ to $\varphi^{n+1}$.  The time step needs to behave according to $1/\xi^{2}$, $\gamma$ and $h$ as parameters:
+\begin{align}
+  \Delta t < \frac{h^{2}}{4\xi^{2}\gamma},
+\end{align}
+then to give some more stability we can scale our time step to be $0.1h^{2}/4\xi^{2}\gamma$.  Then we can use classic computational methods to say
+\begin{align}
+  \varphi_{i,j}^{n+1} &= \varphi_{i,j}^{n} + \gamma\Delta t \left( -\alpha\varphi_{i,j}^{n}-2\beta|\varphi_{i,j}^{n}|^{2}\varphi_{i,j}^{n}+\frac{1}{2m_{c}}\nabla^{2}\varphi_{i,j}^{n} \right).
+\end{align}
+
+
+\end{document}

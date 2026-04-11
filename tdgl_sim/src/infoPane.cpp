@@ -8,7 +8,8 @@
 // constructor 
 infoPane::infoPane(device& device, simulator& simulator, layer& layer ): 
   m_device(device), m_simulator(simulator), m_layer(layer) {
-    gridUnit = (m_device.worldSize.x / m_simulator.m_res) / m_layer.xi;
+    gridUnitX = (m_device.worldSize.x / m_simulator.m_mesh->resX) / m_layer.xi;
+    gridUnitY = (m_device.worldSize.y / m_simulator.m_mesh->resY) / m_layer.xi;
   }
 
 // destructor
@@ -31,9 +32,11 @@ void infoPane::drawSidebar(int simW, int sideW, int h_win) {
 }
 
 void infoPane::drawLegend() {
-   float cx   = wPos.x + 42.f;
-   float cy   = wPos.y + 42.f;
-   float rad  = 34.f;
+    ImDrawList* dl = ImGui::GetWindowDrawList();
+    ImVec2 wPos = ImGui::GetCursorScreenPos();
+    float cx = wPos.x + 42.f;
+    float cy = wPos.y + 42.f;
+    float rad = 34.f;
 
     for (int i = 0; i < 36; i++) {
       float a1 = (i       / 36.f) * 2.f * 3.14159f;
@@ -51,15 +54,12 @@ void infoPane::drawLegend() {
     dl->AddText(ImVec2(cx - 5.f, cy + rad + 4.f),   white, "pi/2");
 
     ImGui::Dummy(ImVec2(0.f, rad * 2.f + 20.f));
-
-    // TODO: add code to draw a 3d coordinate system that defines x y z to user next to the color wheel
-
     ImGui::Separator();
 }
 
 void infoPane::drawSimVars() {
     ImGui::TextColored(ImVec4(0.f,1.f,1.f,1.f), "SYSTEM SCALE");
-    ImGui::Text("Box size    %.2f x %.2f m",  m_device.worldSize.x/m_layer.xi, m_device.worldSize.x/m_layer.xi);
+    ImGui::Text("Box size    %.2f x %.2f m",  m_device.worldSize.x/m_layer.xi, m_device.worldSize.y/m_layer.xi);
     ImGui::Text("Grid step   %.3e m",         m_simulator.h);
     ImGui::Text("xi          %.4e m",         m_layer.xi);
     ImGui::Separator();
@@ -89,6 +89,7 @@ void infoPane::drawSimVars() {
     if (ImGui::Checkbox("Thermal noise", &noiseCheck)) m_simulator.useNoise = noiseCheck;
 
     if (ImGui::Button("Random Quench", ImVec2(-1, 0))) m_simulator.quench();
+    if (ImGui::Button("Seed Abrikosov Lattice", ImVec2(-1, 0))) m_simulator.quenchSeededLattice();
     ImGui::Separator();
 
     ImGui::Text("%.1f FPS  (%.2f ms)", ImGui::GetIO().Framerate,
@@ -99,6 +100,16 @@ void infoPane::drawSimVars() {
     ImGui::Text("avg |psi|   %.4e", m_simulator.phiAvg);
     ImGui::Text("min |psi|   %.4e", m_simulator.phiMin);
     ImGui::Text("max |psi|   %.4e", m_simulator.phiMax);
+    ImGui::Separator();
+    
+    ImGui::TextColored(ImVec4(1.f,0.8f,0.2f,1.f), "VORTEX STATISTICS");
+    ImGui::Text("Vortex count   %d", m_simulator.vortexCount);
+    float expectedVortices = (m_simulator.mc * m_device.externalB.z * m_device.worldSize.x * m_device.worldSize.x) / (2.f * 3.14159f);
+    ImGui::Text("Expected       %.0f", expectedVortices);
+    ImGui::Text("Occupancy      %.1f%%", 100.f * m_simulator.vortexCount / std::max(1.f, expectedVortices));
+    ImGui::Separator();
+    ImGui::TextColored(ImVec4(1.f,0.8f,0.8f,1.f), "ADAPTIVE TIMESTEP");
+    ImGui::Text("dt          %.4e", m_simulator.dt);
 
     ImGui::End(); 
 }

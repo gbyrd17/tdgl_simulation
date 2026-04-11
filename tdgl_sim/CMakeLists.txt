@@ -13,6 +13,7 @@ find_package(glfw3 REQUIRED glm CONFIG REQUIRED)
 set(SOURCES
     main.cpp
     ${SRC}/geometry.cpp
+    ${SRC}/mesh.cpp
     ${SRC}/simulator.cpp
     ${SRC}/infoPane.cpp
     ${IMGUI_DIR}/imgui.cpp

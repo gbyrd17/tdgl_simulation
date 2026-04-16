@@ -88,11 +88,15 @@ int main()  {
     int simW  = w * 5 / 6;
     int sideW = w - simW;
 
+    // Render first viewport always
     glViewport(0, 0, simW / 2, h_win);
     sim.render(0);
 
-    glViewport(simW / 2, 0, simW / 2, h_win);
-    sim.render(1);
+    // Optionally render second viewport (can be disabled for speed)
+    if (sim.m_renderBothViewports) {
+      glViewport(simW / 2, 0, simW / 2, h_win);
+      sim.render(1);
+    }
 
     // ── SIDEBAR ──────────────────────────────────────────────────────────
     infoPane sidebar(dev, sim, nbLayer);

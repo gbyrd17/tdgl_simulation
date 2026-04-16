@@ -1,6 +1,9 @@
 % Some basic packages
+\renewcommand{\familydefault}{\ttdefault}
+
+\usepackage{concmath}
+\usepackage[OT1]{fontenc}
 \usepackage[utf8]{inputenc}
-\usepackage[T1]{fontenc}
 \usepackage{textcomp}
 \usepackage{babel}
 \usepackage{url}
@@ -271,10 +274,7 @@
 \def\brcurs{{\mbox{$\resizebox{.09in}{.08in}{\includegraphics[trim= 1em 0 14em 0,clip]{C:/Users/gbyrd/OneDrive/Documents/latex notes/BoldR.pdf}}$}}}
 \def\hrcurs{{\mbox{$\hat \brcurs$}}}
 
-\titleformat{\chapter}[display]
-  {\normalfont\bfseries}{}{0pt}{\Huge}
-\titlespacing*{\chapter}
-  {0pt}{20pt}{40pt}
+
 
 % My name
 \author{Graham Byrd}

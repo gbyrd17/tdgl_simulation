@@ -28,21 +28,38 @@ class simulator {
     float phiMax = 0.0f;
     int phiStatCounter = 0;
     int vortexCount = 0;
-    int vortexCountCounter = 0;
 
     // Adaptive time stepping parameters
     const float dt_min = 1e-8f;
     float dt_max = 0.0f;
 
     int m_computeGroupSize = 32;
-    int m_dtUpdateInterval = 10;
+    int m_dtUpdateInterval = 100;  // Reduced readback frequency: was 10, now 100 (10x fewer stalls)
     int m_dtUpdateCounter = 0;
+    int m_partitionSize = 512;  // Increased default: larger tiles = better GPU cache utilization
+    int m_vortexCountInterval = 1000;  // Reduced vortex count frequency (was 100)
+    int m_vortexCountCounter = 0;
+    bool m_enableVortexCounting = true;  // User can disable for speed
+    bool m_renderBothViewports = true;   // User can disable to render only one
     std::vector<float> m_phiBuffer;
 
     void step();
     void render();
     void quench();
     void quenchSeededLattice();
+    
+    // Mesh partitioning for parallel GPU computation
+    void setPartitionSize(int size) { 
+      m_partitionSize = std::max(32, size);  // minimum 32x32 tiles
+      m_mesh->partition(m_partitionSize);
+    }
+    
+    // Geometry application: apply shapes to mesh
+    void applyGeometryRectangle(glm::vec2 center, glm::vec2 size);
+    void applyGeometryCircle(glm::vec2 center, float radius);
+    void applyGeometryTriangle(glm::vec2 center, float size);
+    void applyGeometryPolygon(const polygon& shape);
+    void clearGeometry();  // reset mesh mask to all 1s
 
     GLuint getDisplayTexture() const { return m_phiTextures[m_readIdx]; }
     void updateParams();

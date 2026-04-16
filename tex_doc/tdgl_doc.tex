@@ -1,4 +1,4 @@
-\documentclass[11pt,twoside]{report}
+\documentclass[10pt,twoside]{report}
 \input{../preamble.tex}
 \usepackage{dsfont}
 \usepackage{import}
@@ -13,6 +13,19 @@
 \fancyfoot[RE,LO]{\textbf{TDGL Simulation Writeup}}
 
 \title{Time-Dependent Ginzburg-Landau Simulation Writeup}
+
+\setlength{\emergencystretch}{5em}
+
+\titleformat{\part}[display]{\LARGE}{Part \thepart.}{20pt}{}[]
+\titlespacing*{\part}{0}{1pt}{1pt}
+
+\titleformat{\chapter}[hang]{\LARGE}{Chapter \thechapter.}{20pt}{}
+\titlespacing*{\chapter}{0}{1pt}{1pt}
+
+\titleformat{\section}{\Large}{\S\thesection}{20pt}{}
+\titleformat*{\subsection}{\large}{}{}{}
+
+\numberwithin{equation}{chapter}
 
 \begin{document}\maketitle
 \pagenumbering{roman}
@@ -274,23 +287,14 @@ Telling us that in general $H_{c,2} \gg H_{c,1}$.
 
 \chapter{Time-Dependent Ginzburg-Landau Theory}
 
-The Time-Dependent Ginzburg-Landau (TDGL) equation is the simplest equation that maintains the symmetries of the original GL equations and drive $\varphi$ toward the minimum of the free energy:
+Let's get more complex:  The goal of this project is to create a program that can take a number of different realistic situations for a superconductor and respond with a highly-accurate simulation in real time.  So, we start by defining our scope.  In the same vein as the pyTDGL project, we propose a very general TDGL equation:
 \begin{align}
-  \frac{1}{\gamma}\frac{\partial\varphi}{\partial t} &= - \frac{\delta \mathcal{F}}{\delta\varphi}, \nonumber\\
-  \frac{1}{\gamma}\frac{\partial\varphi}{\partial t} &= -\alpha\varphi - 2\beta|\varphi|^{2}\varphi + \frac{1}{2m_{c}}D_{i}^{2}\varphi,
+  \frac{u}{\sqrt{1+\gamma^{2}|\varphi|^{2}}}\left( \frac{\partial}{\partial t} + i\mu + \frac{\gamma^{2}}{2}\frac{\partial|\varphi|^{2}}{\partial t} \right)\varphi = \left( \epsilon - |\varphi|^{2} \right)\varphi + (\nabla - i \bm{A})^{2}\varphi.
 \end{align}
-where $\gamma$ is the relaxation rate -- a material-dependent constant setting the speed at which the condensate responds to perturbations.  This not analytically solvable, so this is where our simulation will build off from.  We propose the 5-point Laplacian Discretization scheme to calculate the laplacian in our covariant derivative:
-\begin{align}
-  \nabla^{2}\varphi\big|_{i,j} = \frac{\varphi_{i+1,j} + \varphi_{i-1,j} + \varphi_{i,j+1} + \varphi_{i,j-1} - 4\varphi_{i,j}}{h^{2}},
-\end{align}
-after this averaging, we need to step forward in time according to the CFL stability condition\footnote{doi: \href{https://doi.org/10.1147/rd.112.0215}{https://doi.org/10.1147/rd.112.0215}, pdf: \href{https://web.stanford.edu/class/cme324/classics/courant-friedrichs-lewy.pdf}{On the Partial Difference Equations of Mathematical Physics}} from our initial point $\varphi^{n}$ to $\varphi^{n+1}$.  The time step needs to behave according to $1/\xi^{2}$, $\gamma$ and $h$ as parameters:
-\begin{align}
-  \Delta t < \frac{h^{2}}{4\xi^{2}\gamma},
-\end{align}
-then to give some more stability we can scale our time step to be $0.1h^{2}/4\xi^{2}\gamma$.  Then we can use classic computational methods to say
-\begin{align}
-  \varphi_{i,j}^{n+1} &= \varphi_{i,j}^{n} + \gamma\Delta t \left( -\alpha\varphi_{i,j}^{n}-2\beta|\varphi_{i,j}^{n}|^{2}\varphi_{i,j}^{n}+\frac{1}{2m_{c}}\nabla^{2}\varphi_{i,j}^{n} \right).
-\end{align}
+While very different, the same genetics of our original equation is still there:  We have a covariant laplacian of $\varphi$ capturing the behavior and coupling of a gauge-invariant scalar field to a magnetic field.  We also have a term that describes the coupling of our field to the critical temperature, $(\epsilon-|\varphi|^{2})$, where $\epsilon(\bm{r}) = T_{c}(\bm{r})/T-1$ is the parameter characterizing the local critical temperature of the object.  The form of this equation is so different because we need dimensionless units when we go to write our simultion.
+
+We see on the left side a swath of unfamiliar terms, from left to right:  The ratio outside of everything is a material parameter governing the response time of the amplitude and phase of the order parameter to perturbations in time.  The term $u = \pi^{4}/14\zeta(3)$ is the ratio for dirty superconductors, and $\gamma$ parameterizes the strength of inelastic scattering (diffusion length) in the material.  Within the parenthesis we see two derivative terms, one a simple time derivative of the order parameter, and the other being a term that manages the diffusive flow of cooper pairs throughout time.  The final term is $i\mu$, the electric potential term.  This is a term that manages the electric potential of the superconductor in response to the rest of the system.
+
 
 
 \end{document}

@@ -2,7 +2,7 @@
 #include <cmath>
 #include <random>
 
-// Structured mesh: regular rectangular grid
+// structuredMesh constructor
 structuredMesh::structuredMesh(glm::vec2 worldSize, int resX_, int resY_) {
   resX = resX_;
   resY = resY_;
@@ -56,7 +56,7 @@ void structuredMesh::build() {
   }
 }
 
-// Voronoi mesh: jittered grid with computed neighbors
+// voronoiMesh constructor
 voronoiMesh::voronoiMesh(glm::vec2 worldSize, int numSites) {
   size = worldSize;
   
@@ -135,5 +135,48 @@ void voronoiMesh::build() {
     }
     
     edgeWeights.push_back(weights);
+  }
+}
+
+void mesh::partition(int partitionSize) {
+  // Divide mesh into rectangular tiles for parallel GPU computation
+  // Interior cells (distance > boundary from edge) can be computed in parallel
+  // Boundary cells (distance <= boundary from edge) must be computed sequentially
+  partitions.clear();
+  
+  const int boundaryWidth = 1;  // 1-cell thick boundary for 4-neighbor stencil
+  
+  // Compute tile grid
+  int tilesX = (resX + partitionSize - 1) / partitionSize;
+  int tilesY = (resY + partitionSize - 1) / partitionSize;
+  
+  for (int ty = 0; ty < tilesY; ++ty) {
+    for (int tx = 0; tx < tilesX; ++tx) {
+      meshPartition part;
+      
+      // Full partition bounds
+      part.startX = tx * partitionSize;
+      part.startY = ty * partitionSize;
+      part.endX = std::min(part.startX + partitionSize, resX);
+      part.endY = std::min(part.startY + partitionSize, resY);
+      part.resX = part.endX - part.startX;
+      part.resY = part.endY - part.startY;
+      part.cellCount = part.resX * part.resY;
+      part.boundaryWidth = boundaryWidth;
+      
+      // Interior region (shrunk by boundaryWidth on all sides)
+      part.interiorStartX = part.startX + boundaryWidth;
+      part.interiorStartY = part.startY + boundaryWidth;
+      part.interiorEndX = std::max(part.interiorStartX, part.endX - boundaryWidth);
+      part.interiorEndY = std::max(part.interiorStartY, part.endY - boundaryWidth);
+      part.interiorResX = part.interiorEndX - part.interiorStartX;
+      part.interiorResY = part.interiorEndY - part.interiorStartY;
+      part.interiorCellCount = std::max(0, part.interiorResX * part.interiorResY);
+      
+      // Only add partition if it has meaningful interior or is small enough to process as-is
+      if (part.interiorCellCount > 0 || part.cellCount <= boundaryWidth * 4) {
+        partitions.push_back(part);
+      }
+    }
   }
 }

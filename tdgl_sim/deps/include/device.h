@@ -3,6 +3,10 @@
 #include <string>
 #include <glm/glm.hpp>
 
+/*'polygon' struct:
+ *:---------------:
+ *
+ */
 struct polygon {
   std::string name;
   std::vector<glm::vec2> vertices;

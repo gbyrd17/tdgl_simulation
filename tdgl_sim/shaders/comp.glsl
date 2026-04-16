@@ -11,6 +11,10 @@ uniform sampler2D img_edgeWeights;  // stores normalized edge distances (up, dow
 uniform float uDt, uH, uL, uBField, uQ, uXi, uAlpha, uLambda, uGamma, uRelax, uEpsilon;
 uniform bool uUseNoise;
 uniform float uTime;
+uniform ivec2 uPartitionOffset;  // offset for current partition (startX, startY)
+uniform bool uComputeInterior;   // true: compute interior only, false: compute boundaries only
+uniform ivec2 uInteriorStart;    // interior region start (for boundary mode)
+uniform ivec2 uInteriorEnd;      // interior region end (for boundary mode)
 
 vec2 cMult (vec2 a, vec2 b) {
   return vec2(a.x*b.x - a.y*b.y, a.x*b.y + a.y*b.x);
@@ -21,10 +25,19 @@ vec2 cConj (vec2 a) {
 }
 
 void main() {
-  ivec2 curr = ivec2(gl_GlobalInvocationID.xy);
+  // Compute actual cell coordinates with partition offset
+  ivec2 local = ivec2(gl_GlobalInvocationID.xy);
+  ivec2 curr = local + uPartitionOffset;
   ivec2 dim = imageSize(img_in);
   float mask = imageLoad(img_mask, curr).r;
   if (curr.x >= dim.x || curr.y >= dim.y) {return;}
+  
+  // Filter cells based on interior vs boundary computation mode
+  bool isInterior = curr.x >= uInteriorStart.x && curr.x < uInteriorEnd.x &&
+                    curr.y >= uInteriorStart.y && curr.y < uInteriorEnd.y;
+  
+  if (uComputeInterior && !isInterior) {return;}  // skip boundaries in interior phase
+  if (!uComputeInterior && isInterior) {return;}  // skip interior in boundary phase
 
   // check for vacuum
   if (mask < 0.5) {

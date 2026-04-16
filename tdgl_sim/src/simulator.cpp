@@ -62,6 +62,11 @@ simulator::simulator(device& device, layer& layer, int resX, int resY, int steps
   initTextures();
   initShaders();
   initRenderQuad();
+  
+  // Initialize mask from device layers (default geometry)
+  if (!m_device.layers.empty()) {
+    m_mesh->mask = geometry::genMask(m_device.layers[0], m_mesh->resX, m_device.worldSize);
+  }
   uploadMask();
   quench();
   std::cout << "SUCCESS::INITIALIZED simulator" << std::endl;
@@ -208,9 +213,7 @@ void simulator::initRenderQuad() {
 }
 
 void simulator::uploadMask() {
-  if (m_device.layers.empty()) return;
-
-  m_mesh->mask = geometry::genMask(m_device.layers[0], m_mesh->resX, m_device.worldSize);
+  // Upload the current mesh mask to GPU (don't regenerate from layers)
   glBindTexture(GL_TEXTURE_2D, m_maskTexture);
   glTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0, m_mesh->resX, m_mesh->resY, GL_RED, GL_FLOAT, m_mesh->mask.data());
 }
@@ -265,6 +268,11 @@ void simulator::buildEdgeWeightTexture() {
 void simulator::step() {
   if (m_device.layers.empty()) return;
 
+  // Initialize partitions if not already done
+  if (m_mesh->partitions.empty()) {
+    m_mesh->partition(m_partitionSize);
+  }
+
   glUseProgram(m_compPID);
 
   // Bind textures to image units
@@ -300,10 +308,56 @@ void simulator::step() {
   glUniform1f(m_compEpsilonLoc,  m_layer.epsilon);
   glUniform1f(m_compTimeLoc,     simTime);
 
-  int dispatchJobs = (m_mesh->resX + m_computeGroupSize - 1) / m_computeGroupSize;
-  glDispatchCompute(dispatchJobs, dispatchJobs, 1);
-
+  // Two-phase computation: interior (parallel) then boundary (sequential)
+  GLint partitionOffsetLoc = glGetUniformLocation(m_compPID, "uPartitionOffset");
+  GLint computeInteriorLoc = glGetUniformLocation(m_compPID, "uComputeInterior");
+  GLint interiorStartLoc = glGetUniformLocation(m_compPID, "uInteriorStart");
+  GLint interiorEndLoc = glGetUniformLocation(m_compPID, "uInteriorEnd");
+  
+  // ============ PHASE 1: Compute all interior cells in parallel ============
+  glUniform1i(computeInteriorLoc, 1);  // true: compute interior only
+  
+  for (const auto& partition : m_mesh->partitions) {
+    // Set partition offset
+    glUniform2i(partitionOffsetLoc, partition.startX, partition.startY);
+    
+    // Set interior bounds for this partition
+    glUniform2i(interiorStartLoc, partition.interiorStartX, partition.interiorStartY);
+    glUniform2i(interiorEndLoc, partition.interiorEndX, partition.interiorEndY);
+    
+    // Dispatch full partition size (shader will skip non-interior cells)
+    int dispatchJobsX = (partition.resX + m_computeGroupSize - 1) / m_computeGroupSize;
+    int dispatchJobsY = (partition.resY + m_computeGroupSize - 1) / m_computeGroupSize;
+    
+    // Queue all interior dispatches (GPU processes in parallel)
+    glDispatchCompute(dispatchJobsX, dispatchJobsY, 1);
+  }
+  
+  // Synchronize GPU after all interior cells computed
   glMemoryBarrier(GL_SHADER_IMAGE_ACCESS_BARRIER_BIT);
+  
+  // ============ PHASE 2: Compute boundary cells sequentially ============
+  glUniform1i(computeInteriorLoc, 0);  // false: compute boundaries only
+  
+  for (const auto& partition : m_mesh->partitions) {
+    // Set partition offset
+    glUniform2i(partitionOffsetLoc, partition.startX, partition.startY);
+    
+    // Set interior bounds (boundary = full region minus interior)
+    glUniform2i(interiorStartLoc, partition.interiorStartX, partition.interiorStartY);
+    glUniform2i(interiorEndLoc, partition.interiorEndX, partition.interiorEndY);
+    
+    // Dispatch full partition size (shader will skip interior cells)
+    int dispatchJobsX = (partition.resX + m_computeGroupSize - 1) / m_computeGroupSize;
+    int dispatchJobsY = (partition.resY + m_computeGroupSize - 1) / m_computeGroupSize;
+    
+    // Sequential dispatch for each partition's boundary
+    glDispatchCompute(dispatchJobsX, dispatchJobsY, 1);
+    
+    // Sync after each boundary dispatch to ensure previous results are visible
+    glMemoryBarrier(GL_SHADER_IMAGE_ACCESS_BARRIER_BIT);
+  }
+  
   glBindImageTexture(0, 0, 0, GL_FALSE, 0, GL_READ_ONLY, GL_RGBA32F);
   glBindImageTexture(1, 0, 0, GL_FALSE, 0, GL_WRITE_ONLY, GL_RGBA32F);
   glBindImageTexture(2, 0, 0, GL_FALSE, 0, GL_READ_ONLY, GL_R32F);
@@ -338,11 +392,13 @@ void simulator::step() {
     findTimeStep();
   }
 
-  // Update vortex count periodically, but avoid doing this every step.
-  vortexCountCounter += 1;
-  if (vortexCountCounter >= 100) {
-    vortexCount = countVortices();
-    vortexCountCounter = 0;
+  // Update vortex count periodically if enabled (expensive GPU readback)
+  if (m_enableVortexCounting) {
+    m_vortexCountCounter += 1;
+    if (m_vortexCountCounter >= m_vortexCountInterval) {
+      vortexCount = countVortices();
+      m_vortexCountCounter = 0;
+    }
   }
 }
 
@@ -489,6 +545,43 @@ void simulator::quenchSeededLattice() {
 
   std::cout << "!! TRUE ABRIKOSOV LATTICE SEEDED !!" << std::endl;
   simTime = 0;
+}
+
+void simulator::applyGeometryRectangle(glm::vec2 center, glm::vec2 size) {
+  // Clear mask and apply new geometry
+  std::fill(m_mesh->mask.begin(), m_mesh->mask.end(), 0.0f);
+  polygon rect = geometry::genRectangle(center, size);
+  geometry::applyPolygonToMesh(*m_mesh, rect);
+  uploadMask();
+}
+
+void simulator::applyGeometryCircle(glm::vec2 center, float radius) {
+  // Clear mask and apply new geometry
+  std::fill(m_mesh->mask.begin(), m_mesh->mask.end(), 0.0f);
+  polygon circle = geometry::genCircle(center, radius);
+  geometry::applyPolygonToMesh(*m_mesh, circle);
+  uploadMask();
+}
+
+void simulator::applyGeometryTriangle(glm::vec2 center, float size) {
+  // Clear mask and apply new geometry
+  std::fill(m_mesh->mask.begin(), m_mesh->mask.end(), 0.0f);
+  polygon triangle = geometry::genTriangle(center, size);
+  geometry::applyPolygonToMesh(*m_mesh, triangle);
+  uploadMask();
+}
+
+void simulator::applyGeometryPolygon(const polygon& shape) {
+  // Clear mask and apply new geometry
+  std::fill(m_mesh->mask.begin(), m_mesh->mask.end(), 0.0f);
+  geometry::applyPolygonToMesh(*m_mesh, shape);
+  uploadMask();
+}
+
+void simulator::clearGeometry() {
+  // Reset mask to all ones (full domain active)
+  std::fill(m_mesh->mask.begin(), m_mesh->mask.end(), 1.0f);
+  uploadMask();
 }
 
 void simulator::updatePhiStats() {

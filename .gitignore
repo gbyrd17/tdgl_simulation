@@ -1,0 +1,44 @@
+# Prerequisites & Compiled Objects
+*.o
+*.obj
+*.slo
+*.lo
+*.gch
+*.pch
+
+# Compiled Dynamic & Static Libraries
+*.so
+*.dylib
+*.dll
+*.lib
+*.lai
+*.la
+*.a
+
+# Tex bloatware
+*.aux
+*.fdb_latexmk
+*.fls
+*.log
+*.out
+*.toc
+*.synctex.gz
+*.synctex.gz.sum.synctex
+
+# Executables
+*.exe
+*.out
+*.app
+
+# Build Systems (CMake)
+/tdgl_sim/build/
+/tdgl_sim/MakeCache.txt
+/tdgl_sim/CMakeFiles/
+/tdgl_sim/CMakeScripts/
+/tdgl_sim/cmake_install.cmake
+/tdgl_sim/Makefile
+
+# deps
+tdgl_sim/deps/imgui/
+tdgl_sim/ignore/
+

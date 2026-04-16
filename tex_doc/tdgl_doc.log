@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.27 (MiKTeX 25.2) (preloaded format=pdflatex 2025.3.18)  2 APR 2026 15:09
+This is pdfTeX, Version 3.141592653-2.6-1.40.27 (MiKTeX 25.2) (preloaded format=pdflatex 2025.3.18)  11 APR 2026 22:02
 entering extended mode
  \write18 enabled.
  file:line:error style messages enabled.
@@ -9,8 +9,8 @@ LaTeX2e <2024-11-01> patch level 2
 L3 programming layer <2025-01-18>
 (C:\Users\Graham\AppData\Local\Programs\MiKTeX\tex/latex/base\report.cls
 Document Class: report 2024/06/29 v1.4n Standard LaTeX document class
-(C:\Users\Graham\AppData\Local\Programs\MiKTeX\tex/latex/base\size11.clo
-File: size11.clo 2024/06/29 v1.4n Standard LaTeX file (size option)
+(C:\Users\Graham\AppData\Local\Programs\MiKTeX\tex/latex/base\size10.clo
+File: size10.clo 2024/06/29 v1.4n Standard LaTeX file (size option)
 )
 \c@part=\count196
 \c@chapter=\count197
@@ -26,13 +26,51 @@ File: size11.clo 2024/06/29 v1.4n Standard LaTeX file (size option)
 \bibindent=\dimen141
 )
 (../preamble.tex
+(C:\Users\Graham\AppData\Local\Programs\MiKTeX\tex/latex/concmath\concmath.sty
+Package: concmath 1999/03/10 v2.0b LaTeX package for Concrete math fonts
+LaTeX Font Info:    Redeclaring symbol font `operators' on input line 43.
+LaTeX Font Info:    Overwriting symbol font `operators' in version `normal'
+(Font)                  OT1/cmr/m/n --> OT1/ccr/m/n on input line 43.
+LaTeX Font Info:    Overwriting symbol font `operators' in version `bold'
+(Font)                  OT1/cmr/bx/n --> OT1/ccr/m/n on input line 43.
+LaTeX Font Info:    Redeclaring symbol font `letters' on input line 44.
+LaTeX Font Info:    Overwriting symbol font `letters' in version `normal'
+(Font)                  OML/cmm/m/it --> OML/ccm/m/it on input line 44.
+LaTeX Font Info:    Overwriting symbol font `letters' in version `bold'
+(Font)                  OML/cmm/b/it --> OML/ccm/m/it on input line 44.
+LaTeX Font Info:    Redeclaring symbol font `symbols' on input line 45.
+LaTeX Font Info:    Overwriting symbol font `symbols' in version `normal'
+(Font)                  OMS/cmsy/m/n --> OMS/ccsy/m/n on input line 45.
+LaTeX Font Info:    Overwriting symbol font `symbols' in version `bold'
+(Font)                  OMS/cmsy/b/n --> OMS/ccsy/m/n on input line 45.
+LaTeX Font Info:    Redeclaring symbol font `largesymbols' on input line 46.
+LaTeX Font Info:    Overwriting symbol font `largesymbols' in version `normal'
+(Font)                  OMX/cmex/m/n --> OMX/ccex/m/n on input line 46.
+LaTeX Font Info:    Overwriting symbol font `largesymbols' in version `bold'
+(Font)                  OMX/cmex/m/n --> OMX/ccex/m/n on input line 46.
+LaTeX Font Info:    Overwriting symbol font `operators' in version `bold'
+(Font)                  OT1/ccr/m/n --> OT1/ccr/bx/n on input line 47.
+LaTeX Font Info:    Overwriting symbol font `letters' in version `bold'
+(Font)                  OML/ccm/m/it --> OML/ccm/b/it on input line 48.
+LaTeX Font Info:    Overwriting symbol font `symbols' in version `bold'
+(Font)                  OMS/ccsy/m/n --> OMS/ccsy/b/n on input line 49.
+LaTeX Font Info:    Redeclaring math alphabet \mathbf on input line 53.
+LaTeX Font Info:    Overwriting math alphabet `\mathbf' in version `normal'
+(Font)                  OT1/cmr/bx/n --> OT1/ccr/bx/n on input line 53.
+LaTeX Font Info:    Overwriting math alphabet `\mathbf' in version `bold'
+(Font)                  OT1/cmr/bx/n --> OT1/ccr/bx/n on input line 53.
+LaTeX Font Info:    Redeclaring math alphabet \mathit on input line 54.
+LaTeX Font Info:    Overwriting math alphabet `\mathit' in version `normal'
+(Font)                  OT1/cmr/m/it --> OT1/ccr/m/it on input line 54.
+LaTeX Font Info:    Overwriting math alphabet `\mathit' in version `bold'
+(Font)                  OT1/cmr/bx/it --> OT1/ccr/m/it on input line 54.
+) (C:\Users\Graham\AppData\Local\Programs\MiKTeX\tex/latex/base\fontenc.sty
+Package: fontenc 2021/04/29 v2.0v Standard LaTeX package
+)
 (C:\Users\Graham\AppData\Local\Programs\MiKTeX\tex/latex/base\inputenc.sty
 Package: inputenc 2024/02/08 v1.3d Input encoding file
 \inpenc@prehook=\toks17
 \inpenc@posthook=\toks18
-)
-(C:\Users\Graham\AppData\Local\Programs\MiKTeX\tex/latex/base\fontenc.sty
-Package: fontenc 2021/04/29 v2.0v Standard LaTeX package
 )
 (C:\Users\Graham\AppData\Local\Programs\MiKTeX\tex/latex/base\textcomp.sty
 Package: textcomp 2024/04/24 v2.1b Standard LaTeX package
@@ -359,8 +397,8 @@ Package: array 2024/10/17 v2.6g Tabular extension package (FMi)
 \rownum=\count324
 )
 (C:\Users\Graham\AppData\Local\Programs\MiKTeX\tex/latex/braket\braket.sty)
-Package hyperref Info: Option `colorlinks' set `true' on input line 24.
-Package hyperref Info: Option `linktocpage' set `true' on input line 24.
+Package hyperref Info: Option `colorlinks' set `true' on input line 27.
+Package hyperref Info: Option `linktocpage' set `true' on input line 27.
 
 (C:\Users\Graham\AppData\Local\Programs\MiKTeX\tex/latex/pgf/frontendlayer\tikz
 .sty
@@ -995,7 +1033,7 @@ Package: bm 2023/12/19 v1.2f Bold Symbol Support (DPC/FMi)
 \symboldoperators=\mathgroup7
 \symboldletters=\mathgroup8
 \symboldsymbols=\mathgroup9
-Package bm Info: No bold for \OMX/cmex/m/n, using \pmb.
+Package bm Info: No bold for \OMX/ccex/m/n, using \pmb.
 Package bm Info: No bold for \U/msa/m/n, using \pmb.
 Package bm Info: No bold for \U/msb/m/n, using \pmb.
 Package bm Info: No bold for \U/rsfs/m/n, using \pmb.
@@ -1074,7 +1112,7 @@ LaTeX Info: Redefining \labelcpageref on input line 2370.
 Package cleveref Info: `amsthm' support loaded on input line 3026.
 )
 Package thmtools Info: Automatically pulling in `thmdef-thmbox' on input line 1
-12.
+15.
 
 (C:\Users\Graham\AppData\Local\Programs\MiKTeX\tex/latex/thmtools\thmdef-thmbox
 .sty
@@ -1302,24 +1340,24 @@ File: pgflibraryshapes.geometric.code.tex 2023-01-15 v3.1.10 (3.1.10)
 an.keys.code.tex))) (tdgl_doc.aux)
 \openout1 = `tdgl_doc.aux'.
 
-LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 17.
-LaTeX Font Info:    ... okay on input line 17.
-LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 17.
-LaTeX Font Info:    ... okay on input line 17.
-LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 17.
-LaTeX Font Info:    ... okay on input line 17.
-LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 17.
-LaTeX Font Info:    ... okay on input line 17.
-LaTeX Font Info:    Checking defaults for TS1/cmr/m/n on input line 17.
-LaTeX Font Info:    ... okay on input line 17.
-LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 17.
-LaTeX Font Info:    ... okay on input line 17.
-LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 17.
-LaTeX Font Info:    ... okay on input line 17.
-LaTeX Font Info:    Checking defaults for PD1/pdf/m/n on input line 17.
-LaTeX Font Info:    ... okay on input line 17.
-LaTeX Font Info:    Checking defaults for PU/pdf/m/n on input line 17.
-LaTeX Font Info:    ... okay on input line 17.
+LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 30.
+LaTeX Font Info:    ... okay on input line 30.
+LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 30.
+LaTeX Font Info:    ... okay on input line 30.
+LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 30.
+LaTeX Font Info:    ... okay on input line 30.
+LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 30.
+LaTeX Font Info:    ... okay on input line 30.
+LaTeX Font Info:    Checking defaults for TS1/cmr/m/n on input line 30.
+LaTeX Font Info:    ... okay on input line 30.
+LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 30.
+LaTeX Font Info:    ... okay on input line 30.
+LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 30.
+LaTeX Font Info:    ... okay on input line 30.
+LaTeX Font Info:    Checking defaults for PD1/pdf/m/n on input line 30.
+LaTeX Font Info:    ... okay on input line 30.
+LaTeX Font Info:    Checking defaults for PU/pdf/m/n on input line 30.
+LaTeX Font Info:    ... okay on input line 30.
 
 (C:\Users\Graham\AppData\Local\Programs\MiKTeX\tex/context/base/mkii\supp-pdf.m
 kii
@@ -1346,7 +1384,7 @@ Package epstopdf-base Info: Redefining graphics rule for `.eps' on input line 4
 cfg
 File: epstopdf-sys.cfg 2021/03/18 v2.0 Configuration of epstopdf for MiKTeX
 ))
-Package hyperref Info: Link coloring ON on input line 17.
+Package hyperref Info: Link coloring ON on input line 30.
  (tdgl_doc.out) (tdgl_doc.out)
 \@outlinefile=\write4
 \openout4 = `tdgl_doc.out'.
@@ -1374,12 +1412,12 @@ Package hyperref Info: Link coloring ON on input line 17.
 * \topmargin=-38.1381pt
 * \headheight=12.0pt
 * \headsep=25.0pt
-* \topskip=11.0pt
+* \topskip=10.0pt
 * \footskip=30.0pt
 * \marginparwidth=130.08621pt
-* \marginparsep=16.33182pt
+* \marginparsep=15.74983pt
 * \columnsep=10.0pt
-* \skip\footins=10.0pt plus 4.0pt minus 2.0pt
+* \skip\footins=9.0pt plus 4.0pt minus 2.0pt
 * \hoffset=0.0pt
 * \voffset=0.0pt
 * \mag=1000
@@ -1410,39 +1448,101 @@ Package pdflscape Info: Auto-detected driver: pdftex on input line 81.
 
 Package tikz-feynman Warning: LuaTeX is required if you wish to have vertices a
 utomatically placed. You can disable this warning by setting /tikzfeynman/warn 
-luatex=false on input line 17.
+luatex=false on input line 30.
 
 
 Package tikz-feynman Warning: The preamble requested version 1.0.0, but the sys
-tem version is 1.1.0. This may change some diagrams. on input line 17.
+tem version is 1.1.0. This may change some diagrams. on input line 30.
 
-LaTeX Font Info:    Trying to load font information for U+msa on input line 18.
+LaTeX Font Info:    Trying to load font information for OT1+ccr on input line 3
+1.
+(C:\Users\Graham\AppData\Local\Programs\MiKTeX\tex/latex/concmath\ot1ccr.fd
+File: ot1ccr.fd 1999/03/10 v2.0b LaTeX font defs for Concrete math fonts
+)
+LaTeX Font Info:    Trying to load font information for OML+ccm on input line 3
+1.
+
+(C:\Users\Graham\AppData\Local\Programs\MiKTeX\tex/latex/concmath\omlccm.fd
+File: omlccm.fd 1999/03/10 v2.0b LaTeX font defs for Concrete math fonts
+)
+LaTeX Font Info:    Trying to load font information for OMS+ccsy on input line 
+31.
+
+(C:\Users\Graham\AppData\Local\Programs\MiKTeX\tex/latex/concmath\omsccsy.fd
+File: omsccsy.fd 1999/03/10 v2.0b LaTeX font defs for Concrete math fonts
+)
+LaTeX Font Info:    Trying to load font information for OMX+ccex on input line 
+31.
+
+(C:\Users\Graham\AppData\Local\Programs\MiKTeX\tex/latex/concmath\omxccex.fd
+File: omxccex.fd 1999/03/10 v2.0b LaTeX font defs for Concrete math fonts
+)
+LaTeX Font Info:    External font `xccex10' loaded for size
+(Font)              <12> on input line 31.
+LaTeX Font Info:    External font `xccex10' loaded for size
+(Font)              <8> on input line 31.
+LaTeX Font Info:    External font `xccex10' loaded for size
+(Font)              <6> on input line 31.
+LaTeX Font Info:    Trying to load font information for U+msa on input line 31.
+
 
 (C:\Users\Graham\AppData\Local\Programs\MiKTeX\tex/latex/amsfonts\umsa.fd
 File: umsa.fd 2013/01/14 v3.01 AMS symbols A
 )
-LaTeX Font Info:    Trying to load font information for U+msb on input line 18.
+LaTeX Font Info:    Trying to load font information for U+msb on input line 31.
 
 
 (C:\Users\Graham\AppData\Local\Programs\MiKTeX\tex/latex/amsfonts\umsb.fd
 File: umsb.fd 2013/01/14 v3.01 AMS symbols B
 )
-LaTeX Font Info:    Trying to load font information for U+rsfs on input line 18
+LaTeX Font Info:    Trying to load font information for U+rsfs on input line 31
 .
 
 (C:\Users\Graham\AppData\Local\Programs\MiKTeX\tex/latex/jknappen\ursfs.fd
 File: ursfs.fd 1998/03/24 rsfs font definition file (jk)
 )
-LaTeX Font Info:    Trying to load font information for U+stmry on input line 1
-8.
+LaTeX Font Info:    Font shape `OT1/ccr/bx/n' in size <12> not available
+(Font)              Font shape `OT1/cmr/bx/n' tried instead on input line 31.
+LaTeX Font Info:    Font shape `OT1/ccr/bx/n' in size <8> not available
+(Font)              Font shape `OT1/cmr/bx/n' tried instead on input line 31.
+LaTeX Font Info:    Font shape `OT1/ccr/bx/n' in size <6> not available
+(Font)              Font shape `OT1/cmr/bx/n' tried instead on input line 31.
+LaTeX Font Info:    Font shape `OML/ccm/b/it' in size <12> not available
+(Font)              Font shape `OML/cmm/b/it' tried instead on input line 31.
+LaTeX Font Info:    Font shape `OML/ccm/b/it' in size <8> not available
+(Font)              Font shape `OML/cmm/b/it' tried instead on input line 31.
+LaTeX Font Info:    Font shape `OML/ccm/b/it' in size <6> not available
+(Font)              Font shape `OML/cmm/b/it' tried instead on input line 31.
+LaTeX Font Info:    Font shape `OMS/ccsy/b/n' in size <12> not available
+(Font)              Font shape `OMS/cmsy/b/n' tried instead on input line 31.
+LaTeX Font Info:    Font shape `OMS/ccsy/b/n' in size <8> not available
+(Font)              Font shape `OMS/cmsy/b/n' tried instead on input line 31.
+LaTeX Font Info:    Font shape `OMS/ccsy/b/n' in size <6> not available
+(Font)              Font shape `OMS/cmsy/b/n' tried instead on input line 31.
+LaTeX Font Info:    Trying to load font information for U+stmry on input line 3
+1.
 
 (C:\Users\Graham\AppData\Local\Programs\MiKTeX\tex/latex/stmaryrd\ustmry.fd)
 
 [1
 
-{C:/Users/Graham/AppData/Local/MiKTeX/fonts/map/pdftex/pdftex.map}{C:/Users/Gra
-ham/AppData/Local/Programs/MiKTeX/fonts/enc/dvips/cm-super/cm-super-t1.enc}]
-(tdgl_doc.toc)
+{C:/Users/Graham/AppData/Local/MiKTeX/fonts/map/pdftex/pdftex.map}]
+tdgl_doc.tex:32: Illegal unit of measure (pt inserted).
+<to be read again> 
+                   !
+l.32 \tableofcontents
+                     
+Dimensions can be in units of em, ex, in, pt, pc,
+cm, mm, dd, cc, nd, nc, bp, or sp; but yours is a new one!
+I'll assume that you meant to say pt, for printer's points.
+To recover gracefully from this error, it's best to
+delete the erroneous units; e.g., type `2' to delete
+two letters. (See Chapter 27 of The TeXbook.)
+
+(tdgl_doc.toc
+LaTeX Font Info:    Font shape `OT1/cmtt/bx/n' in size <10> not available
+(Font)              Font shape `OT1/cmtt/m/n' tried instead on input line 2.
+)
 \tf@toc=\write5
 \openout5 = `tdgl_doc.toc'.
 
@@ -1461,26 +1561,250 @@ Package marginnote Warning: Consecutive odd pages found.
 (marginnote)                changing the page numbering on page i.
 
 Package marginnote Info: Using workaround for absolute page number on input lin
-e 20.
+e 33.
 Chapter 1.
+tdgl_doc.tex:36: Illegal unit of measure (pt inserted).
+<to be read again> 
+                   !
+l.36 \chapter{Introduction}
+                           
+Dimensions can be in units of em, ex, in, pt, pc,
+cm, mm, dd, cc, nd, nc, bp, or sp; but yours is a new one!
+I'll assume that you meant to say pt, for printer's points.
+To recover gracefully from this error, it's best to
+delete the erroneous units; e.g., type `2' to delete
+two letters. (See Chapter 27 of The TeXbook.)
 
-Overfull \hbox (6.12471pt too wide) in paragraph at lines 25--26
-\T1/cmr/m/n/10.95 have even been able to show that increasing the temperature c
-auses the magnetic
+LaTeX Font Info:    External font `xccex10' loaded for size
+(Font)              <10> on input line 38.
+LaTeX Font Info:    External font `xccex10' loaded for size
+(Font)              <7> on input line 38.
+LaTeX Font Info:    External font `xccex10' loaded for size
+(Font)              <5> on input line 38.
+LaTeX Font Info:    Font shape `OT1/ccr/bx/n' in size <10> not available
+(Font)              Font shape `OT1/cmr/bx/n' tried instead on input line 38.
+LaTeX Font Info:    Font shape `OT1/ccr/bx/n' in size <7> not available
+(Font)              Font shape `OT1/cmr/bx/n' tried instead on input line 38.
+LaTeX Font Info:    Font shape `OT1/ccr/bx/n' in size <5> not available
+(Font)              Font shape `OT1/cmr/bx/n' tried instead on input line 38.
+LaTeX Font Info:    Font shape `OML/ccm/b/it' in size <10> not available
+(Font)              Font shape `OML/cmm/b/it' tried instead on input line 38.
+LaTeX Font Info:    Font shape `OML/ccm/b/it' in size <7> not available
+(Font)              Font shape `OML/cmm/b/it' tried instead on input line 38.
+LaTeX Font Info:    Font shape `OML/ccm/b/it' in size <5> not available
+(Font)              Font shape `OML/cmm/b/it' tried instead on input line 38.
+LaTeX Font Info:    Font shape `OMS/ccsy/b/n' in size <10> not available
+(Font)              Font shape `OMS/cmsy/b/n' tried instead on input line 38.
+LaTeX Font Info:    Font shape `OMS/ccsy/b/n' in size <7> not available
+(Font)              Font shape `OMS/cmsy/b/n' tried instead on input line 38.
+LaTeX Font Info:    Font shape `OMS/ccsy/b/n' in size <5> not available
+(Font)              Font shape `OMS/cmsy/b/n' tried instead on input line 38.
+
+Underfull \hbox (badness 10000) in paragraph at lines 38--39
+\OT1/cmtt/m/n/10 The Ginzburg-Landau result introduced the world of physics to 
+the
  []
 
 
-Overfull \hbox (21.7915pt too wide) in paragraph at lines 25--26
-\T1/cmr/m/n/10.95 moments to point in increasingly random directions, causing t
-he bulk magnetization
+Underfull \hbox (badness 10000) in paragraph at lines 38--39
+\OT1/cmtt/m/n/10 idea of spontaneous symmetry breaking. When a ferromagnetic ma
+terial
  []
 
 
-Overfull \hbox (2.4172pt too wide) in paragraph at lines 27--28
-\T1/cmr/m/n/10.95 perspective, we want to compute the partition function $\OML/
-cmm/m/it/10.95 Z \OT1/cmr/m/n/10.95 = []  \OML/cmm/m/it/10.95 e[]$\T1/cmr/m/n/1
-0.95 , (consider
+Underfull \hbox (badness 10000) in paragraph at lines 38--39
+\OT1/cmtt/m/n/10 in thermal equilbrium at temperature $\OML/ccm/m/it/10 T$ \OT1
+/cmtt/m/n/10 is placed in a magnetization
  []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 38--39
+\OML/cmm/b/it/10 M\OT1/ccr/m/n/10 (\OML/ccm/m/it/10 x\OT1/ccr/m/n/10 )$ \OT1/cm
+tt/m/n/10 (this is a measure of how many electrons are magnetically
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 38--39
+\OT1/cmtt/m/n/10 aligned), we know that at low temperatures, rotational invaria
+nce
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 38--39
+\OT1/cmtt/m/n/10 is spontaneously broken, and the material exhibits a sudden bu
+lk
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 38--39
+\OT1/cmtt/m/n/10 magnetization in some direction. The bulk magnetization sudden
+ly
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 38--39
+\OT1/cmtt/m/n/10 disapears above some critical temperature $\OML/ccm/m/it/10 T[
+]$\OT1/cmtt/m/n/10 . We have even been
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 38--39
+\OT1/cmtt/m/n/10 able to show that increasing the temperature causes the magnet
+ic
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 38--39
+\OT1/cmtt/m/n/10 moments to point in increasingly random directions, causing th
+e bulk
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 38--39
+\OT1/cmtt/m/n/10 magnetization to drop lower and lower. Experimentally, we foun
+d that
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 38--39
+\OT1/cmtt/m/n/10 below $\OML/ccm/m/it/10 T[]$\OT1/cmtt/m/n/10 , $\OMS/ccsy/m/n/
+10 j\OML/cmm/b/it/10 M\OMS/ccsy/m/n/10 j$ \OT1/cmtt/m/n/10 vanishes as $\OMS/cc
+sy/m/n/10 ^^X \OT1/ccr/m/n/10 (\OML/ccm/m/it/10 T[] \OMS/ccsy/m/n/10 ^^@ \OML/c
+cm/m/it/10 T\OT1/ccr/m/n/10 )[]$\OT1/cmtt/m/n/10 , with the critical exponent
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 40--41
+[]\OT1/cmtt/m/n/10 We call this sudden change a second order phase transition, 
+which
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 40--41
+\OT1/cmtt/m/n/10 is an example of the greater umbrella term critical phenomena.
+ From
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 40--41
+\OT1/cmtt/m/n/10 a theoretic perspective, we want to compute the partition func
+tion
+ []
+
+
+Underfull \hbox (badness 6125) in paragraph at lines 40--41
+\OML/ccm/m/it/10 Z \OT1/ccr/m/n/10 = []  \OML/ccm/m/it/10 e[]$\OT1/cmtt/m/n/10 
+, (consider $\OMS/ccsy/m/n/10 H$ \OT1/cmtt/m/n/10 the Hamiltonian) which is cle
+arly smooth
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 40--41
+\OT1/cmtt/m/n/10 in $\OML/ccm/m/it/10 T$\OT1/cmtt/m/n/10 , unlike the experimen
+tal result. In true theorist fashion, the
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 40--41
+\OT1/cmtt/m/n/10 first instinct was to blame the experimental result, saying th
+at the
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 40--41
+\OT1/cmtt/m/n/10 phenomenon, arguing that within the error bounds of the measur
+ement
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 40--41
+\OT1/cmtt/m/n/10 of $\OMS/ccsy/m/n/10 j\OML/cmm/b/it/10 M\OMS/ccsy/m/n/10 j$\OT
+1/cmtt/m/n/10 , a hidden, smooth progression to zero in $\OML/ccm/m/it/10 T$ \O
+T1/cmtt/m/n/10 is present. Lars
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 40--41
+\OT1/cmtt/m/n/10 Onsager's exact solution of the 2D Ising model in 1944[][][][]
+[] settled this
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 40--41
+\OT1/cmtt/m/n/10 argument by realizing the trace in the partition function sums
+ over
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 40--41
+\OT1/cmtt/m/n/10 an infinite number of terms, and a sum of infinite terms that 
+are
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 42--42
+[][][][][]\OT1/cmtt/m/n/8 doi.org/10.1016/B978-0-08-010586-4.50078-X[][], pdf: 
+[][]On the Theory of
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 42--43
+[]\OT1/cmtt/m/n/10 Landau and Ginzburg had the elegant idea that the form of th
+e free
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 42--43
+\OT1/cmtt/m/n/10 energy $\OML/ccm/m/it/10 G$ \OT1/cmtt/m/n/10 could be derived 
+from general principles.[][][][][] They proposed
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 42--43
+\OT1/cmtt/m/n/10 that by demanding rotational invariance, the free energy $\OML
+/ccm/m/it/10 G$ \OT1/cmtt/m/n/10 could be
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 42--43
+\OT1/cmtt/m/n/10 expressed as a function of $\OML/cmm/b/it/10 M$ \OT1/cmtt/m/n/
+10 for a system with volume $\OML/ccm/m/it/10 V$\OT1/cmtt/m/n/10 . If $\OML/cmm
+/b/it/10 M$ \OT1/cmtt/m/n/10 is
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 45--47
+\OT1/cmtt/m/n/10 where $\OML/ccm/m/it/10 ; ^^L; [] $ \OT1/cmtt/m/n/10 are unkn
+own but presumably smooth functions of $\OML/ccm/m/it/10 T$\OT1/cmtt/m/n/10 .
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 45--47
+\OT1/cmtt/m/n/10 Landau and Ginzburg further supposed that $\OML/ccm/m/it/10 $
+ \OT1/cmtt/m/n/10 vanishes at some
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 45--47
+\OT1/cmtt/m/n/10 temperature $\OML/ccm/m/it/10 T[]$\OT1/cmtt/m/n/10 , and it lo
+gically follows that $\OML/ccm/m/it/10 $ \OT1/cmtt/m/n/10 would look something
+
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 48--49
+[]\OT1/cmtt/m/n/10 The natural progression is to include the variability of $\O
+ML/cmm/b/it/10 M$ \OT1/cmtt/m/n/10 in
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 48--49
+\OT1/cmtt/m/n/10 space, Landau and Ginzburg argued that the free energy would h
+ave the
+ []
+
+
+Underfull \vbox (badness 3240) has occurred while \output is active []
 
 
 
@@ -1489,8 +1813,8 @@ pdfTeX warning (ext4): destination with the same identifier (name{page.1}) has
 been already used, duplicate ignored
 <to be read again> 
                    \relax 
-l.34 
-      [1
+l.51 \end{align}
+                 [1
 
 ]
 
@@ -1503,52 +1827,314 @@ Package marginnote Warning: Consecutive odd pages found.
 (marginnote)                changing the page numbering on page 1.
 
 Package marginnote Info: Using workaround for absolute page number on input lin
-e 34.
-Package hyperref Info: bookmark level for unknown theorem defaults to 0 on inpu
-t line 44.
+e 51.
 
-Overfull \hbox (4.95508pt too wide) in paragraph at lines 46--46
+Underfull \hbox (badness 10000) in paragraph at lines 51--53
+\OT1/cmtt/m/n/10 where one can argue that we can rescale $\OML/cmm/b/it/10 M$ \
+OT1/cmtt/m/n/10 to set the coefficient of
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 56--57
+\OT1/cmtt/m/n/10 In our introduction, we mentioned spontaneous symmetry breakin
+g.
+ []
+
+LaTeX Font Info:    Font shape `OT1/cmtt/bx/it' in size <10> not available
+(Font)              Font shape `OT1/cmtt/m/it' tried instead on input line 57.
+Package hyperref Info: bookmark level for unknown theorem defaults to 0 on inpu
+t line 57.
+
+Underfull \hbox (badness 10000) in paragraph at lines 57--59
+[][]\OT1/cmtt/m/sl/10 For every spontaneously broken continuous symmetry genera
+tor, there
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 57--59
+\OT1/cmtt/m/sl/10 exists a massless scalar mode in the field spectra, identifie
+d by
+ []
+
+
+Overfull \hbox (4.7999pt too wide) in paragraph at lines 59--59
 [] 
  []
 
 
-Overfull \hbox (4.95508pt too wide) in paragraph at lines 46--46
+Overfull \hbox (4.7999pt too wide) in paragraph at lines 59--59
  | 
  []
 
 
-Overfull \hbox (9.06781pt too wide) in paragraph at lines 49--50
-[]\T1/cmr/m/n/10.95 Consider a complex scalar field
+Underfull \hbox (badness 10000) in paragraph at lines 62--63
+[]\OT1/cmtt/m/n/10 Consider a complex scalar
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 67--69
+\OT1/cmtt/m/n/10 From complex analysis it is intuitive to argue $\OML/ccm/m/it/
+10 ^^^[]$ \OT1/cmtt/m/n/10 is the radial mode,
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 67--69
+\OT1/cmtt/m/n/10 and $\OML/ccm/m/it/10 ^^^[]$ \OT1/cmtt/m/n/10 is the angular m
+ode. Now we build the mass matrix. The mass
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 67--69
+\OT1/cmtt/m/n/10 of a mode is determined by the curvature of the potential at t
+he
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 67--69
+\OT1/cmtt/m/n/10 minimum. A steep potential means we have a heavy particle, whi
+le a
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 85--87
+\OT1/cmtt/m/n/10 We see that after symmetry breaking, the Higgs eats the Goldst
+one
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 85--87
+\OT1/cmtt/m/n/10 bosons and the new gauge-boson couples to the field in a way t
+hat
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 85--87
+\OT1/cmtt/m/n/10 causes the electrons in our system to exhibit an effective att
+raction,
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 85--87
+\OT1/cmtt/m/n/10 the birth of Cooper pairs. The Higgs mode is below zero, telli
+ng us
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 85--87
+\OT1/cmtt/m/n/10 that it costs energy to move away from the vacuum manifold for
+med by
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 85--87
+\OT1/cmtt/m/n/10 the new gauge-boson. The angular mode tells us that it costs n
+othing
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 85--87
+\OT1/cmtt/m/n/10 to modify the phase of the order parameter, and thus the groun
+d state
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 90--91
+[]\OT1/cmtt/m/n/10 This is the theorem that tells us precisely the spectrum of 
+vacua
  []
 
 
 
-
-Package fancyhdr Warning: \headheight is too small (12.0pt): 
-(fancyhdr)                Make it at least 13.59999pt, for example:
-(fancyhdr)                \setlength{\headheight}{13.59999pt}.
-(fancyhdr)                You might also make \topmargin smaller:
-(fancyhdr)                \addtolength{\topmargin}{-1.59999pt}.
-
 [2]
+Underfull \hbox (badness 10000) in paragraph at lines 95--97
+\OT1/cmtt/m/n/10 As we mentioned in the introduction. This is exactly the type 
+of
+ []
 
 
-Package fancyhdr Warning: \headheight is too small (12.0pt): 
-(fancyhdr)                Make it at least 13.59999pt, for example:
-(fancyhdr)                \setlength{\headheight}{13.59999pt}.
-(fancyhdr)                You might also make \topmargin smaller:
-(fancyhdr)                \addtolength{\topmargin}{-1.59999pt}.
+Underfull \hbox (badness 10000) in paragraph at lines 95--97
+\OT1/cmtt/m/n/10 behavior characteristic of a second order phase transition, a 
+smooth
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 95--97
+\OT1/cmtt/m/n/10 transition to and from some critical parameter $\OML/ccm/m/it/
+10 T[]$ \OT1/cmtt/m/n/10 on either side of
+ []
+
+
 
 [3]
 Chapter 2.
+tdgl_doc.tex:100: Illegal unit of measure (pt inserted).
+<to be read again> 
+                   !
+l.100 \chapter{Ginzburg-Landau Theory}
+                                      
+Dimensions can be in units of em, ex, in, pt, pc,
+cm, mm, dd, cc, nd, nc, bp, or sp; but yours is a new one!
+I'll assume that you meant to say pt, for printer's points.
+To recover gracefully from this error, it's best to
+delete the erroneous units; e.g., type `2' to delete
+two letters. (See Chapter 27 of The TeXbook.)
 
-Underfull \hbox (badness 10000) in paragraph at lines 110--111
+
+Underfull \hbox (badness 10000) in paragraph at lines 102--103
+\OT1/cmtt/m/n/10 Now is time for a modern derivation of the Ginzburg-Landau equ
+ations.
+ []
+
+
+Overfull \hbox (16.2686pt too wide) in paragraph at lines 106--108
+\OT1/cmtt/m/n/10 including the kinetic energy of the condensate, $\OMS/ccsy/m/n
+/10 j\OML/ccm/m/it/10 D[]'\OMS/ccsy/m/n/10 j[] ^^Q [] [] \OML/ccm/m/it/10 '[][]
+$\OT1/cmtt/m/n/10 ,
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 106--108
+\OT1/cmtt/m/n/10 and the coupling to the magnetic field $\OML/ccm/m/it/10 B \OM
+S/ccsy/m/n/10 ^^Q \OML/ccm/m/it/10 "[]@[]A[]$\OT1/cmtt/m/n/10 . We note that
+ []
+
+
+Underfull \hbox (badness 4621) in paragraph at lines 106--108
+\OML/ccm/m/it/10 m[] \OT1/ccr/m/n/10 = 2\OML/ccm/m/it/10 m[]$ \OT1/cmtt/m/n/10 
+and $\OML/ccm/m/it/10 e[] \OT1/ccr/m/n/10 = 2\OML/ccm/m/it/10 e$ \OT1/cmtt/m/n/
+10 are the mass and charge of the Cooper pair
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 123--124
+[]\OT1/cmtt/m/n/10 Here we've found the two Ginzburg-Landau (GL) equations that
+ define
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 123--124
+\OT1/cmtt/m/n/10 the boundary conditions of our superconductor. The first resul
+t,
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 123--124
+\OT1/cmtt/m/n/10 eq. ([][]2.0.2[][]) is a energy boundary condition term, telli
+ng us that,
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 123--124
+\OT1/cmtt/m/n/10 when minimized, the kinetic and potential energies will equali
+ze as a
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 123--124
+\OT1/cmtt/m/n/10 function of the order parameter. Phenomenologically, this tell
+s us
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 123--124
+\OT1/cmtt/m/n/10 that for the system to approach equilibrium, the material will
+ form
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 123--124
 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 112--113
+Underfull \hbox (badness 10000) in paragraph at lines 125--126
+[]\OT1/cmtt/m/n/10 The second GL equation, eq. ([][]2.0.3[][]), defines what it
+ means for
+ []
 
+
+Underfull \hbox (badness 10000) in paragraph at lines 125--126
+\OT1/cmtt/m/n/10 the condensate to have a "current". It tells us that the curre
+nt
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 125--126
+\OT1/cmtt/m/n/10 is dependent on the divergence of the density of cooper pairs 
+in the
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 125--126
+\OT1/cmtt/m/n/10 material, as well as the external vector potential experienced
+ by the
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 125--126
+
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 127--128
+[]\OT1/cmtt/m/n/10 We can uncover two important characteristic scales for the e
+ffect we
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 127--128
+\OT1/cmtt/m/n/10 are investigating: first is the distance over which a perturba
+tion
+ []
+
+
+Underfull \hbox (badness 5622) in paragraph at lines 127--128
+\OT1/cmtt/m/n/10 in the order parameter propagates: by setting $\OML/cmm/b/it/1
+0 A \OT1/ccr/m/n/10 = 0$ \OT1/cmtt/m/n/10 in our energy
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 127--128
+\OT1/cmtt/m/n/10 condition, we investigate the length scale over which we expec
+t our
+ []
+
+
+Underfull \hbox (badness 1968) in paragraph at lines 138--138
+\OT1/cmtt/m/n/10 perturb the density around the equilibrium, we get $\OML/ccm/m
+/it/10 ' \OT1/ccr/m/n/10 = (\OML/ccm/m/it/10 '[] \OT1/ccr/m/n/10 + \OML/ccm/m/i
+t/10 ^^N'\OT1/ccr/m/n/10 )\OML/ccm/m/it/10 e[]$\OT1/cmtt/m/n/10 .
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 138--138
+\OT1/cmtt/m/n/10 the zeroth order terms are just the criticality conditions, so
+
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 138--138
+\OT1/cmtt/m/n/10 together they vanish, and if we substitute the minima in, we g
+et the
+ []
+
+
+Underfull \hbox (badness 1968) in paragraph at lines 138--138
+\OT1/cmtt/m/n/10 perturb the density around the equilibrium, we get $\OML/ccm/m
+/it/10 ' \OT1/ccr/m/n/10 = (\OML/ccm/m/it/10 '[] \OT1/ccr/m/n/10 + \OML/ccm/m/i
+t/10 ^^N'\OT1/ccr/m/n/10 )\OML/ccm/m/it/10 e[]$\OT1/cmtt/m/n/10 .
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 138--138
+\OT1/cmtt/m/n/10 the zeroth order terms are just the criticality conditions, so
+
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 138--138
+\OT1/cmtt/m/n/10 together they vanish, and if we substitute the minima in, we g
+et the
  []
 
 
@@ -1556,110 +2142,695 @@ Underfull \hbox (badness 10000) in paragraph at lines 112--113
 [4
 
 ]
+Underfull \hbox (badness 6792) in paragraph at lines 138--140
+\OT1/cmtt/m/n/10 where $\OML/ccm/m/it/10 ^^X[] \OT1/ccr/m/n/10 = 1\OML/ccm/m/it
+/10 =\OT1/ccr/m/n/10 4\OML/ccm/m/it/10 m[]\OMS/ccsy/m/n/10 j\OML/ccm/m/it/10 \
+OMS/ccsy/m/n/10 j$\OT1/cmtt/m/n/10 . This parameter $\OML/ccm/m/it/10 ^^X$ \OT1
+/cmtt/m/n/10 is the coherence length, the
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 138--140
+\OT1/cmtt/m/n/10 length scale over which we expect perturbations of the density
+ field
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 141--142
+[]\OT1/cmtt/m/n/10 The other length scale is the depth within our material that
+ we
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 141--142
+\OT1/cmtt/m/n/10 expect to see no perturbations to the density field. This corr
+esponds
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 141--142
+\OT1/cmtt/m/n/10 to the scenario where $\OML/ccm/m/it/10 ' \OT1/ccr/m/n/10 = \O
+ML/ccm/m/it/10 '[]$ \OT1/cmtt/m/n/10 is uniform, then we can look at the
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 150--150
+\OT1/cmtt/m/n/10 this is the London equation, describing the expulsion of a mag
+netic
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 150--150
+\OT1/cmtt/m/n/10 field by a current propagating through our material, if we loo
+k for a
+ []
+
 
 LaTeX Font Warning: Font shape `U/stmry/b/n' undefined
-(Font)              using `U/stmry/m/n' instead on input line 137.
+(Font)              using `U/stmry/m/n' instead on input line 150.
 
 
+Underfull \hbox (badness 10000) in paragraph at lines 150--150
+\OT1/cmtt/m/n/10 this is the London equation, describing the expulsion of a mag
+netic
+ []
 
 
-Package fancyhdr Warning: \headheight is too small (12.0pt): 
-(fancyhdr)                Make it at least 13.59999pt, for example:
-(fancyhdr)                \setlength{\headheight}{13.59999pt}.
-(fancyhdr)                You might also make \topmargin smaller:
-(fancyhdr)                \addtolength{\topmargin}{-1.59999pt}.
+Underfull \hbox (badness 10000) in paragraph at lines 150--150
+\OT1/cmtt/m/n/10 field by a current propagating through our material, if we loo
+k for a
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 150--152
+
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 155--156
+\OT1/cmtt/m/n/10 We define the material constant $\OML/ccm/m/it/10 ^^T \OT1/ccr
+/m/n/10 = \OML/ccm/m/it/10 ^^U=^^X$ \OT1/cmtt/m/n/10 as the ratio of the
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 155--156
+\OT1/cmtt/m/n/10 penetration to coherence scales. The divergence of the coheren
+ce
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 155--156
+\OT1/cmtt/m/n/10 and penetration parameters is avoided by defining $\OML/ccm/m/
+it/10 ^^T$ \OT1/cmtt/m/n/10 this way as they
+ []
+
+
 
 [5]
-Underfull \hbox (badness 10000) in paragraph at lines 137--139
+Underfull \hbox (badness 10000) in paragraph at lines 157--158
+[]\OT1/cmtt/m/n/10 The use of $\OML/ccm/m/it/10 ^^T$ \OT1/cmtt/m/n/10 gave natu
+ral motivation to make distinct two types
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 157--158
+\OT1/cmtt/m/n/10 of superconductors, inventively dubbed Type I and Type II. Typ
+e I
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 157--158
+\OT1/cmtt/m/n/10 superconductors have a single thermodynamic critical field $\O
+ML/ccm/m/it/10 H[]$ \OT1/cmtt/m/n/10 below
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 157--158
+\OT1/cmtt/m/n/10 which the material is fully superconducting, and above which i
+t is
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 157--158
+\OT1/cmtt/m/n/10 fully normal. It is characterized by a one-to-one correspondan
+ce
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 159--160
+[]\OT1/cmtt/m/n/10 The condensation energy is the difference between the free
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 159--160
+\OT1/cmtt/m/n/10 energy during the normal state, $\OML/ccm/m/it/10 F[]$ \OT1/cm
+tt/m/n/10 and the free energy during the
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 159--160
+\OT1/cmtt/m/n/10 that the energy used to expel the magnetic field comes from th
+e energy
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 159--160
+\OT1/cmtt/m/n/10 gained from forming condensation. At criticality, the Meissner
+ effect
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 163--165
+\OT1/cmtt/m/n/10 is the threshold for the field at which it becomes energetical
+ly
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 163--165
+\OT1/cmtt/m/n/10 favorable to allow penetration by the external field, and dest
+ruction
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 169--170
+[]$\OMS/ccsy/m/n/10 j\OML/ccm/m/it/10 '\OMS/ccsy/m/n/10 j$ \OT1/cmtt/m/n/10 rec
+overs from $\OT1/ccr/m/n/10 0$ \OT1/cmtt/m/n/10 to $\OMS/ccsy/m/n/10 j\OML/ccm/
+m/it/10 '[]\OMS/ccsy/m/n/10 j$ \OT1/cmtt/m/n/10 over the coherence length $\OML
+/ccm/m/it/10 ^^X$ \OT1/cmtt/m/n/10 -- this
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 170--171
+[]$\OML/ccm/m/it/10 B$ \OT1/cmtt/m/n/10 because from $\OML/ccm/m/it/10 H[]$ \OT
+1/cmtt/m/n/10 to $\OT1/ccr/m/n/10 0$ \OT1/cmtt/m/n/10 over the penetration dept
+h $\OML/ccm/m/it/10 ^^U$ \OT1/cmtt/m/n/10 -- this
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 174--175
+[]\OT1/cmtt/m/n/10 So we have two competing contributions to the surface energy
+: far
+ []
+
+
+Underfull \hbox (badness 2376) in paragraph at lines 174--175
+\OT1/cmtt/m/n/10 from the interface, $\OML/ccm/m/it/10 ' \OT1/ccr/m/n/10 = 0$\O
+T1/cmtt/m/n/10 , and $\OML/ccm/m/it/10 B \OT1/ccr/m/n/10 = \OML/ccm/m/it/10 H[]
+$ \OT1/cmtt/m/n/10 in the normal state, while
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 174--175
+\OT1/cmtt/m/n/10 compete due to the mismatch in length scale: over a length $\O
+ML/ccm/m/it/10 ^^X$\OT1/cmtt/m/n/10 ,
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 174--175
+\OT1/cmtt/m/n/10 yet since it isn't greater than the coherence length, thus the
+re is a
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 174--175
+\OT1/cmtt/m/n/10 Then you have a similar resut from the magnetic field, the pen
+etration
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 174--175
+\OT1/cmtt/m/n/10 depth tells us of a magnetic energy cost over a region $\OML/c
+cm/m/it/10 ^^U$ \OT1/cmtt/m/n/10 as the field
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 177--179
+\OT1/cmtt/m/n/10 (Another derivation is available for this using an effective l
+ength
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 177--179
+\OT1/cmtt/m/n/10 measure $\OML/ccm/m/it/10 ^^N \OMS/ccsy/m/n/10 / [][] \OML/ccm
+/m/it/10 dx f\OT1/ccr/m/n/10 (\OML/ccm/m/it/10 '; H[]\OT1/ccr/m/n/10 )$ \OT1/cm
+tt/m/n/10 where $\OML/ccm/m/it/10 f$ \OT1/cmtt/m/n/10 is a function of the norm
+alized
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 180--181
+\OT1/cmtt/m/n/10 thus the system avoids creating them, so the field is either f
+ully
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 180--181
 
  []
 
 
-Overfull \hbox (30.64668pt too wide) in paragraph at lines 144--145
-[]\T1/cmr/m/n/10.95 The use of $\OML/cmm/m/it/10.95 ^^T$ \T1/cmr/m/n/10.95 gave
- natural motivation to make distinct two types of superconductors,
- []
-
-
-Overfull \hbox (14.45554pt too wide) in paragraph at lines 144--145
-\T1/cmr/m/n/10.95 thermodynamic critical field $\OML/cmm/m/it/10.95 H[]$ \T1/cm
-r/m/n/10.95 below which the material is fully superconducting,
- []
-
-
-Overfull \hbox (26.84071pt too wide) in paragraph at lines 144--145
-\T1/cmr/m/n/10.95 and above which it is fully normal. It is characterized by a 
-one-to-one correspondance
- []
-
-
-
-
-Package fancyhdr Warning: \headheight is too small (12.0pt): 
-(fancyhdr)                Make it at least 13.59999pt, for example:
-(fancyhdr)                \setlength{\headheight}{13.59999pt}.
-(fancyhdr)                You might also make \topmargin smaller:
-(fancyhdr)                \addtolength{\topmargin}{-1.59999pt}.
 
 [6{C:/Users/Graham/AppData/Local/Programs/MiKTeX/fonts/enc/dvips/cm-super/cm-su
 per-ts1.enc}]
-Underfull \hbox (badness 10000) in paragraph at lines 167--168
-
+Underfull \hbox (badness 10000) in paragraph at lines 182--183
+[]\OT1/cmtt/m/n/10 When $\OML/ccm/m/it/10 ^^T > \OT1/ccr/m/n/10 1\OML/ccm/m/it/
+10 =[]$ \OT1/cmtt/m/n/10 ($\OML/ccm/m/it/10 ^^X < ^^U$\OT1/cmtt/m/n/10 ), $\OML
+/ccm/m/it/10 ^^[[]$ \OT1/cmtt/m/n/10 is negative -- interfaces are
  []
 
 
-Overfull \hbox (15.93214pt too wide) in paragraph at lines 183--184
-\T1/cmr/m/n/10.95 coherence length, and so it becomes energetically favorable t
-o have an intermediate
+Underfull \hbox (badness 10000) in paragraph at lines 182--183
+\OT1/cmtt/m/n/10 energetically favorable, so the system will create as many as
  []
 
 
+Underfull \hbox (badness 10000) in paragraph at lines 182--183
+\OT1/cmtt/m/n/10 possible. This results in \OT1/cmtt/m/it/10 quantized flux tub
+es\OT1/cmtt/m/n/10 , each carrying one
+ []
 
 
-Package fancyhdr Warning: \headheight is too small (12.0pt): 
-(fancyhdr)                Make it at least 13.59999pt, for example:
-(fancyhdr)                \setlength{\headheight}{13.59999pt}.
-(fancyhdr)                You might also make \topmargin smaller:
-(fancyhdr)                \addtolength{\topmargin}{-1.59999pt}.
+Underfull \hbox (badness 10000) in paragraph at lines 182--183
+\OT1/cmtt/m/n/10 flux quantum (see following section) surrounded by a normal co
+re of
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 184--185
+[]\OT1/cmtt/m/n/10 The \OT1/cmtt/m/it/10 Bogomolny point \OT1/cmtt/m/n/10 is th
+e exact value of $\OML/ccm/m/it/10 ^^T$ \OT1/cmtt/m/n/10 for which crossover
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 184--185
+\OT1/cmtt/m/n/10 occurs. At this value, the surface energy vanishes and the GL
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 187--189
+\OT1/cmtt/m/n/10 below this value, the material is Type I, above it, the materi
+al is
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 192--193
+\OT1/cmtt/m/n/10 and superconducting, and the transition between these two stat
+es
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 192--193
+\OT1/cmtt/m/n/10 is immediate, the material moves from a state of total expulsi
+on
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 192--193
+\OT1/cmtt/m/n/10 of any magnetic flux ($\OML/ccm/m/it/10 B \OT1/ccr/m/n/10 = 0$
+\OT1/cmtt/m/n/10 ) to a normal state with induced flux
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 192--193
+\OT1/cmtt/m/n/10 from the external field. There is no intermediate state since 
+the
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 192--193
+\OT1/cmtt/m/n/10 coherence length is greater than the penetration depth, so it 
+would
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 192--193
+\OT1/cmtt/m/n/10 cost more energy to form mixed regions of superconductiveity a
+nd
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 196--197
+\OT1/cmtt/m/n/10 In the case of a type-II material, the penetration depth is gr
+eater
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 196--197
+\OT1/cmtt/m/n/10 than the coherence length, and so it becomes energetically fav
+orable
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 196--197
+\OT1/cmtt/m/n/10 to have an intermediate state where there are some regions wit
+h
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 196--197
+\OT1/cmtt/m/n/10 superconductivity and some regions with normal conductivity. T
+he
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 196--197
+\OT1/cmtt/m/n/10 regions exhibiting superconductive behavior are called vortexe
+s and
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 196--197
+\OT1/cmtt/m/n/10 carry quantized magnetic flux through the superconductor. In g
+eneral,
+ []
+
+
+Underfull \hbox (badness 4872) in paragraph at lines 207--207
+\OT1/cmtt/m/n/10 and we consider a curve large enough s.t. $\OML/ccm/m/it/10 j[
+] \OT1/ccr/m/n/10 = 0$ \OT1/cmtt/m/n/10 on $\OML/ccm/m/it/10 @\OMS/ccsy/m/n/10 
+S$\OT1/cmtt/m/n/10 , we see the
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 207--207
+\OT1/cmtt/m/n/10 notice that if we name the integral $\OML/ccm/m/it/10 z$\OT1/c
+mtt/m/n/10 , we have $\OML/ccm/m/it/10 z \OT1/ccr/m/n/10 + \OML/ccm/m/it/10 z[]
+$\OT1/cmtt/m/n/10 , which is just
+ []
+
+
+Underfull \hbox (badness 4872) in paragraph at lines 207--207
+\OT1/cmtt/m/n/10 and we consider a curve large enough s.t. $\OML/ccm/m/it/10 j[
+] \OT1/ccr/m/n/10 = 0$ \OT1/cmtt/m/n/10 on $\OML/ccm/m/it/10 @\OMS/ccsy/m/n/10 
+S$\OT1/cmtt/m/n/10 , we see the
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 207--207
+\OT1/cmtt/m/n/10 notice that if we name the integral $\OML/ccm/m/it/10 z$\OT1/c
+mtt/m/n/10 , we have $\OML/ccm/m/it/10 z \OT1/ccr/m/n/10 + \OML/ccm/m/it/10 z[]
+$\OT1/cmtt/m/n/10 , which is just
+ []
+
+
 
 [7]
+Underfull \hbox (badness 10000) in paragraph at lines 207--209
+\OT1/cmtt/m/n/10 This is the \OT1/cmtt/m/it/10 flux quanta \OT1/cmtt/m/n/10 of 
+a vortex, the basic unit of energy that
+ []
 
 
-Package fancyhdr Warning: \headheight is too small (12.0pt): 
-(fancyhdr)                Make it at least 13.59999pt, for example:
-(fancyhdr)                \setlength{\headheight}{13.59999pt}.
-(fancyhdr)                You might also make \topmargin smaller:
-(fancyhdr)                \addtolength{\topmargin}{-1.59999pt}.
+Underfull \hbox (badness 10000) in paragraph at lines 210--211
+[]\OT1/cmtt/m/n/10 The core of the vortex is of radius $\OML/ccm/m/it/10 ^^X$ \
+OT1/cmtt/m/n/10 and is very small, so we
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 212--213
+[]\OT1/cmtt/m/n/10 The line energy (energy per unit length) is given by the sum
+ of the
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 212--213
+\OT1/cmtt/m/n/10 energy associated with the magnetic field, and the kinetic ene
+rgy of
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 223--225
+\OT1/cmtt/m/n/10 Now, if we consider the interior of the core, we need a source
+ term
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 236--236
+\OT1/cmtt/m/n/10 the left integral vanishes by the divergence theorem and Maxwe
+ll's
+ []
+
+
+Underfull \hbox (badness 2556) in paragraph at lines 236--236
+\OT1/cmtt/m/n/10 this integral moves through $\OT1/ccr/m/n/10 (\OML/ccm/m/it/10
+ ^^X < r \OMS/ccsy/m/n/10 ^^\ \OML/ccm/m/it/10 ^^U\OT1/ccr/m/n/10 )$ \OT1/cmtt/
+m/n/10 about the boundary of the
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 236--236
+\OT1/cmtt/m/n/10 vortex, so we carve out $\OML/ccm/m/it/10 B\OT1/ccr/m/n/10 (0)
+$\OT1/cmtt/m/n/10 , leaving the much simpler continuity
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 236--236
+\OT1/cmtt/m/n/10 the left integral vanishes by the divergence theorem and Maxwe
+ll's
+ []
+
+
+Underfull \hbox (badness 2556) in paragraph at lines 236--236
+\OT1/cmtt/m/n/10 this integral moves through $\OT1/ccr/m/n/10 (\OML/ccm/m/it/10
+ ^^X < r \OMS/ccsy/m/n/10 ^^\ \OML/ccm/m/it/10 ^^U\OT1/ccr/m/n/10 )$ \OT1/cmtt/
+m/n/10 about the boundary of the
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 236--236
+\OT1/cmtt/m/n/10 vortex, so we carve out $\OML/ccm/m/it/10 B\OT1/ccr/m/n/10 (0)
+$\OT1/cmtt/m/n/10 , leaving the much simpler continuity
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 236--238
+\OT1/cmtt/m/n/10 Now, the change in free energy must be zero for this to be fav
+orable,
+ []
+
+
 
 [8]
+Underfull \hbox (badness 10000) in paragraph at lines 246--247
+[]\OT1/cmtt/m/n/10 We denote this the first critical magnetic field, $\OML/ccm/
+m/it/10 H[]$\OT1/cmtt/m/n/10 , it is the
+ []
 
 
-Package fancyhdr Warning: \headheight is too small (12.0pt): 
-(fancyhdr)                Make it at least 13.59999pt, for example:
-(fancyhdr)                \setlength{\headheight}{13.59999pt}.
-(fancyhdr)                You might also make \topmargin smaller:
-(fancyhdr)                \addtolength{\topmargin}{-1.59999pt}.
+Underfull \hbox (badness 10000) in paragraph at lines 246--247
+\OT1/cmtt/m/n/10 threshold below which the Superconductive Meissner state is st
+able.
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 246--247
+\OT1/cmtt/m/n/10 Above this point, it is energetically favorable to form vortic
+es, but
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 246--247
+\OT1/cmtt/m/n/10 the cores aren't small enough to not feel the effect of the co
+herence
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 248--249
+[]\OT1/cmtt/m/n/10 We are then interested in the other regime, where $\OMS/ccsy
+/m/n/10 j\OML/ccm/m/it/10 '\OMS/ccsy/m/n/10 j[]$ \OT1/cmtt/m/n/10 is close to
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 258--258
+\OT1/cmtt/m/n/10 the vector potential needs to correspond to the unifrom magnet
+ic field
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 258--258
+\OT1/cmtt/m/n/10 the vector potential needs to correspond to the unifrom magnet
+ic field
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 258--260
+\OT1/cmtt/m/n/10 if we suppose $\OMS/ccsy/m/n/10 ^^@\OML/ccm/m/it/10 $ \OT1/cm
+tt/m/n/10 is the energy, this is just the quantum harmonic
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 269--271
+\OT1/cmtt/m/n/10 Notice that the upper critical field is set entirely by the co
+herence
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 269--271
+\OT1/cmtt/m/n/10 length, as it gets longer, the superconductor will form more v
+orticies
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 269--271
+\OT1/cmtt/m/n/10 easier, since the material doesnt have enough room to totally
+ []
+
+
 
 [9]
+Underfull \hbox (badness 10000) in paragraph at lines 272--273
+[]\OT1/cmtt/m/n/10 A couple things are worth pointing out here: First, look at 
+the
+ []
 
 
-Package fancyhdr Warning: \headheight is too small (12.0pt): 
-(fancyhdr)                Make it at least 13.59999pt, for example:
-(fancyhdr)                \setlength{\headheight}{13.59999pt}.
-(fancyhdr)                You might also make \topmargin smaller:
-(fancyhdr)                \addtolength{\topmargin}{-1.59999pt}.
+Underfull \hbox (badness 10000) in paragraph at lines 276--278
+\OT1/cmtt/m/n/10 So for $\OML/ccm/m/it/10 ^^T$ \OT1/cmtt/m/n/10 large, this rat
+io explodes, making the superconducting state
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 276--278
+\OT1/cmtt/m/n/10 less and less stable, requiring lower temperatures to obtain a
+ fully
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 276--278
+\OT1/cmtt/m/n/10 superconducting state. We also see an interesting relationship
+ to the
+ []
+
+
 
 [10]
 Chapter 3.
+tdgl_doc.tex:288: Illegal unit of measure (pt inserted).
+<to be read again> 
+                   !
+l.288 ...er{Time-Dependent Ginzburg-Landau Theory}
+                                                  
+Dimensions can be in units of em, ex, in, pt, pc,
+cm, mm, dd, cc, nd, nc, bp, or sp; but yours is a new one!
+I'll assume that you meant to say pt, for printer's points.
+To recover gracefully from this error, it's best to
+delete the erroneous units; e.g., type `2' to delete
+two letters. (See Chapter 27 of The TeXbook.)
 
-Overfull \hbox (27.88289pt too wide) in paragraph at lines 275--275
-|\T1/cmr/bx/n/24.88 Time-Dependent Ginzburg-Landau
+
+Overfull \hbox (7.1025pt too wide) in paragraph at lines 288--288
+|[]\OT1/cmtt/m/n/17.28 Time-Dependent Ginzburg-Landau
  []
 
 
-Overfull \hbox (15.86293pt too wide) in paragraph at lines 277--278
-\T1/cmr/m/n/10.95 The Time-Dependent Ginzburg-Landau (TDGL) equation is the sim
-plest equation
+Underfull \hbox (badness 10000) in paragraph at lines 290--291
+\OT1/cmtt/m/n/10 Let's get more complex: The goal of this project is to create 
+a
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 290--291
+\OT1/cmtt/m/n/10 program that can take a number of different realistic situatio
+ns for a
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 290--291
+\OT1/cmtt/m/n/10 superconductor and respond with a highly-accurate simulation i
+n real
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 290--291
+\OT1/cmtt/m/n/10 time. So, we start by defining our scope. In the same vein as 
+the
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 293--295
+\OT1/cmtt/m/n/10 While very different, the same genetics of our original equati
+on
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 293--295
+\OT1/cmtt/m/n/10 is still there: We have a covariant laplacian of $\OML/ccm/m/i
+t/10 '$ \OT1/cmtt/m/n/10 capturing the
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 293--295
+\OT1/cmtt/m/n/10 behavior and coupling of a gauge-invariant scalar field to a m
+agnetic
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 293--295
+\OT1/cmtt/m/n/10 field. We also have a term that describes the coupling of our 
+field
+ []
+
+
+Underfull \hbox (badness 3646) in paragraph at lines 293--295
+\OT1/cmtt/m/n/10 to the critical temperature, $\OT1/ccr/m/n/10 (\OML/ccm/m/it/1
+0 " \OMS/ccsy/m/n/10 ^^@ j\OML/ccm/m/it/10 '\OMS/ccsy/m/n/10 j[]\OT1/ccr/m/n/10
+ )$\OT1/cmtt/m/n/10 , where $\OML/ccm/m/it/10 "\OT1/ccr/m/n/10 (\OML/cmm/b/it/1
+0 r\OT1/ccr/m/n/10 ) = \OML/ccm/m/it/10 T[]\OT1/ccr/m/n/10 (\OML/cmm/b/it/10 r\
+OT1/ccr/m/n/10 )\OML/ccm/m/it/10 =T \OMS/ccsy/m/n/10 ^^@ \OT1/ccr/m/n/10 1$ \OT
+1/cmtt/m/n/10 is
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 293--295
+\OT1/cmtt/m/n/10 the parameter characterizing the local critical temperature of
+ the
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 293--295
+\OT1/cmtt/m/n/10 object. The form of this equation is so different because we n
+eed
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 296--297
+[]\OT1/cmtt/m/n/10 We see on the left side a swath of unfamiliar terms, from le
+ft
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 296--297
+\OT1/cmtt/m/n/10 to right: The ratio outside of everything is a material parame
+ter
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 296--297
+\OT1/cmtt/m/n/10 governing the response time of the amplitude and phase of the 
+order
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 296--297
+\OT1/cmtt/m/n/10 parameter to perturbations in time. The term $\OML/ccm/m/it/10
+ u \OT1/ccr/m/n/10 = \OML/ccm/m/it/10 ^^Y[]=\OT1/ccr/m/n/10 14\OML/ccm/m/it/10 
+^^P\OT1/ccr/m/n/10 (3)$ \OT1/cmtt/m/n/10 is the
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 296--297
+\OT1/cmtt/m/n/10 ratio for dirty superconductors, and $\OML/ccm/m/it/10 ^^M$ \O
+T1/cmtt/m/n/10 parameterizes the strength of
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 296--297
+\OT1/cmtt/m/n/10 inelastic scattering (diffusion length) in the material. Withi
+n the
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 296--297
+\OT1/cmtt/m/n/10 parenthesis we see two derivative terms, one a simple time der
+ivative
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 296--297
+\OT1/cmtt/m/n/10 of the order parameter, and the other being a term that manage
+s the
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 296--297
+\OT1/cmtt/m/n/10 diffusive flow of cooper pairs throughout time. The final term
+ is $\OML/ccm/m/it/10 i^^V$\OT1/cmtt/m/n/10 ,
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 296--297
+\OT1/cmtt/m/n/10 the electric potential term. This is a term that manages the e
+lectric
  []
 
 
@@ -1675,49 +2846,44 @@ L3 programming layer <2025-01-18>
 
 LaTeX Font Warning: Some font shapes were not available, defaults substituted.
 
+
+LaTeX Warning: Label(s) may have changed. Rerun to get cross-references right.
+
 Package rerunfilecheck Info: File `tdgl_doc.out' has not changed.
 (rerunfilecheck)             Checksum: FC94778A1362C204D92A925B5FD5C4D6;493.
  ) 
 Here is how much of TeX's memory you used:
- 37051 strings out of 473523
- 749866 string characters out of 5714146
- 1166245 words of memory out of 5000000
- 59493 multiletter control sequences out of 15000+600000
- 585267 words of font info for 113 fonts, out of 8000000 for 9000
+ 37151 strings out of 473523
+ 752368 string characters out of 5714146
+ 1167429 words of memory out of 5000000
+ 59586 multiletter control sequences out of 15000+600000
+ 576764 words of font info for 108 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
- 89i,14n,96p,1209b,536s stack positions out of 10000i,1000n,20000p,200000b,200000s
-<C:/Users/Graham/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm
-/cmbsy10.pfb><C:/Users/Graham/AppData/Local/Programs/MiKTeX/fonts/type1/public/
-amsfonts/cm/cmbx10.pfb><C:/Users/Graham/AppData/Local/Programs/MiKTeX/fonts/typ
-e1/public/amsfonts/cm/cmex10.pfb><C:/Users/Graham/AppData/Local/Programs/MiKTeX
-/fonts/type1/public/amsfonts/cm/cmmi10.pfb><C:/Users/Graham/AppData/Local/Progr
-ams/MiKTeX/fonts/type1/public/amsfonts/cm/cmmi8.pfb><C:/Users/Graham/AppData/Lo
-cal/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmmib10.pfb><C:/Users/Graham
-/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cmextra/cmmib8.pfb><
-C:/Users/Graham/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cm
-r10.pfb><C:/Users/Graham/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfo
-nts/cm/cmr8.pfb><C:/Users/Graham/AppData/Local/Programs/MiKTeX/fonts/type1/publ
-ic/amsfonts/cm/cmsy10.pfb><C:/Users/Graham/AppData/Local/Programs/MiKTeX/fonts/
-type1/public/amsfonts/cm/cmsy8.pfb><C:/Users/Graham/AppData/Local/Programs/MiKT
-eX/fonts/type1/public/amsfonts/symbols/msbm10.pfb><C:/Users/Graham/AppData/Loca
-l/Programs/MiKTeX/fonts/type1/public/cm-super/sfbi1095.pfb><C:/Users/Graham/App
-Data/Local/Programs/MiKTeX/fonts/type1/public/cm-super/sfbx1095.pfb><C:/Users/G
-raham/AppData/Local/Programs/MiKTeX/fonts/type1/public/cm-super/sfbx1200.pfb><C
-:/Users/Graham/AppData/Local/Programs/MiKTeX/fonts/type1/public/cm-super/sfbx24
-88.pfb><C:/Users/Graham/AppData/Local/Programs/MiKTeX/fonts/type1/public/cm-sup
-er/sfrm0600.pfb><C:/Users/Graham/AppData/Local/Programs/MiKTeX/fonts/type1/publ
-ic/cm-super/sfrm0800.pfb><C:/Users/Graham/AppData/Local/Programs/MiKTeX/fonts/t
-ype1/public/cm-super/sfrm0900.pfb><C:/Users/Graham/AppData/Local/Programs/MiKTe
-X/fonts/type1/public/cm-super/sfrm1095.pfb><C:/Users/Graham/AppData/Local/Progr
-ams/MiKTeX/fonts/type1/public/cm-super/sfrm1200.pfb><C:/Users/Graham/AppData/Lo
-cal/Programs/MiKTeX/fonts/type1/public/cm-super/sfrm1728.pfb><C:/Users/Graham/A
-ppData/Local/Programs/MiKTeX/fonts/type1/public/cm-super/sfsl0900.pfb><C:/Users
-/Graham/AppData/Local/Programs/MiKTeX/fonts/type1/public/cm-super/sfsl1095.pfb>
-<C:/Users/Graham/AppData/Local/Programs/MiKTeX/fonts/type1/public/cm-super/sfti
-1095.pfb>
-Output written on tdgl_doc.pdf (13 pages, 435793 bytes).
+ 89i,14n,96p,1209b,478s stack positions out of 10000i,1000n,20000p,200000b,200000s
+ <C:\Users\Graham\AppData\Local\MiKTeX\fonts/pk/ljfour/public/concrete/dpi600
+\ccr7.pk> <C:\Users\Graham\AppData\Local\MiKTeX\fonts/pk/ljfour/public/concmath
+-fonts/dpi600\xccex10.pk> <C:\Users\Graham\AppData\Local\MiKTeX\fonts/pk/ljfour
+/public/concmath-fonts/dpi600\xccsy7.pk> <C:\Users\Graham\AppData\Local\MiKTeX\
+fonts/pk/ljfour/public/concmath-fonts/dpi600\xccsy10.pk> <C:\Users\Graham\AppDa
+ta\Local\MiKTeX\fonts/pk/ljfour/public/concmath-fonts/dpi600\xccmi7.pk> <C:\Use
+rs\Graham\AppData\Local\MiKTeX\fonts/pk/ljfour/public/concrete/dpi600\ccr10.pk>
+ <C:\Users\Graham\AppData\Local\MiKTeX\fonts/pk/ljfour/public/concmath-fonts/dp
+i600\xccmi10.pk><C:/Users/Graham/AppData/Local/Programs/MiKTeX/fonts/type1/publ
+ic/amsfonts/cm/cmbsy10.pfb><C:/Users/Graham/AppData/Local/Programs/MiKTeX/fonts
+/type1/public/amsfonts/cm/cmbx10.pfb><C:/Users/Graham/AppData/Local/Programs/Mi
+KTeX/fonts/type1/public/amsfonts/cm/cmitt10.pfb><C:/Users/Graham/AppData/Local/
+Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmmib10.pfb><C:/Users/Graham/App
+Data/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cmextra/cmmib7.pfb><C:/U
+sers/Graham/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmsltt
+10.pfb><C:/Users/Graham/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfon
+ts/cm/cmtt10.pfb><C:/Users/Graham/AppData/Local/Programs/MiKTeX/fonts/type1/pub
+lic/amsfonts/cm/cmtt12.pfb><C:/Users/Graham/AppData/Local/Programs/MiKTeX/fonts
+/type1/public/amsfonts/cm/cmtt8.pfb><C:/Users/Graham/AppData/Local/Programs/MiK
+TeX/fonts/type1/public/amsfonts/symbols/msbm10.pfb><C:/Users/Graham/AppData/Loc
+al/Programs/MiKTeX/fonts/type1/public/cm-super/sftt1000.pfb>
+Output written on tdgl_doc.pdf (13 pages, 220474 bytes).
 PDF statistics:
- 263 PDF objects out of 1000 (max. 8388607)
- 47 named destinations out of 1000 (max. 500000)
+ 370 PDF objects out of 1000 (max. 8388607)
+ 43 named destinations out of 1000 (max. 500000)
  37 words of extra memory for PDF output out of 10000 (max. 10000000)
 

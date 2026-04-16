@@ -84,12 +84,44 @@ void infoPane::drawSimVars() {
     // controls
     ImGui::TextColored(ImVec4(0.8f,1.f,0.8f,1.f), "CONTROLS");
     ImGui::SliderInt("Steps/Frame", &m_simulator.stepsPerFrame, 10, 500);
+    
+    if (ImGui::SliderInt("Partition Size##gpu", &m_simulator.m_partitionSize, 32, 1024)) {
+      m_simulator.setPartitionSize(m_simulator.m_partitionSize);
+    }
 
     bool noiseCheck = m_simulator.useNoise;
     if (ImGui::Checkbox("Thermal noise", &noiseCheck)) m_simulator.useNoise = noiseCheck;
+    
+    ImGui::Separator();
+    ImGui::TextColored(ImVec4(1.f,0.8f,0.2f,1.f), "PERFORMANCE");
+    ImGui::Checkbox("Render Both Viewports", &m_simulator.m_renderBothViewports);
+    ImGui::Checkbox("Enable Vortex Count", &m_simulator.m_enableVortexCounting);
+    ImGui::SliderInt("Vortex Count Freq", &m_simulator.m_vortexCountInterval, 100, 5000);
+    ImGui::SliderInt("Timestep Update Freq", &m_simulator.m_dtUpdateInterval, 10, 500);
+    ImGui::Separator();
 
     if (ImGui::Button("Random Quench", ImVec2(-1, 0))) m_simulator.quench();
     if (ImGui::Button("Seed Abrikosov Lattice", ImVec2(-1, 0))) m_simulator.quenchSeededLattice();
+    ImGui::Separator();
+
+    ImGui::TextColored(ImVec4(0.8f,1.f,0.8f,1.f), "GEOMETRY");
+    static glm::vec2 geomCenter(48.0f, 48.0f);
+    static float geomSize = 30.0f;
+    ImGui::InputFloat2("Center##geom", &geomCenter.x);
+    ImGui::SliderFloat("Size", &geomSize, 5.0f, 80.0f);
+    
+    if (ImGui::Button("Apply Rectangle", ImVec2(-1, 0))) {
+      m_simulator.applyGeometryRectangle(geomCenter, glm::vec2(geomSize, geomSize));
+    }
+    if (ImGui::Button("Apply Circle", ImVec2(-1, 0))) {
+      m_simulator.applyGeometryCircle(geomCenter, geomSize);
+    }
+    if (ImGui::Button("Apply Triangle", ImVec2(-1, 0))) {
+      m_simulator.applyGeometryTriangle(geomCenter, geomSize);
+    }
+    if (ImGui::Button("Clear Geometry", ImVec2(-1, 0))) {
+      m_simulator.clearGeometry();
+    }
     ImGui::Separator();
 
     ImGui::Text("%.1f FPS  (%.2f ms)", ImGui::GetIO().Framerate,

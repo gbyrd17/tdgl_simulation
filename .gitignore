@@ -39,9 +39,8 @@
 /Makefile
 
 # external deps
-/include/glfw
-/include/khr
+/include/GLFW
+/include/KHR
 /lib-mingw-w64
-/imgui
 /src/glad.c
 

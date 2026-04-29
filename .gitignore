@@ -43,5 +43,5 @@
 /include/glad
 /include/KHR
 /lib-mingw-w64
-/src/glad.c
+glad.c
 

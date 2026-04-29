@@ -11,6 +11,8 @@ uniform sampler2D img_edgeWeights;  // stores normalized edge distances (up, dow
 uniform float uDt, uH, uL, uBField, uQ, uXi, uAlpha, uLambda, uGamma, uRelax, uEpsilon;
 uniform bool uUseNoise;
 uniform float uTime;
+uniform float uSurfaceVoltage;
+uniform float uSheetCurrent;
 uniform ivec2 uPartitionOffset;  // offset for current partition (startX, startY)
 uniform bool uComputeInterior;   // true: compute interior only, false: compute boundaries only
 uniform ivec2 uInteriorStart;    // interior region start (for boundary mode)
@@ -104,10 +106,11 @@ void main() {
   laplacian     /= (uH * uH);       // normalize by grid spacing squared
   float lapScale = 1.0f; // gradient energy scaling; must be 1.0 in properly normalized TDGL units
 
-  // for now we set mu = 0 since we havent implemented terminals yet, so no current flowing
+  // electric scalar potential can drive superconducting currents and lattice formation
   // calculate the euler step variable w using temporal link var tU
-  float mu      = 0.0f; // electric scalar potential felt at point, not implemented yet ####
+  float mu      = uSurfaceVoltage; // electric scalar potential felt at point
   vec2 tU       = vec2(cos(- mu * uDt), sin(-mu * uDt));
+  
   float phi2 = dot(phi, phi);
 
   // TDGL implicit Euler time-stepping (following pyTDGL Eq. 16-17)
@@ -120,11 +123,20 @@ void main() {
   float zScale = 0.5f * uGamma * uGamma;  // Accumulate scale factor
   vec2 z = zScale * phi;
   
-  // Explicit RHS w^n = ψ^n + (Δt/u) * [GL terms] / sqrt(1 + γ^2 |ψ|^2)
+  // Lorentz force on vortices: F = J_sheet × B
+  // Applied current J_sheet in x-direction, B-field in z-direction => Force in y-direction
+  // This drives phase winding that pushes vortices perpendicular to current
+  float lorentzForce = uSheetCurrent * uBField;  // F_y = J_x * B_z
+  
+  // Encode Lorentz force as phase-gradient driving term in y-direction
+  // The force creates a phase slip that drives supercurrent circulation around vortices
+  vec2 phaseGradForce = vec2(0.0f, lorentzForce * phi2);  // Force couples to condensate density
+  
+  // Explicit RHS w^n = ψ^n + (Δt/u) * [GL terms + Lorentz force] / sqrt(1 + γ^2 |ψ|^2)
   float denomFactor = sqrt(1.0f + uGamma * uGamma * phi2);
   float prefactor = uDt / (uRelax * denomFactor);
   vec2 glTerms = (uEpsilon - phi2) * phi + lapScale * laplacian;
-  vec2 w = phi + prefactor * glTerms;
+  vec2 w = phi + prefactor * (glTerms + phaseGradForce);
 
   // quadratic solve for |ψ^{n+1}|^2 (pyTDGL Eq. 18-20)
   // Equation: ψ + z|ψ|^2 = w, solved as quadratic in |ψ|^2

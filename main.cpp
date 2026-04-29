@@ -13,7 +13,9 @@
 int main()  {
   device dev;     // init device 
   dev.worldSize = glm::vec2(96.0f, 96.0f);  // multiple of Abrikosov spacing for clean lattice
-  dev.externalB = glm::vec3(0, 0, 0.05f);  // moderate field for visible vortex nucleation in a 100ξ domain
+  dev.externalB = glm::vec3(0, 0, 0.15f);  // moderate field for visible vortex nucleation in a 100ξ domain
+  dev.surfaceVoltage = 0.5f;  // electric potential to drive lattice formation via condensate dynamics
+  dev.sheetCurrentDensity = 0.05f;  // injected surface current density to nucleate vortex motion
 
   layer nbLayer;  // init niobium layer
   nbLayer.xi      = 1.0f;

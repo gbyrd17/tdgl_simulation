@@ -1,6 +1,6 @@
 #pragma once
-#include <device.h>
-#include <mesh.h>
+#include "device.h"
+#include "mesh.h"
 #include <glad/glad.h>
 #include <memory>
 #include <vector>
@@ -95,6 +95,8 @@ class simulator {
     GLint m_compBFieldLoc;
     GLint m_compEpsilonLoc;
     GLint m_compTimeLoc;
+    GLint m_compSurfaceVoltageLoc;
+    GLint m_compSheetCurrentLoc;
 
     GLint m_rendFieldLoc;
     GLint m_rendMaskLoc;

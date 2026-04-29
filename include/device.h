@@ -36,6 +36,8 @@ struct device {
   std::vector<layer> layers;
   glm::vec3 externalB = glm::vec3(0,0,0);
   float temp          = 0.1f;
+  float surfaceVoltage = 0.0f;   // electric potential to drive lattice formation
+  float sheetCurrentDensity = 0.0f;  // supercurrent density injected at surface
 
   glm::vec2 worldSize;
 };

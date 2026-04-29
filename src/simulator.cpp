@@ -115,7 +115,7 @@ void simulator::initTextures() {
 
 void simulator::initShaders() {
   // load and compile compute shader
-  std::string compSrc = readFile("../shaders/comp.glsl");
+  std::string compSrc = readFile("./shaders/comp.glsl");
   checkFile(compSrc, "COMPILE SHADER");
   const char* compPtr = compSrc.c_str();
   GLuint compShader = glCreateShader(GL_COMPUTE_SHADER);
@@ -144,11 +144,13 @@ void simulator::initShaders() {
   m_compBFieldLoc    = glGetUniformLocation(m_compPID, "uBField");
   m_compEpsilonLoc   = glGetUniformLocation(m_compPID, "uEpsilon");
   m_compTimeLoc      = glGetUniformLocation(m_compPID, "uTime");
+  m_compSurfaceVoltageLoc = glGetUniformLocation(m_compPID, "uSurfaceVoltage");
+  m_compSheetCurrentLoc = glGetUniformLocation(m_compPID, "uSheetCurrent");
 
   // load and compile render shaders
-  std::string vertSrc = readFile("../shaders/vert.glsl");
+  std::string vertSrc = readFile("./shaders/vert.glsl");
   checkFile(vertSrc, "VERTEX SHADER");
-  std::string fragSrc = readFile("../shaders/frag.glsl");
+  std::string fragSrc = readFile("./shaders/frag.glsl");
   checkFile(fragSrc, "FRAGMENT SHADER");
 
   const char* vertPtr = vertSrc.c_str();
@@ -293,20 +295,22 @@ void simulator::step() {
   glBindTexture(GL_TEXTURE_2D, m_edgeWeightTexture);
   glUniform1i(glGetUniformLocation(m_compPID, "img_edgeWeights"), 4);
 
-  float alpha = 1.0f / (4.0f * mc * m_layer.xi * m_layer.xi);
-  glUniform1f(m_compXiLoc,       m_layer.xi);
-  glUniform1f(m_compLambdaLoc,   m_layer.lambda);
-  glUniform1f(m_compGammaLoc,    m_layer.gamma);
+  double alpha = 1.0 / (4.0 * mc * m_layer.xi * m_layer.xi);
+  glUniform1d(m_compXiLoc,       m_layer.xi);
+  glUniform1d(m_compLambdaLoc,   m_layer.lambda);
+  glUniform1d(m_compGammaLoc,    m_layer.gamma);
   glUniform1f(m_compQLoc,        q);
   glUniform1f(m_compHLoc,        h);
   glUniform1f(m_compLLoc,        m_device.worldSize.x);
   glUniform1f(m_compRelaxLoc,    m_layer.u);
   glUniform1i(m_compUseNoiseLoc, useNoise);
   glUniform1f(m_compDtLoc,       dt);
-  glUniform1f(m_compAlphaLoc,    alpha);
+  glUniform1d(m_compAlphaLoc,    alpha);
   glUniform1f(m_compBFieldLoc,   m_device.externalB.z);
   glUniform1f(m_compEpsilonLoc,  m_layer.epsilon);
   glUniform1f(m_compTimeLoc,     simTime);
+  glUniform1f(m_compSurfaceVoltageLoc, m_device.surfaceVoltage);
+  glUniform1f(m_compSheetCurrentLoc, m_device.sheetCurrentDensity);
 
   // Two-phase computation: interior (parallel) then boundary (sequential)
   GLint partitionOffsetLoc = glGetUniformLocation(m_compPID, "uPartitionOffset");
@@ -455,7 +459,7 @@ void simulator::quenchSeededLattice() {
   std::vector<float> initData(m_mesh->resX * m_mesh->resY * 4, 0.0f);
 
   float phiEq = sqrt(m_layer.epsilon);
-  float xi = m_layer.xi;  // coherence length
+  double xi = m_layer.xi;  // coherence length
 
   // Calculate Abrikosov lattice spacing: a ≈ sqrt(2*Phi_0 / (sqrt(3)*B))
   float B = m_device.externalB.z;
@@ -463,7 +467,7 @@ void simulator::quenchSeededLattice() {
 
   // Convert to grid spacing units for indexing
   float latticeSpacing = latticeDist / h;
-  float coreHealing = xi / h;  // core healing length in grid points
+  double coreHealing = xi / h;  // core healing length in grid points
 
   std::cout << "Seeding TRUE Abrikosov lattice with spacing " << latticeDist << " ξ ("
             << latticeSpacing << " grid pts), core healing " << coreHealing << " pts" << std::endl;
@@ -486,10 +490,10 @@ void simulator::quenchSeededLattice() {
   }
 
   // For each grid cell, find nearest vortex cores and compute order parameter
-  for (int yi = 0; yi < m_mesh->resY; yi++) {
-    for (int xi = 0; xi < m_mesh->resX; xi++) {
-      float x = float(xi);
-      float y = float(yi);
+  for (int i = 0; i < m_mesh->resY; i++) {
+    for (int j = 0; j < m_mesh->resX; j++) {
+      float x = float(j);
+      float y = float(i);
 
       // Find the closest vortex core (use periodic boundaries)
       float minDist = 1e9f;
@@ -526,15 +530,15 @@ void simulator::quenchSeededLattice() {
       // Healing profile: amplitude grows from 0 at core to phiEq at far field
       // Use form: |φ| = φ_eq * sqrt(1 - exp(-r²/ξ²))
       // This gives correct r → 0 scaling (linear) and r → ∞ saturation
-      float rNorm = minDist / coreHealing;
+      float rNorm = minDist / (float)coreHealing;
       float healingFactor = sqrt(1.0f - exp(-rNorm * rNorm));
       float mag = phiEq * healingFactor;
 
       // Store complex order parameter as (Re, Im) with proper vortex core structure
-      initData[(yi * m_mesh->resX + xi) * 4 + 0] = mag * cos(vortexPhase);
-      initData[(yi * m_mesh->resX + xi) * 4 + 1] = mag * sin(vortexPhase);
-      initData[(yi * m_mesh->resX + xi) * 4 + 2] = 0.0f;
-      initData[(yi * m_mesh->resX + xi) * 4 + 3] = 0.5f;
+      initData[(i * m_mesh->resX + j) * 4 + 0] = mag * cos(vortexPhase);
+      initData[(i * m_mesh->resX + j) * 4 + 1] = mag * sin(vortexPhase);
+      initData[(i * m_mesh->resX + j) * 4 + 2] = 0.0f;
+      initData[(i * m_mesh->resX + j) * 4 + 3] = 0.5f;
     }
   }
 
@@ -612,7 +616,7 @@ int simulator::countVortices() {
   glBindTexture(GL_TEXTURE_2D, m_phiTextures[m_readIdx]);
   glGetTexImage(GL_TEXTURE_2D, 0, GL_RGBA, GL_FLOAT, m_phiBuffer.data());
 
-  int vortexCount = 0;
+  this->vortexCount = 0;
   
   // Check each plaquette for phase circulation
   for (int y = 0; y < m_mesh->resY - 1; y++) {
@@ -645,12 +649,12 @@ int simulator::countVortices() {
       
       // Normalize to vortex count (circulation/2π)
       if (abs(circulation) > PI) {
-        vortexCount++;
+        this->vortexCount++;
       }
     }
   }
   
-  return vortexCount;
+  return this->vortexCount;
 }
 
 void simulator::render(int renderMode) {
@@ -665,14 +669,14 @@ void simulator::render(int renderMode) {
   glBindTexture(GL_TEXTURE_2D, m_maskTexture);
   glUniform1i(m_rendMaskLoc, 1);
 
-  float h    = m_device.worldSize.x / (float)m_mesh->resX;
-  float alpha = 1.0f / (4.0f * mc * m_layer.xi * m_layer.xi);
-  float beta  = (q * q * m_layer.lambda * m_layer.lambda * alpha) / mc;
+  this->h       = m_device.worldSize.x / (float)m_mesh->resX;
+  double alpha  = 1.0f / (4.0f * mc * m_layer.xi * m_layer.xi);
+  double beta   = (q * q * m_layer.lambda * m_layer.lambda * alpha) / mc;
 
   glUniform1i(m_rendRenderModeLoc, renderMode);
-  glUniform1f(m_rendHLoc,          h);
-  glUniform1f(m_rendAlphaLoc,      alpha);
-  glUniform1f(m_rendBetaLoc,       beta);
+  glUniform1f(m_rendHLoc,          this->h);
+  glUniform1d(m_rendAlphaLoc,      alpha);
+  glUniform1d(m_rendBetaLoc,       beta);
   glUniform1f(m_rendLLoc,          m_device.worldSize.x);
   glUniform1f(m_rendBFieldLoc,     m_device.externalB.z);
   glUniform1f(m_rendQLoc,          q);

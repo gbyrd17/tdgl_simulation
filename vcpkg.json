@@ -1,8 +1,21 @@
 {
+  "name": "tdgl-simulation",
+  "version": "1.0.0",
+  "description": "Time-Dependent Ginzburg-Landau Simulation using OpenGL",
+  "homepage": "https://github.com/gbyrd17/tdgl_simulation",
   "dependencies": [
-    "glfw3",
-    "glm",
-    "imgui",
-    "glad"
-  ]
+    {
+      "name": "glfw3",
+      "version>=": "3.3.8"
+    },
+    {
+      "name": "glm",
+      "version>=": "1.0.3"
+    },
+    {
+      "name": "glad",
+      "version>=": "0.1.36"
+    }
+  ],
+  "builtin-baseline": "4b77da7fed37817f124936239197833469f1b9a8"
 }

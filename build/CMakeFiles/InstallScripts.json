@@ -1,7 +1,7 @@
 {
 	"InstallScripts" : 
 	[
-		"D:/cpp/tdgl_project/tdgl_sim/build/cmake_install.cmake"
+		"D:/cpp/tdgl_project/build/cmake_install.cmake"
 	],
 	"Parallel" : false
 }

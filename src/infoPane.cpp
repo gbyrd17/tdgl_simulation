@@ -8,8 +8,8 @@
 // constructor 
 infoPane::infoPane(device& device, simulator& simulator, layer& layer ): 
   m_device(device), m_simulator(simulator), m_layer(layer) {
-    gridUnitX = (m_device.worldSize.x / m_simulator.m_mesh->resX) / m_layer.xi;
-    gridUnitY = (m_device.worldSize.y / m_simulator.m_mesh->resY) / m_layer.xi;
+    gridUnitX = (m_device.worldSize.x / (float)m_simulator.m_mesh->resX) / m_layer.xi;
+    gridUnitY = (m_device.worldSize.y / (float)m_simulator.m_mesh->resY) / m_layer.xi;
   }
 
 // destructor

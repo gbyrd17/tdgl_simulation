@@ -31,14 +31,17 @@
 *.app
 
 # Build Systems (CMake)
-/tdgl_sim/build/
-/tdgl_sim/MakeCache.txt
-/tdgl_sim/CMakeFiles/
-/tdgl_sim/CMakeScripts/
-/tdgl_sim/cmake_install.cmake
-/tdgl_sim/Makefile
+/build/
+/MakeCache.txt
+/CMakeFiles/
+/CMakeScripts/
+/cmake_install.cmake
+/Makefile
 
-# deps
-tdgl_sim/deps/imgui/
-tdgl_sim/ignore/
+# external deps
+/include/glfw
+/include/khr
+/lib-mingw-w64
+/imgui
+/src/glad.c
 

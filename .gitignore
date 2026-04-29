@@ -31,7 +31,7 @@
 *.app
 
 # Build Systems (CMake)
-/build/
+/build/*
 /MakeCache.txt
 /CMakeFiles/
 /CMakeScripts/

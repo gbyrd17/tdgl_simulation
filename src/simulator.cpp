@@ -1,60 +1,78 @@
+#include "constants.h"
 #include "device.h"
-#include <iterator>
-#include <simulator.h>
+#include <algorithm>
+#include <cmath>
+#include <fstream>
 #include <geometry.h>
 #include <iostream>
-#include <fstream>
-#include <random>
-#include <vector>
-#include <algorithm>
+#include <iterator>
 #include <memory>
-#include "cmath"
+#include <random>
+#include <simulator.h>
+#include <vector>
 
-#define PI 3.14159265359f
-
-std::string readFile(const char* path) {
+std::string readFile(const char *path) {
   std::ifstream file(path);
-  if(!file) { std::cerr << "Failed to open " << path << "\n"; return ""; }
-  return std::string((std::istreambuf_iterator<char>(file)), std::istreambuf_iterator<char>());
+  if (!file) {
+    std::cerr << "Failed to open " << path << "\n";
+    return "";
+  }
+  return std::string((std::istreambuf_iterator<char>(file)),
+                     std::istreambuf_iterator<char>());
 }
 
 void checkShader(GLuint shader, std::string type) {
   GLint success;
-  char infoLog[1024];
+  char infoLog[Constants::SHADER_LOG_SIZE];
   glGetShaderiv(shader, GL_COMPILE_STATUS, &success);
   if (!success) {
-    glGetShaderInfoLog(shader, 1024, NULL, infoLog);
-    std::cerr << "ERROR::SHADER_COMPILATION_ERROR of type: " << type << "\n" << infoLog << "\n -- --------------------------------------------------- -- " << std::endl;
-  } else { std::cout << "SUCCESS::COMPILED shader of type: " << type << std::endl; }
+    glGetShaderInfoLog(shader, Constants::SHADER_LOG_SIZE, NULL, infoLog);
+    std::cerr << "ERROR::SHADER_COMPILATION_ERROR of type: " << type << "\n"
+              << infoLog
+              << "\n -- --------------------------------------------------- -- "
+              << std::endl;
+  } else {
+    std::cout << "SUCCESS::COMPILED shader of type: " << type << std::endl;
+  }
 }
 
 void checkProgram(GLuint pid, std::string type) {
   GLint success;
-  char log[1024];
+  char log[Constants::SHADER_LOG_SIZE];
   glGetProgramiv(pid, GL_LINK_STATUS, &success);
   if (!success) {
-    glGetShaderInfoLog(pid, 1024, NULL, log);
-    std::cerr << "ERROR::PROGRAM_LINKTIME_ERROR of type: " << type << "\n" << log << "\n -- --------------------------------------------------- -- " << std::endl;
-  } else { std::cout << "SUCCESS::INITIALIZED program of type: " << type << std::endl; }
+    glGetShaderInfoLog(pid, Constants::SHADER_LOG_SIZE, NULL, log);
+    std::cerr << "ERROR::PROGRAM_LINKTIME_ERROR of type: " << type << "\n"
+              << log
+              << "\n -- --------------------------------------------------- -- "
+              << std::endl;
+  } else {
+    std::cout << "SUCCESS::INITIALIZED program of type: " << type << std::endl;
+  }
 }
 
 void checkFile(std::string file, std::string type) {
   if (file.empty()) {
-    std::cout << "ERROR::DIRECTORY_NOT_FOUND of file: " << file << "of type: " << type << std::endl;
-  } else { std::cout << "SUCCESS::FOUND file of type: " << type << std::endl; }
+    std::cout << "ERROR::DIRECTORY_NOT_FOUND of file: " << file
+              << "of type: " << type << std::endl;
+  } else {
+    std::cout << "SUCCESS::FOUND file of type: " << type << std::endl;
+  }
 }
 
 // constructor
-simulator::simulator(device& device, layer& layer, int resX, int resY, int stepsPerFrame) : 
-                     m_device(device), m_layer(layer), stepsPerFrame(stepsPerFrame) 
-{
+Simulator::Simulator(device &device, layer &layer, int resX, int resY,
+                     int stepsPerFrame)
+    : m_device(device), m_layer(layer), stepsPerFrame(stepsPerFrame) {
   simTime = 0;
   m_mesh = std::make_unique<structuredMesh>(m_device.worldSize, resX, resY);
   h = m_mesh->spacing.x;
-  dt = (0.05f * h * h);  // Use a physically reasonable TDGL timestep for observable amplitude growth
+  dt = (0.05f * h * h); // Use a physically reasonable TDGL timestep for
+                        // observable amplitude growth
   initDt = dt;
-  dt_max = 5 * dt;         // needs to be set by cfl criterion
-  std::cout << "dt=" << dt << " h=" << h << " L=" << m_mesh->size.x << " res=" << m_mesh->resX << "x" << m_mesh->resY << std::endl;
+  dt_max = 5 * dt; // needs to be set by cfl criterion
+  std::cout << "dt=" << dt << " h=" << h << " L=" << m_mesh->size.x
+            << " res=" << m_mesh->resX << "x" << m_mesh->resY << std::endl;
 
   prevPhi2.resize(m_mesh->resX * m_mesh->resY, 0.0f);
   m_phiBuffer.resize(m_mesh->resX * m_mesh->resY * 4);
@@ -62,10 +80,11 @@ simulator::simulator(device& device, layer& layer, int resX, int resY, int steps
   initTextures();
   initShaders();
   initRenderQuad();
-  
+
   // Initialize mask from device layers (default geometry)
   if (!m_device.layers.empty()) {
-    m_mesh->mask = geometry::genMask(m_device.layers[0], m_mesh->resX, m_device.worldSize);
+    m_mesh->mask =
+        geometry::genMask(m_device.layers[0], m_mesh->resX, m_device.worldSize);
   }
   uploadMask();
   quench();
@@ -73,7 +92,7 @@ simulator::simulator(device& device, layer& layer, int resX, int resY, int steps
 }
 
 // destructor
-simulator::~simulator() {
+Simulator::~Simulator() {
   glDeleteTextures(2, m_phiTextures);
   glDeleteTextures(1, &m_maskTexture);
   glDeleteTextures(1, &m_neighborTexture);
@@ -86,11 +105,12 @@ simulator::~simulator() {
   glDeleteProgram(m_rendPID);
 }
 
-void simulator::initTextures() {
+void Simulator::initTextures() {
   glGenTextures(2, m_phiTextures);
   for (int i = 0; i < 2; i++) {
     glBindTexture(GL_TEXTURE_2D, m_phiTextures[i]);
-    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA32F, m_mesh->resX, m_mesh->resY, 0, GL_RGBA, GL_FLOAT, nullptr);
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA32F, m_mesh->resX, m_mesh->resY, 0,
+                 GL_RGBA, GL_FLOAT, nullptr);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
@@ -99,7 +119,8 @@ void simulator::initTextures() {
 
   glGenTextures(1, &m_maskTexture);
   glBindTexture(GL_TEXTURE_2D, m_maskTexture);
-  glTexImage2D(GL_TEXTURE_2D, 0, GL_R32F, m_mesh->resX, m_mesh->resY, 0, GL_RED, GL_FLOAT, nullptr);
+  glTexImage2D(GL_TEXTURE_2D, 0, GL_R32F, m_mesh->resX, m_mesh->resY, 0, GL_RED,
+               GL_FLOAT, nullptr);
   glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
   glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
   glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
@@ -108,16 +129,16 @@ void simulator::initTextures() {
 
   // Build neighbor connectivity texture
   buildNeighborTexture();
-  
+
   // Build edge weight texture
   buildEdgeWeightTexture();
 }
 
-void simulator::initShaders() {
+void Simulator::initShaders() {
   // load and compile compute shader
   std::string compSrc = readFile("./shaders/comp.glsl");
   checkFile(compSrc, "COMPILE SHADER");
-  const char* compPtr = compSrc.c_str();
+  const char *compPtr = compSrc.c_str();
   GLuint compShader = glCreateShader(GL_COMPUTE_SHADER);
   glShaderSource(compShader, 1, &compPtr, NULL);
   glCompileShader(compShader);
@@ -131,19 +152,19 @@ void simulator::initShaders() {
 
   // cache compute uniform locations
   m_compImgSamplerLoc = glGetUniformLocation(m_compPID, "img_sampler");
-  m_compXiLoc        = glGetUniformLocation(m_compPID, "uXi");
-  m_compLambdaLoc    = glGetUniformLocation(m_compPID, "uLambda");
-  m_compGammaLoc     = glGetUniformLocation(m_compPID, "uGamma");
-  m_compQLoc         = glGetUniformLocation(m_compPID, "uQ");
-  m_compHLoc         = glGetUniformLocation(m_compPID, "uH");
-  m_compLLoc         = glGetUniformLocation(m_compPID, "uL");
-  m_compRelaxLoc     = glGetUniformLocation(m_compPID, "uRelax");
-  m_compUseNoiseLoc  = glGetUniformLocation(m_compPID, "uUseNoise");
-  m_compDtLoc        = glGetUniformLocation(m_compPID, "uDt");
-  m_compAlphaLoc     = glGetUniformLocation(m_compPID, "uAlpha");
-  m_compBFieldLoc    = glGetUniformLocation(m_compPID, "uBField");
-  m_compEpsilonLoc   = glGetUniformLocation(m_compPID, "uEpsilon");
-  m_compTimeLoc      = glGetUniformLocation(m_compPID, "uTime");
+  m_compXiLoc = glGetUniformLocation(m_compPID, "uXi");
+  m_compLambdaLoc = glGetUniformLocation(m_compPID, "uLambda");
+  m_compGammaLoc = glGetUniformLocation(m_compPID, "uGamma");
+  m_compQLoc = glGetUniformLocation(m_compPID, "uQ");
+  m_compHLoc = glGetUniformLocation(m_compPID, "uH");
+  m_compLLoc = glGetUniformLocation(m_compPID, "uL");
+  m_compRelaxLoc = glGetUniformLocation(m_compPID, "uRelax");
+  m_compUseNoiseLoc = glGetUniformLocation(m_compPID, "uUseNoise");
+  m_compDtLoc = glGetUniformLocation(m_compPID, "uDt");
+  m_compAlphaLoc = glGetUniformLocation(m_compPID, "uAlpha");
+  m_compBFieldLoc = glGetUniformLocation(m_compPID, "uBField");
+  m_compEpsilonLoc = glGetUniformLocation(m_compPID, "uEpsilon");
+  m_compTimeLoc = glGetUniformLocation(m_compPID, "uTime");
   m_compSurfaceVoltageLoc = glGetUniformLocation(m_compPID, "uSurfaceVoltage");
   m_compSheetCurrentLoc = glGetUniformLocation(m_compPID, "uSheetCurrent");
 
@@ -153,8 +174,8 @@ void simulator::initShaders() {
   std::string fragSrc = readFile("./shaders/frag.glsl");
   checkFile(fragSrc, "FRAGMENT SHADER");
 
-  const char* vertPtr = vertSrc.c_str();
-  const char* fragPtr = fragSrc.c_str();
+  const char *vertPtr = vertSrc.c_str();
+  const char *fragPtr = fragSrc.c_str();
 
   GLuint vertShader = glCreateShader(GL_VERTEX_SHADER);
   glShaderSource(vertShader, 1, &vertPtr, NULL);
@@ -171,104 +192,106 @@ void simulator::initShaders() {
   checkProgram(m_rendPID, "RENDER");
 
   // cache render uniform locations
-  m_rendFieldLoc       = glGetUniformLocation(m_rendPID, "uField");
-  m_rendMaskLoc        = glGetUniformLocation(m_rendPID, "uMask");
-  m_rendRenderModeLoc  = glGetUniformLocation(m_rendPID, "uRenderMode");
-  m_rendHLoc           = glGetUniformLocation(m_rendPID, "uH");
-  m_rendAlphaLoc       = glGetUniformLocation(m_rendPID, "uAlpha");
-  m_rendBetaLoc        = glGetUniformLocation(m_rendPID, "uBeta");
-  m_rendLLoc           = glGetUniformLocation(m_rendPID, "uL");
-  m_rendBFieldLoc      = glGetUniformLocation(m_rendPID, "uBField");
-  m_rendQLoc           = glGetUniformLocation(m_rendPID, "uQ");
-  m_rendEpsilonLoc     = glGetUniformLocation(m_rendPID, "uEpsilon");
+  m_rendFieldLoc = glGetUniformLocation(m_rendPID, "uField");
+  m_rendMaskLoc = glGetUniformLocation(m_rendPID, "uMask");
+  m_rendRenderModeLoc = glGetUniformLocation(m_rendPID, "uRenderMode");
+  m_rendHLoc = glGetUniformLocation(m_rendPID, "uH");
+  m_rendAlphaLoc = glGetUniformLocation(m_rendPID, "uAlpha");
+  m_rendBetaLoc = glGetUniformLocation(m_rendPID, "uBeta");
+  m_rendLLoc = glGetUniformLocation(m_rendPID, "uL");
+  m_rendBFieldLoc = glGetUniformLocation(m_rendPID, "uBField");
+  m_rendQLoc = glGetUniformLocation(m_rendPID, "uQ");
+  m_rendEpsilonLoc = glGetUniformLocation(m_rendPID, "uEpsilon");
 
   glDeleteShader(vertShader);
   glDeleteShader(fragShader);
 }
 
-void simulator::initRenderQuad() {
-  float quadVertices[] = {
-    -1.0f,  1.0f,  0.0f, 1.0f,
-    -1.0f, -1.0f,  0.0f, 0.0f,
-     1.0f, -1.0f,  1.0f, 0.0f,
+void Simulator::initRenderQuad() {
+  float quadVertices[] = {-1.0f, 1.0f, 0.0f, 1.0f,  -1.0f, -1.0f,
+                          0.0f,  0.0f, 1.0f, -1.0f, 1.0f,  0.0f,
 
-    -1.0f,  1.0f,  0.0f, 1.0f,
-     1.0f, -1.0f,  1.0f, 0.0f,
-     1.0f,  1.0f,  1.0f, 1.0f
-  };
+                          -1.0f, 1.0f, 0.0f, 1.0f,  1.0f,  -1.0f,
+                          1.0f,  0.0f, 1.0f, 1.0f,  1.0f,  1.0f};
 
   glGenVertexArrays(1, &m_quadVAO);
   glGenBuffers(1, &m_quadVBO);
 
   glBindVertexArray(m_quadVAO);
   glBindBuffer(GL_ARRAY_BUFFER, m_quadVBO);
-  glBufferData(GL_ARRAY_BUFFER, sizeof(quadVertices), &quadVertices, GL_STATIC_DRAW);
+  glBufferData(GL_ARRAY_BUFFER, sizeof(quadVertices), &quadVertices,
+               GL_STATIC_DRAW);
 
   // position attribute
   glEnableVertexAttribArray(0);
-  glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, 4 * sizeof(float), (void*)0);
+  glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, 4 * sizeof(float), (void *)0);
 
   // texture coord attribute
   glEnableVertexAttribArray(1);
-  glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 4* sizeof(float), (void*)(2*sizeof(float)));
+  glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 4 * sizeof(float),
+                        (void *)(2 * sizeof(float)));
   std::cout << "SUCCESS::RENDER of type: QUAD" << std::endl;
 }
 
-void simulator::uploadMask() {
+void Simulator::uploadMask() {
   // Upload the current mesh mask to GPU (don't regenerate from layers)
   glBindTexture(GL_TEXTURE_2D, m_maskTexture);
-  glTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0, m_mesh->resX, m_mesh->resY, GL_RED, GL_FLOAT, m_mesh->mask.data());
+  glTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0, m_mesh->resX, m_mesh->resY, GL_RED,
+                  GL_FLOAT, m_mesh->mask.data());
 }
 
-void simulator::buildNeighborTexture() {
+void Simulator::buildNeighborTexture() {
   // Encode neighbor indices into RGBA texture (up, down, left, right)
   std::vector<glm::vec4> neighborData(m_mesh->resX * m_mesh->resY);
-  
+
   for (int y = 0; y < m_mesh->resY; y++) {
     for (int x = 0; x < m_mesh->resX; x++) {
       int idx = y * m_mesh->resX + x;
-      const meshCell& cell = m_mesh->cells[idx];
-      
+      const meshCell &cell = m_mesh->cells[idx];
+
       // Store neighbor IDs normalized to [0, 1] for texture encoding
       float scale = 1.0f / (float)(m_mesh->resX * m_mesh->resY);
-      
+
       glm::vec4 neighbors(0.0f);
       if (cell.neighborIds.size() >= 4) {
-        neighbors.r = (float)cell.neighborIds[0] * scale;  // up
-        neighbors.g = (float)cell.neighborIds[1] * scale;  // down
-        neighbors.b = (float)cell.neighborIds[2] * scale;  // left
-        neighbors.a = (float)cell.neighborIds[3] * scale;  // right
+        neighbors.r = (float)cell.neighborIds[0] * scale; // up
+        neighbors.g = (float)cell.neighborIds[1] * scale; // down
+        neighbors.b = (float)cell.neighborIds[2] * scale; // left
+        neighbors.a = (float)cell.neighborIds[3] * scale; // right
       }
-      
+
       neighborData[idx] = neighbors;
     }
   }
-  
+
   // Create and upload neighbor texture
   glGenTextures(1, &m_neighborTexture);
   glBindTexture(GL_TEXTURE_2D, m_neighborTexture);
-  glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA32F, m_mesh->resX, m_mesh->resY, 0, GL_RGBA, GL_FLOAT, neighborData.data());
+  glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA32F, m_mesh->resX, m_mesh->resY, 0,
+               GL_RGBA, GL_FLOAT, neighborData.data());
   glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
   glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
   glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
   glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
 }
 
-void simulator::buildEdgeWeightTexture() {
+void Simulator::buildEdgeWeightTexture() {
   // Upload pre-computed edge weights from mesh to GPU texture
   // Weights are normalized by reference distance for discretization consistency
-  
+
   glGenTextures(1, &m_edgeWeightTexture);
   glBindTexture(GL_TEXTURE_2D, m_edgeWeightTexture);
-  glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA32F, m_mesh->resX, m_mesh->resY, 0, GL_RGBA, GL_FLOAT, m_mesh->edgeWeights.data());
+  glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA32F, m_mesh->resX, m_mesh->resY, 0,
+               GL_RGBA, GL_FLOAT, m_mesh->edgeWeights.data());
   glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
   glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
   glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
   glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
 }
 
-void simulator::step() {
-  if (m_device.layers.empty()) return;
+void Simulator::step() {
+  if (m_device.layers.empty())
+    return;
 
   // Initialize partitions if not already done
   if (m_mesh->partitions.empty()) {
@@ -278,10 +301,12 @@ void simulator::step() {
   glUseProgram(m_compPID);
 
   // Bind textures to image units
-  glBindImageTexture(0, m_phiTextures[m_readIdx],   0, GL_FALSE, 0, GL_READ_ONLY,   GL_RGBA32F);
-  glBindImageTexture(1, m_phiTextures[m_writeIdx],  0, GL_FALSE, 0, GL_WRITE_ONLY,  GL_RGBA32F);
-  glBindImageTexture(2, m_maskTexture,              0, GL_FALSE, 0, GL_READ_ONLY,   GL_R32F);
-  
+  glBindImageTexture(0, m_phiTextures[m_readIdx], 0, GL_FALSE, 0, GL_READ_ONLY,
+                     GL_RGBA32F);
+  glBindImageTexture(1, m_phiTextures[m_writeIdx], 0, GL_FALSE, 0,
+                     GL_WRITE_ONLY, GL_RGBA32F);
+  glBindImageTexture(2, m_maskTexture, 0, GL_FALSE, 0, GL_READ_ONLY, GL_R32F);
+
   // Bind texture sampler and neighbor connectivity
   glActiveTexture(GL_TEXTURE0);
   glBindTexture(GL_TEXTURE_2D, m_phiTextures[m_readIdx]);
@@ -296,72 +321,82 @@ void simulator::step() {
   glUniform1i(glGetUniformLocation(m_compPID, "img_edgeWeights"), 4);
 
   double alpha = 1.0 / (4.0 * mc * m_layer.xi * m_layer.xi);
-  glUniform1d(m_compXiLoc,       m_layer.xi);
-  glUniform1d(m_compLambdaLoc,   m_layer.lambda);
-  glUniform1d(m_compGammaLoc,    m_layer.gamma);
-  glUniform1f(m_compQLoc,        q);
-  glUniform1f(m_compHLoc,        h);
-  glUniform1f(m_compLLoc,        m_device.worldSize.x);
-  glUniform1f(m_compRelaxLoc,    m_layer.u);
+  glm::vec3 b_current = m_device.fieldProfile->evaluate(simTime);
+  glUniform1d(m_compXiLoc, m_layer.xi);
+  glUniform1d(m_compLambdaLoc, m_layer.lambda);
+  glUniform1d(m_compGammaLoc, m_layer.gamma);
+  glUniform1f(m_compQLoc, q);
+  glUniform1f(m_compHLoc, h);
+  glUniform1f(m_compLLoc, m_device.worldSize.x);
+  glUniform1f(m_compRelaxLoc, m_layer.u);
   glUniform1i(m_compUseNoiseLoc, useNoise);
-  glUniform1f(m_compDtLoc,       dt);
-  glUniform1d(m_compAlphaLoc,    alpha);
-  glUniform1f(m_compBFieldLoc,   m_device.externalB.z);
-  glUniform1f(m_compEpsilonLoc,  m_layer.epsilon);
-  glUniform1f(m_compTimeLoc,     simTime);
+  glUniform1f(m_compDtLoc, dt);
+  glUniform1d(m_compAlphaLoc, alpha);
+  glUniform3f(m_compBFieldLoc, b_current.x, b_current.y, b_current.z);
+  glUniform1f(m_compEpsilonLoc, m_layer.epsilon);
+  glUniform1f(m_compTimeLoc, simTime);
   glUniform1f(m_compSurfaceVoltageLoc, m_device.surfaceVoltage);
   glUniform1f(m_compSheetCurrentLoc, m_device.sheetCurrentDensity);
 
   // Two-phase computation: interior (parallel) then boundary (sequential)
-  GLint partitionOffsetLoc = glGetUniformLocation(m_compPID, "uPartitionOffset");
-  GLint computeInteriorLoc = glGetUniformLocation(m_compPID, "uComputeInterior");
+  GLint partitionOffsetLoc =
+      glGetUniformLocation(m_compPID, "uPartitionOffset");
+  GLint computeInteriorLoc =
+      glGetUniformLocation(m_compPID, "uComputeInterior");
   GLint interiorStartLoc = glGetUniformLocation(m_compPID, "uInteriorStart");
   GLint interiorEndLoc = glGetUniformLocation(m_compPID, "uInteriorEnd");
-  
+
   // ============ PHASE 1: Compute all interior cells in parallel ============
-  glUniform1i(computeInteriorLoc, 1);  // true: compute interior only
-  
-  for (const auto& partition : m_mesh->partitions) {
+  glUniform1i(computeInteriorLoc, 1); // true: compute interior only
+
+  for (const auto &partition : m_mesh->partitions) {
     // Set partition offset
     glUniform2i(partitionOffsetLoc, partition.startX, partition.startY);
-    
+
     // Set interior bounds for this partition
-    glUniform2i(interiorStartLoc, partition.interiorStartX, partition.interiorStartY);
-    glUniform2i(interiorEndLoc, partition.interiorEndX, partition.interiorEndY);
-    
+    glUniform2i(interiorStartLoc, partition.interior_startX,
+                partition.interior_startY);
+    glUniform2i(interiorEndLoc, partition.interior_endX,
+                partition.interior_endY);
+
     // Dispatch full partition size (shader will skip non-interior cells)
-    int dispatchJobsX = (partition.resX + m_computeGroupSize - 1) / m_computeGroupSize;
-    int dispatchJobsY = (partition.resY + m_computeGroupSize - 1) / m_computeGroupSize;
-    
+    int dispatchJobsX =
+        (partition.resX + m_computeGroupSize - 1) / m_computeGroupSize;
+    int dispatchJobsY =
+        (partition.resY + m_computeGroupSize - 1) / m_computeGroupSize;
+
     // Queue all interior dispatches (GPU processes in parallel)
     glDispatchCompute(dispatchJobsX, dispatchJobsY, 1);
   }
-  
+
   // Synchronize GPU after all interior cells computed
   glMemoryBarrier(GL_SHADER_IMAGE_ACCESS_BARRIER_BIT);
-  
+
   // ============ PHASE 2: Compute boundary cells sequentially ============
-  glUniform1i(computeInteriorLoc, 0);  // false: compute boundaries only
-  
-  for (const auto& partition : m_mesh->partitions) {
+  glUniform1i(computeInteriorLoc, 0); // false: compute boundaries only
+
+  for (const auto &partition : m_mesh->partitions) {
     // Set partition offset
     glUniform2i(partitionOffsetLoc, partition.startX, partition.startY);
-    
+
     // Set interior bounds (boundary = full region minus interior)
-    glUniform2i(interiorStartLoc, partition.interiorStartX, partition.interiorStartY);
+    glUniform2i(interiorStartLoc, partition.interiorStartX,
+                partition.interiorStartY);
     glUniform2i(interiorEndLoc, partition.interiorEndX, partition.interiorEndY);
-    
+
     // Dispatch full partition size (shader will skip interior cells)
-    int dispatchJobsX = (partition.resX + m_computeGroupSize - 1) / m_computeGroupSize;
-    int dispatchJobsY = (partition.resY + m_computeGroupSize - 1) / m_computeGroupSize;
-    
+    int dispatchJobsX =
+        (partition.resX + m_computeGroupSize - 1) / m_computeGroupSize;
+    int dispatchJobsY =
+        (partition.resY + m_computeGroupSize - 1) / m_computeGroupSize;
+
     // Sequential dispatch for each partition's boundary
     glDispatchCompute(dispatchJobsX, dispatchJobsY, 1);
-    
+
     // Sync after each boundary dispatch to ensure previous results are visible
     glMemoryBarrier(GL_SHADER_IMAGE_ACCESS_BARRIER_BIT);
   }
-  
+
   glBindImageTexture(0, 0, 0, GL_FALSE, 0, GL_READ_ONLY, GL_RGBA32F);
   glBindImageTexture(1, 0, 0, GL_FALSE, 0, GL_WRITE_ONLY, GL_RGBA32F);
   glBindImageTexture(2, 0, 0, GL_FALSE, 0, GL_READ_ONLY, GL_R32F);
@@ -370,7 +405,8 @@ void simulator::step() {
   std::swap(m_readIdx, m_writeIdx);
   simTime += dt;
 
-  // Update adaptive time step only every few solver iterations to avoid CPU/GPU stalls
+  // Update adaptive time step only every few solver iterations to avoid CPU/GPU
+  // stalls
   m_dtUpdateCounter += 1;
   if (m_dtUpdateCounter >= m_dtUpdateInterval) {
     m_dtUpdateCounter = 0;
@@ -406,8 +442,7 @@ void simulator::step() {
   }
 }
 
-
-void simulator::findTimeStep() {
+void Simulator::findTimeStep() {
   if (maxChange.empty()) {
     return;
   }
@@ -425,52 +460,57 @@ void simulator::findTimeStep() {
   dt = std::max(dt_min, std::min(candidate, dt_max));
 }
 
-void simulator::quench() {
-  // Use a small-amplitude random seed, not sustained thermal noise, so the system
-  // can transition to its natural vortex state under the applied field.
+void Simulator::quench() {
+  // Use a small-amplitude random seed, not sustained thermal noise, so the
+  // system can transition to its natural vortex state under the applied field.
   useNoise = false;
   std::vector<float> initData(m_mesh->resX * m_mesh->resY * 4, 0.0f);
 
-  float phiEq   = sqrt(m_layer.epsilon);
-  float phiAmp  = 0.1f * phiEq; // start near zero with small random perturbations
+  float phiEq = sqrt(m_layer.epsilon);
+  float phiAmp =
+      0.1f * phiEq; // start near zero with small random perturbations
   std::random_device rd;
   std::mt19937 gen(rd());
   std::uniform_real_distribution<float> dist(-1.0f, 1.0f);
 
-  for(int i = 0; i < (m_mesh->resX * m_mesh->resY); i++) {
-      initData[i * 4 + 0] = phiAmp * dist(gen);
-      initData[i * 4 + 1] = phiAmp * dist(gen);
-      initData[i * 4 + 2] = 0.0f;
-      initData[i * 4 + 3] = 0.5f;
+  for (int i = 0; i < (m_mesh->resX * m_mesh->resY); i++) {
+    initData[i * 4 + 0] = phiAmp * dist(gen);
+    initData[i * 4 + 1] = phiAmp * dist(gen);
+    initData[i * 4 + 2] = 0.0f;
+    initData[i * 4 + 3] = 0.5f;
   }
 
-  for(int i = 0; i < 2;i++){
-      glBindTexture(GL_TEXTURE_2D, m_phiTextures[i]);
-      glTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0, m_mesh->resX, m_mesh->resY, GL_RGBA, GL_FLOAT, initData.data());
+  for (int i = 0; i < 2; i++) {
+    glBindTexture(GL_TEXTURE_2D, m_phiTextures[i]);
+    glTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0, m_mesh->resX, m_mesh->resY, GL_RGBA,
+                    GL_FLOAT, initData.data());
   }
   std::cout << "!! SYSTEM QUENCHED !!" << std::endl;
   simTime = 0;
 }
 
-void simulator::quenchSeededLattice() {
+void Simulator::quenchSeededLattice() {
   // Seed a triangular Abrikosov lattice with proper vortex cores
   // Each vortex core has 2π phase winding and amplitude healing profile
   useNoise = false;
   std::vector<float> initData(m_mesh->resX * m_mesh->resY * 4, 0.0f);
 
   float phiEq = sqrt(m_layer.epsilon);
-  double xi = m_layer.xi;  // coherence length
+  double xi = m_layer.xi; // coherence length
 
   // Calculate Abrikosov lattice spacing: a ≈ sqrt(2*Phi_0 / (sqrt(3)*B))
   float B = m_device.externalB.z;
-  float latticeDist = (B > 1e-6f) ? sqrt(4.0f * 3.14159f / (1.732f * B)) : 12.0f;
+  float latticeDist = (B > 1 / Constants::INVALID_FIELD_THRESHOLD)
+                          ? sqrt(4.0f * Constants::PI / (1.732f * B))
+                          : 12.0f;
 
   // Convert to grid spacing units for indexing
   float latticeSpacing = latticeDist / h;
-  double coreHealing = xi / h;  // core healing length in grid points
+  double coreHealing = xi / h; // core healing length in grid points
 
-  std::cout << "Seeding TRUE Abrikosov lattice with spacing " << latticeDist << " ξ ("
-            << latticeSpacing << " grid pts), core healing " << coreHealing << " pts" << std::endl;
+  std::cout << "Seeding TRUE Abrikosov lattice with spacing " << latticeDist
+            << " ξ (" << latticeSpacing << " grid pts), core healing "
+            << coreHealing << " pts" << std::endl;
 
   // Triangular lattice basis vectors
   float a1x = latticeSpacing;
@@ -499,16 +539,20 @@ void simulator::quenchSeededLattice() {
       float minDist = 1e9f;
       float vortexX = 0.0f, vortexY = 0.0f;
 
-      for (const auto& site : latticeSites) {
+      for (const auto &site : latticeSites) {
         float dx = x - site.x;
         float dy = y - site.y;
         // Handle periodic boundaries
-        while (dx > m_mesh->resX * 0.5f) dx -= m_mesh->resX;
-        while (dx < -m_mesh->resX * 0.5f) dx += m_mesh->resX;
-        while (dy > m_mesh->resY * 0.5f) dy -= m_mesh->resY;
-        while (dy < -m_mesh->resY * 0.5f) dy += m_mesh->resY;
+        while (dx > m_mesh->resX * 0.5f)
+          dx -= m_mesh->resX;
+        while (dx < -m_mesh->resX * 0.5f)
+          dx += m_mesh->resX;
+        while (dy > m_mesh->resY * 0.5f)
+          dy -= m_mesh->resY;
+        while (dy < -m_mesh->resY * 0.5f)
+          dy += m_mesh->resY;
 
-        float dist = sqrt(dx*dx + dy*dy);
+        float dist = sqrt(dx * dx + dy * dy);
         if (dist < minDist) {
           minDist = dist;
           vortexX = site.x;
@@ -520,10 +564,14 @@ void simulator::quenchSeededLattice() {
       float dx = x - vortexX;
       float dy = y - vortexY;
       // Handle periodic boundaries
-      while (dx > m_mesh->resX * 0.5f) dx -= m_mesh->resX;
-      while (dx < -m_mesh->resX * 0.5f) dx += m_mesh->resX;
-      while (dy > m_mesh->resY * 0.5f) dy -= m_mesh->resY;
-      while (dy < -m_mesh->resY * 0.5f) dy += m_mesh->resY;
+      while (dx > m_mesh->resX * 0.5f)
+        dx -= m_mesh->resX;
+      while (dx < -m_mesh->resX * 0.5f)
+        dx += m_mesh->resX;
+      while (dy > m_mesh->resY * 0.5f)
+        dy -= m_mesh->resY;
+      while (dy < -m_mesh->resY * 0.5f)
+        dy += m_mesh->resY;
 
       float vortexPhase = atan2(dy, dx);
 
@@ -534,7 +582,8 @@ void simulator::quenchSeededLattice() {
       float healingFactor = sqrt(1.0f - exp(-rNorm * rNorm));
       float mag = phiEq * healingFactor;
 
-      // Store complex order parameter as (Re, Im) with proper vortex core structure
+      // Store complex order parameter as (Re, Im) with proper vortex core
+      // structure
       initData[(i * m_mesh->resX + j) * 4 + 0] = mag * cos(vortexPhase);
       initData[(i * m_mesh->resX + j) * 4 + 1] = mag * sin(vortexPhase);
       initData[(i * m_mesh->resX + j) * 4 + 2] = 0.0f;
@@ -544,14 +593,15 @@ void simulator::quenchSeededLattice() {
 
   for (int i = 0; i < 2; i++) {
     glBindTexture(GL_TEXTURE_2D, m_phiTextures[i]);
-    glTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0, m_mesh->resX, m_mesh->resY, GL_RGBA, GL_FLOAT, initData.data());
+    glTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0, m_mesh->resX, m_mesh->resY, GL_RGBA,
+                    GL_FLOAT, initData.data());
   }
 
   std::cout << "!! TRUE ABRIKOSOV LATTICE SEEDED !!" << std::endl;
   simTime = 0;
 }
 
-void simulator::applyGeometryRectangle(glm::vec2 center, glm::vec2 size) {
+void Simulator::applyGeometryRectangle(glm::vec2 center, glm::vec2 size) {
   // Clear mask and apply new geometry
   std::fill(m_mesh->mask.begin(), m_mesh->mask.end(), 0.0f);
   polygon rect = geometry::genRectangle(center, size);
@@ -559,7 +609,7 @@ void simulator::applyGeometryRectangle(glm::vec2 center, glm::vec2 size) {
   uploadMask();
 }
 
-void simulator::applyGeometryCircle(glm::vec2 center, float radius) {
+void Simulator::applyGeometryCircle(glm::vec2 center, float radius) {
   // Clear mask and apply new geometry
   std::fill(m_mesh->mask.begin(), m_mesh->mask.end(), 0.0f);
   polygon circle = geometry::genCircle(center, radius);
@@ -567,7 +617,7 @@ void simulator::applyGeometryCircle(glm::vec2 center, float radius) {
   uploadMask();
 }
 
-void simulator::applyGeometryTriangle(glm::vec2 center, float size) {
+void Simulator::applyGeometryTriangle(glm::vec2 center, float size) {
   // Clear mask and apply new geometry
   std::fill(m_mesh->mask.begin(), m_mesh->mask.end(), 0.0f);
   polygon triangle = geometry::genTriangle(center, size);
@@ -575,20 +625,20 @@ void simulator::applyGeometryTriangle(glm::vec2 center, float size) {
   uploadMask();
 }
 
-void simulator::applyGeometryPolygon(const polygon& shape) {
+void Simulator::applyGeometryPolygon(const polygon &shape) {
   // Clear mask and apply new geometry
   std::fill(m_mesh->mask.begin(), m_mesh->mask.end(), 0.0f);
   geometry::applyPolygonToMesh(*m_mesh, shape);
   uploadMask();
 }
 
-void simulator::clearGeometry() {
+void Simulator::clearGeometry() {
   // Reset mask to all ones (full domain active)
   std::fill(m_mesh->mask.begin(), m_mesh->mask.end(), 1.0f);
   uploadMask();
 }
 
-void simulator::updatePhiStats() {
+void Simulator::updatePhiStats() {
   glBindTexture(GL_TEXTURE_2D, m_phiTextures[m_readIdx]);
   glGetTexImage(GL_TEXTURE_2D, 0, GL_RGBA, GL_FLOAT, m_phiBuffer.data());
 
@@ -611,13 +661,13 @@ void simulator::updatePhiStats() {
   phiMax = maxVal;
 }
 
-int simulator::countVortices() {
+int Simulator::countVortices() {
   // Count vortex singularities by detecting 2π phase windings around plaquettes
   glBindTexture(GL_TEXTURE_2D, m_phiTextures[m_readIdx]);
   glGetTexImage(GL_TEXTURE_2D, 0, GL_RGBA, GL_FLOAT, m_phiBuffer.data());
 
   this->vortexCount = 0;
-  
+
   // Check each plaquette for phase circulation
   for (int y = 0; y < m_mesh->resY - 1; y++) {
     for (int x = 0; x < m_mesh->resX - 1; x++) {
@@ -629,35 +679,37 @@ int simulator::countVortices() {
         float psi_y = m_phiBuffer[(py * m_mesh->resX + px) * 4 + 1];
         return atan2(psi_y, psi_x);
       };
-      
+
       float p0 = getPhase(x, y);
       float p1 = getPhase(x + 1, y);
       float p2 = getPhase(x + 1, y + 1);
       float p3 = getPhase(x, y + 1);
-      
+
       // Compute circulation around plaquette
       // Account for 2π wraps
       auto angleDiff = [](float a, float b) {
         float diff = a - b;
-        while (diff > PI) diff -= 2.0f * PI;
-        while (diff < -PI) diff += 2.0f * PI;
+        while (diff > PI)
+          diff -= 2.0f * PI;
+        while (diff < -PI)
+          diff += 2.0f * PI;
         return diff;
       };
-      
-      float circulation = angleDiff(p0, p1) + angleDiff(p1, p2) + 
-                        angleDiff(p2, p3) + angleDiff(p3, p0);
-      
+
+      float circulation = angleDiff(p0, p1) + angleDiff(p1, p2) +
+                          angleDiff(p2, p3) + angleDiff(p3, p0);
+
       // Normalize to vortex count (circulation/2π)
       if (abs(circulation) > PI) {
         this->vortexCount++;
       }
     }
   }
-  
+
   return this->vortexCount;
 }
 
-void simulator::render(int renderMode) {
+void Simulator::render(int renderMode) {
   glUseProgram(m_rendPID);
 
   // bind current read texture and mask
@@ -669,18 +721,18 @@ void simulator::render(int renderMode) {
   glBindTexture(GL_TEXTURE_2D, m_maskTexture);
   glUniform1i(m_rendMaskLoc, 1);
 
-  this->h       = m_device.worldSize.x / (float)m_mesh->resX;
-  double alpha  = 1.0f / (4.0f * mc * m_layer.xi * m_layer.xi);
-  double beta   = (q * q * m_layer.lambda * m_layer.lambda * alpha) / mc;
+  this->h = m_device.worldSize.x / (float)m_mesh->resX;
+  double alpha = 1.0f / (4.0f * mc * m_layer.xi * m_layer.xi);
+  double beta = (q * q * m_layer.lambda * m_layer.lambda * alpha) / mc;
 
   glUniform1i(m_rendRenderModeLoc, renderMode);
-  glUniform1f(m_rendHLoc,          this->h);
-  glUniform1d(m_rendAlphaLoc,      alpha);
-  glUniform1d(m_rendBetaLoc,       beta);
-  glUniform1f(m_rendLLoc,          m_device.worldSize.x);
-  glUniform1f(m_rendBFieldLoc,     m_device.externalB.z);
-  glUniform1f(m_rendQLoc,          q);
-  glUniform1f(m_rendEpsilonLoc,    m_layer.epsilon);
+  glUniform1f(m_rendHLoc, this->h);
+  glUniform1d(m_rendAlphaLoc, alpha);
+  glUniform1d(m_rendBetaLoc, beta);
+  glUniform1f(m_rendLLoc, m_device.worldSize.x);
+  glUniform1f(m_rendBFieldLoc, m_device.externalB.z);
+  glUniform1f(m_rendQLoc, q);
+  glUniform1f(m_rendEpsilonLoc, m_layer.epsilon);
 
   glBindVertexArray(m_quadVAO);
   glDrawArrays(GL_TRIANGLES, 0, 6);

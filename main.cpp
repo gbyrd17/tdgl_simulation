@@ -1,26 +1,31 @@
 #include <glad/glad.h>
+
 #include <GLFW/glfw3.h>
-#include <imgui.h>
-#include <imgui_impl_glfw.h>
-#include <imgui_impl_opengl3.h>
 #include <device.h>
 #include <geometry.h>
-#include <simulator.h>
+#include <imgui.h>
+#include <imgui_impl_opengl3.h>
 #include <infoPane.h>
-#include <vector>
 #include <iostream>
+#include <simulator.h>
+#include <vector>
 
-int main()  {
-  device dev;     // init device 
-  dev.worldSize = glm::vec2(96.0f, 96.0f);  // multiple of Abrikosov spacing for clean lattice
-  dev.externalB = glm::vec3(0, 0, 0.15f);  // moderate field for visible vortex nucleation in a 100ξ domain
-  dev.surfaceVoltage = 0.5f;  // electric potential to drive lattice formation via condensate dynamics
-  dev.sheetCurrentDensity = 0.05f;  // injected surface current density to nucleate vortex motion
+int main() {
+  device dev; // init device
+  dev.worldSize = glm::vec2(
+      96.0f, 96.0f); // multiple of Abrikosov spacing for clean lattice
+  dev.externalB = glm::vec3(
+      0, 0,
+      0.15f); // moderate field for visible vortex nucleation in a 100ξ domain
+  dev.surfaceVoltage = 0.5f; // electric potential to drive lattice formation
+                             // via condensate dynamics
+  dev.sheetCurrentDensity =
+      0.05f; // injected surface current density to nucleate vortex motion
 
-  layer nbLayer;  // init niobium layer
-  nbLayer.xi      = 1.0f;
-  nbLayer.lambda  = 2.0f;
-  nbLayer.gamma   = 0.1f;
+  layer nbLayer; // init niobium layer
+  nbLayer.xi = 1.0f;
+  nbLayer.lambda = 2.0f;
+  nbLayer.gamma = 0.1f;
   nbLayer.epsilon = 1.0f; // stronger superconducting condensate
 
   polygon rect = geometry::genRectangle({48, 48}, {80, 80});
@@ -47,7 +52,8 @@ int main()  {
   glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4); // compute shaders need 4.3+
   glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
   glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
-  GLFWwindow* window = glfwCreateWindow(1536, 768, "GPU TDGL Solver", NULL, NULL);
+  GLFWwindow *window =
+      glfwCreateWindow(1536, 768, "GPU TDGL Solver", NULL, NULL);
   if (!window) {
     std::cerr << "ERROR::GLFW_WINDOW_INITIALIZATION" << std::endl;
     return -1;
@@ -66,11 +72,10 @@ int main()  {
   // init imgui
   IMGUI_CHECKVERSION();
   ImGui::CreateContext();
-  ImGui_ImplGlfw_InitForOpenGL(window, true);
   ImGui_ImplOpenGL3_Init("#version 330");
+  ImGui_ImplGlfw_InitForOpenGL(window, true);
   ImGui::StyleColorsDark();
 
-  int readTex = 0;
   while (!glfwWindowShouldClose(window)) {
     glClear(GL_COLOR_BUFFER_BIT);
     glfwPollEvents();
@@ -82,12 +87,15 @@ int main()  {
 
     // make sure we havent hijacked our own texture pointer
 
-    for (int i = 0; i < sim.stepsPerFrame; i++) {sim.step();} 
+    for (int i = 0; i < sim.stepsPerFrame; i++) {
+      sim.step();
+    }
 
     // render step
-    int w, h_win; glfwGetFramebufferSize(window, &w, &h_win);
+    int w, h_win;
+    glfwGetFramebufferSize(window, &w, &h_win);
     // sidebar occupies right 1/6; two sim panels share the left 5/6
-    int simW  = w * 5 / 6;
+    int simW = w * 5 / 6;
     int sideW = w - simW;
 
     // Render first viewport always
@@ -120,4 +128,3 @@ int main()  {
   glfwTerminate();
   return 0;
 }
-

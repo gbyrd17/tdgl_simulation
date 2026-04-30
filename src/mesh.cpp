@@ -1,182 +1,133 @@
-#include <mesh.h>
-#include <cmath>
-#include <random>
+#pragma once
+#include "mesh.h"
 
-// structuredMesh constructor
-structuredMesh::structuredMesh(glm::vec2 worldSize, int resX_, int resY_) {
-  resX = resX_;
-  resY = resY_;
-  size = worldSize;
-  spacing = glm::vec2(worldSize.x / resX, worldSize.y / resY);
-  build();
-}
+namespace GeometryUtils {
+/**
+ * @brief Robust Winding Number implementation for dependable point-in-polygon
+ * tests. Encapsulated here to prevent global namespace pollution.
+ */
+static int calculate_winding_number(glm::vec2 p,
+                                    const std::vector<glm::vec2> &poly) {
+  int wn = 0;
+  const size_t n = poly.size();
 
-void structuredMesh::build() {
-  cells.clear();
-  vertices.clear();
+  for (size_t i = 0; i < n; ++i) {
+    size_t next = (i + 1) % n;
 
-  // Create cell centers at grid points
-  int cellId = 0;
-  for (int y = 0; y < resY; y++) {
-    for (int x = 0; x < resX; x++) {
-      meshCell cell;
-      cell.id = cellId++;
-      cell.center = glm::vec2(
-        (x + 0.5f) * spacing.x,
-        (y + 0.5f) * spacing.y
-      );
-      cell.area = spacing.x * spacing.y;
-
-      // 4-neighbor connectivity (up, down, left, right)
-      int left = (x - 1 + resX) % resX;
-      int right = (x + 1) % resX;
-      int down = (y - 1 + resY) % resY;
-      int up = (y + 1) % resY;
-
-      cell.neighborIds = {
-        up * resX + x,        // up
-        down * resX + x,      // down
-        y * resX + left,      // left
-        y * resX + right      // right
-      };
-
-      cells.push_back(cell);
-    }
-  }
-
-  mask.assign(resX * resY, 1.0f);
-
-  // Compute edge weights (all uniform for structured grid)
-  float cellSpacing = glm::length(spacing);  // Effective grid spacing
-  edgeWeights.clear();
-  for (int i = 0; i < resX * resY; i++) {
-    // For structured mesh, all neighbors are at distance = spacing
-    float w = 1.0f;  // normalized weight (distance / spacing = 1)
-    edgeWeights.push_back(glm::vec4(w, w, w, w));  // (up, down, left, right)
-  }
-}
-
-// voronoiMesh constructor
-voronoiMesh::voronoiMesh(glm::vec2 worldSize, int numSites) {
-  size = worldSize;
-  
-  // Simple grid layout of Voronoi sites
-  int gridSide = (int)sqrt((float)numSites);
-  resX = gridSide;
-  resY = gridSide;
-  spacing = glm::vec2(worldSize.x / gridSide, worldSize.y / gridSide);
-  
-  build();
-}
-
-void voronoiMesh::build() {
-  cells.clear();
-  vertices.clear();
-
-  // Generate jittered Voronoi sites on a grid
-  std::random_device rd;
-  std::mt19937 gen(rd());
-  std::uniform_real_distribution<float> jitter(-spacing.x * 0.3f, spacing.x * 0.3f);
-
-  int cellId = 0;
-  for (int y = 0; y < resY; y++) {
-    for (int x = 0; x < resX; x++) {
-      meshCell cell;
-      cell.id = cellId++;
-      
-      // Grid position with random jitter
-      float baseX = (x + 0.5f) * spacing.x;
-      float baseY = (y + 0.5f) * spacing.y;
-      cell.center = glm::vec2(baseX + jitter(gen), baseY + jitter(gen));
-      
-      // Clamp to domain
-      cell.center.x = glm::clamp(cell.center.x, 0.0f, size.x);
-      cell.center.y = glm::clamp(cell.center.y, 0.0f, size.y);
-      
-      cell.area = spacing.x * spacing.y;
-
-      // Simple 4-neighbor connectivity (approximation for Voronoi)
-      int left = (x - 1 + resX) % resX;
-      int right = (x + 1) % resX;
-      int down = (y - 1 + resY) % resY;
-      int up = (y + 1) % resY;
-
-      cell.neighborIds = {
-        up * resX + x,        // up
-        down * resX + x,      // down
-        y * resX + left,      // left
-        y * resX + right      // right
-      };
-
-      cells.push_back(cell);
-    }
-  }
-
-  mask.assign(resX * resY, 1.0f);
-
-  // Compute edge weights based on actual distances in Voronoi mesh
-  float refDistance = glm::length(spacing);  // Reference distance for normalization
-  edgeWeights.clear();
-  
-  for (int idx = 0; idx < (int)cells.size(); idx++) {
-    const meshCell& cell = cells[idx];
-    glm::vec4 weights(1.0f);  // default
-    
-    if (cell.neighborIds.size() >= 4) {
-      for (int i = 0; i < 4; i++) {
-        int neighborId = cell.neighborIds[i];
-        if (neighborId >= 0 && neighborId < (int)cells.size()) {
-          const meshCell& neighbor = cells[neighborId];
-          glm::vec2 delta = neighbor.center - cell.center;
-          float distance = glm::length(delta);
-          weights[i] = distance / refDistance;  // normalize by reference spacing
-        }
+    if (poly[i].y <= p.y) {
+      if (poly[next].y > p.y) {
+        float isect = (poly[next].x - poly[i].x) * (p.y - poly[i].y) -
+                      (p.x - poly[i].x) * (poly[next].y - poly[i].y);
+        if (isect > 0)
+          wn++;
       }
-    }
-    
-    edgeWeights.push_back(weights);
-  }
-}
-
-void mesh::partition(int partitionSize) {
-  // Divide mesh into rectangular tiles for parallel GPU computation
-  // Interior cells (distance > boundary from edge) can be computed in parallel
-  // Boundary cells (distance <= boundary from edge) must be computed sequentially
-  partitions.clear();
-  
-  const int boundaryWidth = 1;  // 1-cell thick boundary for 4-neighbor stencil
-  
-  // Compute tile grid
-  int tilesX = (resX + partitionSize - 1) / partitionSize;
-  int tilesY = (resY + partitionSize - 1) / partitionSize;
-  
-  for (int ty = 0; ty < tilesY; ++ty) {
-    for (int tx = 0; tx < tilesX; ++tx) {
-      meshPartition part;
-      
-      // Full partition bounds
-      part.startX = tx * partitionSize;
-      part.startY = ty * partitionSize;
-      part.endX = std::min(part.startX + partitionSize, resX);
-      part.endY = std::min(part.startY + partitionSize, resY);
-      part.resX = part.endX - part.startX;
-      part.resY = part.endY - part.startY;
-      part.cellCount = part.resX * part.resY;
-      part.boundaryWidth = boundaryWidth;
-      
-      // Interior region (shrunk by boundaryWidth on all sides)
-      part.interiorStartX = part.startX + boundaryWidth;
-      part.interiorStartY = part.startY + boundaryWidth;
-      part.interiorEndX = std::max(part.interiorStartX, part.endX - boundaryWidth);
-      part.interiorEndY = std::max(part.interiorStartY, part.endY - boundaryWidth);
-      part.interiorResX = part.interiorEndX - part.interiorStartX;
-      part.interiorResY = part.interiorEndY - part.interiorStartY;
-      part.interiorCellCount = std::max(0, part.interiorResX * part.interiorResY);
-      
-      // Only add partition if it has meaningful interior or is small enough to process as-is
-      if (part.interiorCellCount > 0 || part.cellCount <= boundaryWidth * 4) {
-        partitions.push_back(part);
+    } else {
+      if (poly[next].y <= p.y) {
+        float isect = (poly[next].x - poly[i].x) * (p.y - poly[i].y) -
+                      (p.x - poly[i].x) * (poly[next].y - poly[i].y);
+        if (isect < 0)
+          wn--;
       }
     }
   }
+  return wn;
+}
+
+/**
+ * @brief Computes Axis-Aligned Bounding Box (AABB) for a polygon.
+ * Optimization: Prevents O(N*M) complexity on every shape application.
+ */
+static void get_poly_bounds(const std::vector<glm::vec2> &poly, glm::vec2 &min,
+                            glm::vec2 &max) {
+  min = glm::vec2(std::numeric_limits<float>::max());
+  max = glm::vec2(std::numeric_limits<float>::lowest());
+  for (const auto &v : poly) {
+    min = glm::min(min, v);
+    max = glm::max(max, v);
+  }
+}
+} // namespace GeometryUtils
+
+void Mesh::apply_shape(const std::vector<glm::vec2> &polygon,
+                       MeshTraits::Trait trait) {
+  if (polygon.size() < 3)
+    return; // Dependable check: Polygons need at least 3 vertices
+
+  glm::vec2 pMin, pMax;
+  GeometryUtils::get_poly_bounds(polygon, pMin, pMax);
+
+  for (size_t i = 0; i < cells.size(); ++i) {
+    const glm::vec2 &pos = cells[i].center;
+
+    // Optimization: Fast AABB rejection
+    if (pos.x < pMin.x || pos.x > pMax.x || pos.y < pMin.y || pos.y > pMax.y) {
+      continue;
+    }
+
+    if (GeometryUtils::calculate_winding_number(pos, polygon) != 0) {
+      traits[i] = trait;
+
+      // sync mask with the physical trait
+      // VOID is only truly inactive meshtype
+      mask[i] = (trait.type == MeshTraits::Type::VOID) ? 0.0f : 1.0f;
+    }
+  }
+}
+
+void StructuredMesh::build() {
+  const uint32_t total_cells = resX * resY;
+
+  cells.assign(total_cells, MeshCell{});
+  traits.assign(total_cells, MeshTraits::Trait{});
+  mask.assign(total_cells, 1.0f);
+
+  const float dx = world_size.x / static_cast<float>(resX);
+  const float dy = world_size.y / static_cast<float>(resY);
+  const float cell_area = dx * dy;
+
+  for (uint32_t y = 0; y < resY; ++y) {
+    for (uint32_t x = 0; x < resX; ++x) {
+      const uint32_t idx = y * resX + x;
+      MeshCell &cell = cells[idx];
+
+      // centers are offset to pixel-centers
+      cell.center = glm::vec2((static_cast<float>(x) + 0.5f) * dx,
+                              (static_cast<float>(y) + 0.5f) * dy);
+      cell.area = cell_area;
+
+      // finite difference stencil
+      int32_t count = 0;
+
+      if (x > 0) // left
+        cell.neighbors[count++] = static_cast<int32_t>(idx - 1);
+      if (x < resX - 1) // right
+        cell.neighbors[count++] = static_cast<int32_t>(idx + 1);
+      if (y > 0) // up
+        cell.neighbors[count++] = static_cast<int32_t>(idx - resX);
+      if (y < resY - 1) // down
+        cell.neighbors[count++] = static_cast<int32_t>(idx + resX);
+
+      cell.neighbor_count = count;
+
+      // initialize remaining slots to empty (-1)
+      for (int32_t i = count; i < Constants::MAX_NEIGHBORS; ++i) {
+        cell.neighbors[i] = -1;
+      }
+    }
+  }
+}
+
+void VoronoiMesh::build() {
+  // Note for Research Cases:
+  // A production Voronoi builder usually requires a robust Delaunay
+  // Triangulation library (like Triangle or Boost.Polygon). Manual
+  // implementation here would risk 'floating point slivers' that crash the
+  // solver.
+
+  // For now, we stub this out to ensure the factory functions.
+  cells.resize(resX * resY); // ResX*ResY as a target count
+  traits.resize(cells.size());
+  mask.resize(cells.size(), 1.0f);
+
+  // TODO: Integrate a robust Fortune's algorithm or Lloyd's relaxation here.
 }

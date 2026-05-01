@@ -1,29 +1,14 @@
 #pragma once
-#include <device.h>
-#include <glm/glm.hpp>
-#include <mesh.h>
-#include <vector>
+#include "types.h"
 
-class geometry {
-public:
-  // Shape generators: create polygon definitions for arbitrary geometry
-  static polygon genRectangle(glm::vec2 center, glm::vec2 size);
-  static polygon genCircle(glm::vec2 center, float radius,
-                           int numSegments = 32);
-  static polygon genTriangle(glm::vec2 center, float size);
-  static polygon genRing(glm::vec2 center, float innerRad, float outerRad);
-  static polygon genPolyVec(std::vector<glm::vec2> points);
+namespace geometry {
+  Polygon rectangle(glm::vec2 center, glm::vec2 size);
+  Polygon circle(glm::vec2 center, float radius, int num_segments = 64);
+  Polygon triangle(glm::vec2 center, glm::vec2 size);
+  Polygon ring(glm::vec2 center, float inner_radius, float outer_radius, int num_segments = 64);
 
-  // Mesh-polygon integration: apply geometry to a mesh
-  static void applyPolygonToMesh(Mesh &target_mesh, const polygon &shape);
-  static void applyPolygonsToMesh(Mesh &target_mesh,
-                                  const std::vector<polygon> &shapes);
-
-  // Legacy support: rasterize polygons to mask array
-  static std::vector<float> genMask(const layer &layer, int res,
-                                    glm::vec2 worldSize);
-  static void maskToLayer(layer &layer, const polygon &polygon);
-
-private:
-  static bool isInside(glm::vec2 p, const polygon &poly);
+  bool contains(const Polygon &poly, glm::vec2 p); // is p in poly
+  glm::vec2 minBounds(const Polygon &poly);
+  glm::vec2 maxBounds(const Polygon &poly);
+  float area(const Polygon &poly);
 };
